@@ -1,0 +1,16 @@
+﻿@using Core.Presentation.Models
+@using Core.Presentation.Models.DataTransferObjects.Base
+@using Core.Presentation.ViewComponents.Components.Base
+
+@typeparam TRecord where TRecord: BaseDto, new()
+@inherits GenericComponentBase<OverviewComponentViewModel<TRecord>, TRecord>
+<div class="bg-light py-3 shadow-none row">
+   @foreach(var sectionModel in ViewModel.OverviewSectionsViewModel){
+      <div class="col">
+            <h5>@sectionModel.Title</h5>
+            @if(OverviewSection is not null){
+                @OverviewSection(sectionModel.Name)
+            }
+      </div>
+   }
+</div>

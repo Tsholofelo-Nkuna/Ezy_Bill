@@ -1,0 +1,23 @@
+﻿@using Core.Presentation.Models
+@using Core.Presentation.Models.DataTransferObjects.Base
+@using Core.Presentation.ViewComponents.Components.Base
+
+@typeparam TRecord where TRecord : BaseDto, new()
+@inherits GenericComponentBase<TabsComponentViewModel<TRecord>, TRecord>
+
+ <nav class="nav nav-tabs my-2">
+    @foreach (var tabItem in this.ViewModel.TabItems)
+    {
+        <a style="cursor:pointer" @onclick="(e) => OnTabItemClick(tabItem)" class="nav-link @(tabItem.ActiveClass)">@tabItem.Title</a>
+    }
+ </nav>
+
+@foreach (var tabItem in this.ViewModel.TabItems)
+{
+    if (TabItem is not null)
+    {
+        <div class="container @(!tabItem.Active ? "d-none": string.Empty)">
+            @TabItem(tabItem)
+        </div>
+    }
+}

@@ -1,0 +1,37 @@
+﻿@page "/Products"
+@using ClientManagement.Presentation.Models.DataTransferObjects
+
+
+@inherits GenericComponentBase<ProductsViewModel, ProductDto>
+<PageTitle>Products</PageTitle>
+<PageComponent>
+    <Body>
+      <FormComponent 
+          ViewModel="ViewModel.ProductSearchViewModel"
+          OnFormSubmitClick="OnSearchClick"
+      >
+      </FormComponent>
+
+      <TableComponent @ref="ProductsTableComponent"
+          ViewModel="ViewModel.ProductTableViewModel"
+          OnNewClick="OnCreateNewProduct"
+          OnDeleteClick="OnDeleteProduct"
+          OnSaveUpdatesClick="OnSaveProductUpdates"
+          @bind-EditIndex="ProductsTableEditIndex"
+          @bind-IsLoading ="ProductsTableIsLoading"
+          Filter ="SearchFormFilters"
+      >
+
+      </TableComponent>
+    </Body>
+</PageComponent>
+<ModalComponent ViewModel="ViewModel.NewProductModalViewModel">
+    <Body>
+        <FormComponent 
+            ViewModel="ViewModel.NewProductFormViewModel"
+            OnFormSubmitClick="OnSaveNewProduct"
+        >
+
+        </FormComponent>
+    </Body>
+</ModalComponent>

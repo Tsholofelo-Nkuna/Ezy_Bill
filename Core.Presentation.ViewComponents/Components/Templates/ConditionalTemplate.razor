@@ -1,0 +1,8 @@
+﻿@typeparam TContext
+@typeparam TOtherContext
+@if(Condition && IfTrue is not null){
+    @IfTrue(ContextIfTrue)
+}
+else if(!Condition && ElseIfFalse is not null){
+    @ElseIfFalse(ContextIfFalse)
+}

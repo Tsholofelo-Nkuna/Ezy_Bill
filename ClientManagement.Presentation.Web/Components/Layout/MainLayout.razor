@@ -1,0 +1,37 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <nav class="sidebar nav nav-pills flex-column border-end">
+        <span class="navbar-brand m-0 py-0 ps-2 border-bottom border-2 border-primary mb-3 pt-2" style="height:3.5rem"><span class="badge bg-primary">E</span>zyBill</span>
+    
+        <a href="/" class="nav-link mx-3 active"><i class="bi bi-house me-1"></i> Home</a>
+        <a href="/Clients" class="nav-link mx-3"><i class="bi bi-people me-1"></i>Clients</a>
+        <a href="/Products" class="nav-link mx-3"><i class="bi bi-cart4 me-1"></i>Products</a>
+        <a href="/Invoices" class="nav-link mx-3"><i class="bi bi-receipt-cutoff me-1"></i>Invoices</a>
+    </nav>
+    <main>
+        <div class="top-row px-4 bg-primary-subtle">
+          <div class="nav container-fluid">
+            
+          </div>
+        </div>
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+<script>
+    [...document.querySelectorAll(".sidebar .nav-link")].forEach((e,index, currentCollection) => {
+       e.addEventListener("click",eventPayload => {
+           eventPayload.currentTarget.classList.add("active");
+           currentCollection.filter(x => x!==e).forEach(otherE => otherE.classList.remove("active"));
+       })
+    })
+</script>

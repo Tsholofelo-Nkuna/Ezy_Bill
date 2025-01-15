@@ -1,0 +1,24 @@
+﻿@using Core.Presentation.Models.DataTransferObjects.Base
+@using Core.Presentation.Models
+@using Core.Presentation.ViewComponents.Components.Base
+@typeparam TRecordType where TRecordType : BaseDto, new()
+@inherits  GenericComponentBase<ModalViewModel<TRecordType>, TRecordType>
+<div class="modal fade @ViewModel.ShowhowClass" style="display:@ViewModel.DisplayStyle" tabindex="-1" role="dialog" id="new-client-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@ViewModel.Title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => {ViewModel.Show = false;}">
+                </button>
+            </div>
+            <form>
+                <div class="modal-body" style="max-height:412px; overflow-y:auto;">
+                  @Body
+                </div>
+                <div class="modal-footer">
+                  @Footer
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

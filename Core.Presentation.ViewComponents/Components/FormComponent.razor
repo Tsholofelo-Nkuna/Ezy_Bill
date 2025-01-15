@@ -1,0 +1,54 @@
+﻿@using Core.Presentation.Models
+@using Core.Presentation.Models.DataTransferObjects.Base
+@using  Core.Presentation.Models.Base
+@using Core.Presentation.Models.Validation
+@using Core.Presentation.ViewComponents.Components.Base
+@using Microsoft.AspNetCore.Components.Forms
+@typeparam TRecord where TRecord: BaseDto, new()
+@inherits GenericComponentBase<FormComponentViewModel<TRecord>, TRecord> 
+
+@foreach(var sourceRecord in this.ViewModel.ViewModelState)
+{
+
+    <div class="card">
+
+        <form class="card-body"  id="@ViewModel.FormName" method="post">
+
+            @{
+
+                if (ViewModel.IncludeFormStatePropsAsHidden)
+                {
+                    foreach (var formStateKeyVal in this.RecordAsKeyValuePairs(sourceRecord).Where(kv => !ViewModel.Fields.Any(field => kv.Key == field.Name)))
+                    {
+
+                        <input type="hidden" name="@formStateKeyVal.Key" value="@formStateKeyVal.Value" />
+                    }
+                }
+            }
+            <div class="row gx-5 gy-3">
+                @foreach (var field in ViewModel.Fields)
+                {
+                    <div class="@ViewModel.ColClass">
+                        <InputComponent 
+                            ViewModel="field"
+                            OnValidationFail="OnValidationFail"
+                            ViewModelState="sourceRecord"> 
+
+                        </InputComponent>
+                    </div>
+                }
+            </div>
+          
+        </form>
+        @if (!ViewModel.CollapseFooter)
+        {
+            <div class="card-footer">
+                <a @onclick="OnFormSubmit" class="btn btn-primary">@ViewModel.SubmitButtonText</a>
+               @*  <button type="reset" class="btn btn-secondary">Reset</button> *@
+            </div>
+        }
+    </div>
+    <script>
+
+    </script>
+}

@@ -1,0 +1,127 @@
+﻿@using Core.Presentation.Models
+@using Core.Presentation.Models.DataTransferObjects.Base
+@typeparam TRecord where TRecord : BaseDto, new()
+
+@switch (ViewModel.ControlType)
+{
+   
+    case ControlType.Text:
+    case ControlType.Email:
+
+        <div class="row">
+            <div class="col-auto text-end"><label class="form-label">@ViewModel.Label</label></div>
+            <div class="col">
+
+                <input class="form-control @(!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage) ? "border-danger": string.Empty)"
+                       name="@ViewModel.Name"
+                       value="@(_genericListViewModel.Get<string>(ViewModelState.Id, ViewModel.Name))"
+                       @oninput="(eventArgs) => { this.OnInputChange(ViewModelState.Id, ViewModel, eventArgs.Value);}" />
+                @if (!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage))
+                {
+                    <div class="text-danger">@ViewModel.ValidationMessage</div>
+                }
+            </div>
+        </div>
+
+        break;
+    case ControlType.Checkbox:
+
+        <div class="row">
+            <div class="col-auto text-end"><label class="form-label">@ViewModel.Label</label></div>
+            @if ((_genericListViewModel.Get<bool>(ViewModelState.Id, ViewModel.Name)))
+            {
+                <div class="col-auto text-start"> <input @oninput="(e) => { this._genericListViewModel.Set(ViewModelState.Id, ViewModel.Name, e.Value); }" checked type="checkbox" class="form-check-input" name="@ViewModel.Name" value="@bool.TrueString" /></div>
+            }
+            else
+            {
+
+                <div class="col-auto text-start"> <input @oninput="(e) => { this._genericListViewModel.Set(ViewModelState.Id, ViewModel.Name, e.Value); }" type="checkbox" class=" form-check-input" name="@ViewModel.Name" value="@bool.TrueString" /></div>
+            }
+
+        </div>
+        break;
+    case ControlType.Select:
+        <div class="row">
+            <div class="col-auto text-end"><label class="form-label">@ViewModel.Label</label></div>
+            <div class="col-auto text-start">
+                <select class="form-select @(!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage) ? "border-danger":"")"
+                        value="@(_genericListViewModel.Get<string>(ViewModelState.Id, ViewModel.Name))"
+                        @onchange="(e) => _genericListViewModel.Set(ViewModelState.Id, ViewModel.Name, e.Value)">
+                    <option value="">Please select</option>
+                    @foreach (var option in ViewModel.Options)
+                    {
+                        <option value="@option.Key">@option.Value</option>
+                    }
+                </select>
+                @if (!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage))
+                {
+                    <div class="text-danger">@ViewModel.ValidationMessage</div>
+                }
+            </div>
+        </div>
+        break;
+    case ControlType.Date:
+        <div class="row">
+            <div class="col-auto text-end"><label class="form-label">@ViewModel.Label</label></div>
+            <div class="col-auto text-start">
+                <input class="form-control  @(!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage) ? "border-danger": string.Empty)"
+                       name="@ViewModel.Name"
+                       value="@(_genericListViewModel.Get<string>(ViewModelState.Id, ViewModel.Name, true))"
+                       placeholder="dd/MM/yyyy"
+                       @oninput="(eventArgs) => { this.OnInputChange(ViewModelState.Id, ViewModel, eventArgs.Value);}" />
+                @if (!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage))
+                {
+                    <div class="text-danger">@ViewModel.ValidationMessage</div>
+                }
+            </div>
+        </div>
+        break;
+    case ControlType.MultiSelect:
+        <div class="row">
+            <div class="col-auto text-end">
+                <label class="form-label">@ViewModel.Label</label>
+            </div>
+            <div class="col-auto text-start">
+                <div class="row" style="width:256px;">
+                    <div class="col-12 py-3 rounded @(!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage)?"border-danger":string.Empty)" style="border:1px dotted gray;cursor:pointer" @onclick="()=> {ViewModel.SearchBoxOptionsVisible=true;}">
+                        @if (_genericListViewModel.Get<IEnumerable<string>?>(ViewModelState.Id, ViewModel.Name) is IEnumerable<string> multiSelectOptions)
+                        {
+                            @foreach (var mulitSelectOptionKey in multiSelectOptions)
+                            {
+                                var optionVal = ViewModel.Options.Any() ? ViewModel.Options.FirstOrDefault(op => op.Key == mulitSelectOptionKey).Value : null;
+                                if (optionVal is not null)
+                                {
+                                    <span class="badge bg-primary"> <span style="width:128px;display:inline-block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden">@optionVal</span></span>
+                                }
+                            }
+                        }
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage))
+                    {
+                        <div class="text-danger">@ViewModel.ValidationMessage</div>
+                    }
+                    <div class="col-12 position-relative">
+
+                        <ul style="max-height:256px;height:auto; overflow-y:auto;" class="list-group position-absolute top-0 @(!ViewModel.SearchBoxOptionsVisible?"d-none":string.Empty)">
+                            <li class="list-group-item position-sticky top-0" style="z-index:1">
+                                <div class="d-flex flex-row-reverse"><a @onclick="(e) =>{ViewModel.SearchBoxOptionsVisible = false;}" class="btn btn-close"></a></div>
+                            </li>
+                            @foreach (var item in ViewModel.Options)
+                            {
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between">
+                                        <span>@item.Value</span>
+                                        <input @oninput="(e) => OnMultiSelectInputChange(ViewModelState.Id, ViewModel, e.Value, item)"
+                                               value="@item.Key"
+                                               type="checkbox"
+                                               class="form-check-input" />
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        break;
+}

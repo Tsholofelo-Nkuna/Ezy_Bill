@@ -1,0 +1,21 @@
+﻿@using Core.Presentation.Models
+@using Core.Presentation.Models.DataTransferObjects.Base
+@using Core.Presentation.ViewComponents.Components.Base
+
+@inherits GenericComponentBase<PageComponentViewModel, BaseDto>
+<div class="breadcrumb">
+    @foreach(var item in this.BreadcrumbItems){
+        <div class="breadcrumb-item">@item</div>
+    }
+</div>
+<div class="my-2 d-flex justify-content-between">
+    <a class="btn btn-link  @(!ShowBackButton?"d-none":"")" onclick="history.back()">Back</a>
+    <div class="d-flex align-items-center" style="column-gap:0.25rem;">
+        @if(TopControls is not null){
+            @TopControls;
+        }
+    </div>
+</div>
+@if(Body is RenderFragment){
+    @(Body);
+}
