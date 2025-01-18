@@ -1,0 +1,12 @@
+﻿<a class="@CssClass position-relative" @onclick="OnClicked" title="@ToolTip">
+    @if(Icon is not null){
+        @Icon
+    }
+    @if(!string.IsNullOrWhiteSpace(Text)){
+       // &nbsp;
+        <span class="ms-1">@Text</span>
+    }
+   @if(IsLoading){
+     <div class="spinner-border position-absolute" style="height:1rem;width:1rem;font-size:0.5rem;left:35%;top:35%;"></div>
+   }
+</a>

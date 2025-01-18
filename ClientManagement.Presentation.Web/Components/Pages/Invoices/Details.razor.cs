@@ -20,6 +20,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
         [Inject]
         public HtmlToPdfConverter? HtmlToPdfConverter { get; set; }
         public string InvoicePdfBase64 { get; set; } = string.Empty;
+        public bool PrintBusy { get; set; }
         public string InvoiceDetailsTab 
         {
             get => _invoiceDetailsTab;
@@ -76,7 +77,9 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
             }
         }
         public async Task OnPrintInvoice()
-        {
+        { 
+            PrintBusy = true;
+            StateHasChanged();
             var invoiceTemplate = new InvoiceTemplate();
             var pdfContent =  await (this.HtmlToPdfConverter?.CreatePdfAsync(
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{DateTime.Now:yyyyMMddhhmmss}-{this.Id}.pdf"),
@@ -85,8 +88,10 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
             if(pdfContent is byte[] contents)
             {
                 this.InvoicePdfBase64 = $"data:application/pdf;base64,{Convert.ToBase64String(pdfContent)}";
-                StateHasChanged();
+               
             }
+            PrintBusy = false;
+            StateHasChanged();
         }
         public async Task OnEditInvoicePaymentSaveClick(EventState<InvoicePaymentDto?> eventState)
         {

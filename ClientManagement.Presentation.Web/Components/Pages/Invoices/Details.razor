@@ -16,7 +16,17 @@
         {
           <a class="btn btn-link text-success" href="@this.InvoicePdfBase64" download="invoice">Open Invoice</a>
         }
-        <a title="Print" class="btn btn-outline-primary" @onclick="OnPrintInvoice"><i class="bi bi-printer"></i></a>
+       
+        <ButtonTemplate 
+            CssClass="btn btn-outline-primary"
+            OnClick="OnPrintInvoice"
+            ToolTip="Download Invoice"
+            IsLoading ="PrintBusy"
+        >
+          <Icon>
+                <i class="bi bi-download"></i>
+          </Icon>
+        </ButtonTemplate>
        
     </TopControls>
     <Body>
