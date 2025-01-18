@@ -17,7 +17,7 @@ namespace Core.Presentation.ViewComponents.Components.Templates
         [Parameter]
         public RenderFragment? Icon { get; set; }
         [Parameter]
-        public Func<Task>? OnClick { get; set; }
+        public EventCallback OnClick { get; set; }
         [Parameter]
         public string? ToolTip { get; set; }
         [Parameter]
@@ -26,7 +26,7 @@ namespace Core.Presentation.ViewComponents.Components.Templates
         {
             if (!IsLoading)
             {
-                OnClick?.Invoke();
+                OnClick.InvokeAsync();
             }
         }
         
