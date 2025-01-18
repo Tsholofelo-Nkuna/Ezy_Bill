@@ -24,7 +24,10 @@ namespace Core.Presentation.ViewComponents.Components.Templates
         public bool IsLoading {get; set;}
         public void OnClicked()
         {
-            OnClick?.Invoke();
+            if (!IsLoading)
+            {
+                OnClick?.Invoke();
+            }
         }
         
     }
