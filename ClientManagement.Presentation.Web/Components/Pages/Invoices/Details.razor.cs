@@ -128,7 +128,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
         {
             this.InvoiceProductCreationInProgress = true;
             this.StateHasChanged();
-            if(eventState is { Success : true, Payload : IEnumerable<InvoicePaymentDto> } && eventState.Payload.Any(iP =>  iP is not null && iP.ProductId != Guid.Empty))
+            if(eventState is { Success : true, Payload : IEnumerable<InvoiceProductDto> } && eventState.Payload.Any(iP =>  iP is not null && iP.ProductId != Guid.Empty))
             {
                 var invoiceProduct = eventState.Payload.FirstOrDefault(ip => ip is not null && ip.ProductId != Guid.Empty)!;
                 invoiceProduct.InvoiceId = this.Id;

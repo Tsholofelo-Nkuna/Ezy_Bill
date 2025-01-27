@@ -90,6 +90,11 @@ namespace Core.Presentation.Models.Base
             {
                 return validStrCollectionSource;
             }
+           else if(targetTypeName == guidType && source is object validSourceObject)
+           {
+                _ = Guid.TryParse(validSourceObject.ToString(), out var guidResult);
+                return guidResult;
+           }
             else if ((targetTypeName == dateTimeType || targetTypeName == nullableDateTime) && source is object validDateSource)
             {
                 var match = Regex.Match(validDateSource.ToString(), @"(\d{2})/(\d{2})/(\d{4})");
