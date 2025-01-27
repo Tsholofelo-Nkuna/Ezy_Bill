@@ -17,6 +17,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Products
             this.ViewModel.ProductSearchViewModel.ViewModelState.FirstOrDefault() ?? new ProductDto();
         [Inject]
         public ProductStateManager StateManager { get; set; }
+        public bool NewProductCreationInProgress { get; set; }
         public int ProductsTableEditIndex { get; set; } = -1;
         public bool ProductsTableIsLoading { get; set; }
         public TableComponent<ProductDto>? ProductsTableComponent { get; set; }
@@ -55,7 +56,8 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Products
 
         public async Task OnSaveNewProduct(IEnumerable<ProductDto> products)
         {
-          
+            this.NewProductCreationInProgress = true;
+            StateHasChanged();
             if (this.ViewModel.NewProductFormViewModel.Validate())
             {
                 var response = await this.AppApi
@@ -72,6 +74,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Products
             {
                // this.StateManager.Set<bool>(nameof(ProductState.CreateNewProductModelIsValid), false);
             }
+            this.NewProductCreationInProgress=false;
             StateHasChanged();
         }
 
