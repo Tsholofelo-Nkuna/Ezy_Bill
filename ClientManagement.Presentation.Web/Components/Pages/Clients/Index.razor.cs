@@ -19,7 +19,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Clients
         [Inject]
         public IndexStateManager StateManager { get; set; }
         public bool ClientsTableIsLoading { get; set; }
-
+        public bool NewClientCreationInProgress { get; set; }
         public TableComponent<ClientDto>? ClientsTableComponent { get; set; }
         protected override async Task OnInitializedAsync()
         {
@@ -42,7 +42,8 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Clients
 
         public async Task OnNewClientFormSubmitted(ClientDto? details, ClientDto? primaryContact)
         {
-           
+            this.NewClientCreationInProgress = true;
+            StateHasChanged();
             var addedClient = new ClientDto();
             if (details is ClientDto newC && primaryContact is ClientDto contactInfo)
             {
@@ -69,6 +70,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Clients
                     //Display error message
                 }
             }
+            this.NewClientCreationInProgress = false;
             StateHasChanged();           
         }
    

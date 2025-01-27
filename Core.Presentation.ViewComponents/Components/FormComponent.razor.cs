@@ -20,6 +20,8 @@ namespace Core.Presentation.ViewComponents.Components
         public Func<EventState<IEnumerable<TRecord>>, Task>? OnFormSubmitClicked { get; set; }
         [Parameter]
         public Action<KeyValuePair<string, string>?>? OnValidationFail { get; set; }
+        [Parameter]
+        public bool SubmitBusy { get; set; }
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -94,7 +96,6 @@ namespace Core.Presentation.ViewComponents.Components
 
         public Task OnFormSubmit()
         {
-           
             if (this.ViewModel.Validate())
             {
               //model is valid

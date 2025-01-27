@@ -1,5 +1,6 @@
 ﻿@page "/Clients"
 @using ClientManagement.Presentation.Models.DataTransferObjects
+@using Core.Presentation.ViewComponents.Components.Templates
 
 @inherits GenericComponentBase<ClientsViewModel, ClientDto>
 
@@ -30,10 +31,13 @@
                 </div>
             </Body>
             <Footer>
-                <a @onclick=" async (eventArgs) => { await this.OnNewClientFormSubmitted(ViewModel.NewClientFormViewModel.ViewModelState.FirstOrDefault(), ViewModel.PrimaryContactFormViewModel.ViewModelState.FirstOrDefault());}"
-                        class="btn btn-primary">
-                    Submit
-                </a>
+                <ButtonTemplate
+                    Text="Submit"
+                    OnClick=" async () => {  await this.OnNewClientFormSubmitted(ViewModel.NewClientFormViewModel.ViewModelState.FirstOrDefault(), ViewModel.PrimaryContactFormViewModel.ViewModelState.FirstOrDefault()); }"
+                    IsLoading ="this.NewClientCreationInProgress">
+
+                </ButtonTemplate>
+             
             </Footer>
         </ModalComponent>
     </Body>
