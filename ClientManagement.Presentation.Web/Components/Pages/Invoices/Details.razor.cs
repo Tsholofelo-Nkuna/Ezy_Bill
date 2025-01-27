@@ -6,6 +6,7 @@ using Core.Presentation.Models;
 using Core.Presentation.ViewComponents.Components.Base;
 using Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Identity.Client;
 
 namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
 {
@@ -22,6 +23,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
         public string InvoicePdfBase64 { get; set; } = string.Empty;
         public bool PrintBusy { get; set; }
         public bool InvoicePaymentInProgress { get; set; }
+        public bool InvoiceProductCreationInProgress { get; set; }
         public string InvoiceDetailsTab 
         {
             get => _invoiceDetailsTab;
@@ -64,6 +66,24 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
                     StateHasChanged();
                 }
             }
+
+            var productRequestResponse = await this.AppApi.PostAsJsonAsync($"api/Products/Get", new ProductDto());
+            if(productRequestResponse is { IsSuccessStatusCode : true} successResponse)
+            {
+                var productList = await successResponse.Content.ReadFromJsonAsync<IEnumerable<ProductDto>>() ;
+                var productOptions = productList?
+                    .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.Name} | {x.Description}"));
+                if(productOptions is IEnumerable<KeyValuePair<string, string>> validProductOptions)
+                {
+                   var productDropDown = this.ViewModel.NewInvoiceProductFormViewModel.Fields
+                        .FirstOrDefault(x => x.ControlType == ControlType.Select && x.Name == nameof(InvoiceProductDto.ProductId));
+                    if(productDropDown is not null)
+                    {
+                        productDropDown.Options = validProductOptions;
+                        StateHasChanged() ;
+                    }
+                }
+            }
         }
 
         public async Task GetInvoicePayments(Guid invoiceId)
@@ -102,6 +122,34 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
                 await this.GetData(true);
                 await this.GetInvoicePayments(this.Id);
             }
+        }
+
+        public async Task OnNewInvoiceProductSave (EventState<IEnumerable<InvoiceProductDto?>> eventState)
+        {
+            this.InvoiceProductCreationInProgress = true;
+            this.StateHasChanged();
+            if(eventState is { Success : true, Payload : IEnumerable<InvoicePaymentDto> } && eventState.Payload.Any(iP =>  iP is not null && iP.ProductId != Guid.Empty))
+            {
+                var invoiceProduct = eventState.Payload.FirstOrDefault(ip => ip is not null && ip.ProductId != Guid.Empty)!;
+                invoiceProduct.InvoiceId = this.Id;
+                
+                var serviceReponse = await this.AppApi.PostAsJsonAsync("api/InvoiceProducts", invoiceProduct);
+                if(serviceReponse is { IsSuccessStatusCode : true })
+                {
+
+                }
+                
+            }
+
+            this.InvoiceProductCreationInProgress = false;
+            this.StateHasChanged();
+        }
+
+        public Task OnInvoiceProductTableNewClick()
+        {
+            this.ViewModel.InvoiceProductViewModalModel.Show = true;
+            StateHasChanged();
+            return Task.CompletedTask;
         }
         public async Task OnNewInvoicePaymentSave(EventState<IEnumerable<InvoicePaymentDto>?> eventState)
         {

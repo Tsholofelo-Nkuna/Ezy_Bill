@@ -84,6 +84,7 @@
                         OnSaveUpdatesClick="OnSaveInvoiceProduct"
                         @bind-EditIndex="InvoiceProductsTableEditIndex"
                         OnDeleteClick="OnDeleteInvoiceProduct"
+                        OnNewClick="OnInvoiceProductTableNewClick"
                     >
                     </TableComponent>
                     <div class="container">
@@ -119,6 +120,15 @@
                     ViewModel="ViewModel.NewInvoicePaymentFormViewModel"
                     OnFormSubmitClicked="OnNewInvoicePaymentSave"
                     SubmitBusy ="InvoicePaymentInProgress">
+                </FormComponent>
+            </Body>
+        </ModalComponent>
+        <ModalComponent
+            ViewModel="ViewModel.InvoiceProductViewModalModel">
+            <Body>
+                <FormComponent ViewModel="ViewModel.NewInvoiceProductFormViewModel"
+                               OnFormSubmitClicked="OnNewInvoiceProductSave"
+                               SubmitBusy="InvoicePaymentInProgress">
                 </FormComponent>
             </Body>
         </ModalComponent>

@@ -6,6 +6,7 @@ namespace ClientManagement.Presentation.Models.DataTransferObjects
 {
     public class InvoiceProductDto : BaseDto
     {
+        public Guid ProductId { get; set; }
         public ProductDto Product { get; set; } = new ProductDto();
         public double Quantity { get; set; } = 1;
         public Guid InvoiceId { get; set; }

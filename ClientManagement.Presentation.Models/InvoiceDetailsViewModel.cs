@@ -37,6 +37,7 @@ namespace ClientManagement.Presentation.Models
             ShowArchiveButton = false,
             ShowViewButton = false,
             ShowDeleteButton = true,
+            ShowCreateNewButton = true,
             ColumnConfigs = new List<TableComponentColumnConfig<InvoiceProductDto>>
             {
                 new TableComponentColumnConfig<InvoiceProductDto>
@@ -128,6 +129,29 @@ namespace ClientManagement.Presentation.Models
         public ModalViewModel<InvoicePaymentDto> InvoicePaymentModalViewModel { get; set; } = new ModalViewModel<InvoicePaymentDto>
         {
             Title = "New Invoice Payment",
+        };
+
+        public ModalViewModel<InvoiceProductDto> InvoiceProductViewModalModel { get; set; } = new ModalViewModel<InvoiceProductDto>()
+        {
+            Title = "New Invoice Product"
+        };
+
+        public FormComponentViewModel<InvoiceProductDto> NewInvoiceProductFormViewModel { get; set; } = new()
+        {
+            ViewModelState = Enumerable.Empty<InvoiceProductDto>().Append(new InvoiceProductDto()),
+            Fields = new()
+            {
+                new InputFieldViewModel<InvoiceProductDto>( nameof(InvoiceProductDto.ProductId), "Product")
+                {
+                    ControlType = ControlType.Select,
+                },
+                  new InputFieldViewModel<InvoiceProductDto>( nameof(InvoiceProductDto.Quantity), "Quantity", new ValidatorBase<InvoiceProductDto>(new []{ Validators.Number()}, nameof(InvoiceProductDto.Quantity)))
+                {
+                   
+                },
+
+            },
+            ColClass = "col-12"
         };
 
         public FormComponentViewModel<InvoicePaymentDto> NewInvoicePaymentFormViewModel =
