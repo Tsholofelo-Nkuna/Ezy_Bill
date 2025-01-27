@@ -14,6 +14,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
     {
         [Inject]
         public InvoiceStateManager StateManager { get; set; }
+        public bool NewInvoiceCreationInProgress { get; set; }
         protected override async Task OnInitializedAsync()
         {
              await base.OnInitializedAsync();
@@ -97,6 +98,8 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
 
         public async Task OnSaveNewInvoice(IEnumerable<InvoiceDto> data) 
         {
+            this.NewInvoiceCreationInProgress = true;
+            StateHasChanged();
             var response = await this.AppApi.PostAsJsonAsync($"{this.BaseUrl}", data.FirstOrDefault());
             if (response is { IsSuccessStatusCode: true } && (await response.Content.ReadFromJsonAsync<bool>()))
             {
@@ -107,6 +110,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
             {
                 //Some error occured during creation of a new invoice.
             }
+            this.NewInvoiceCreationInProgress = false;
             StateHasChanged();
            // return Task.CompletedTask;
         }
