@@ -21,6 +21,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
         public HtmlToPdfConverter? HtmlToPdfConverter { get; set; }
         public string InvoicePdfBase64 { get; set; } = string.Empty;
         public bool PrintBusy { get; set; }
+        public bool InvoicePaymentInProgress { get; set; }
         public string InvoiceDetailsTab 
         {
             get => _invoiceDetailsTab;
@@ -104,6 +105,8 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
         }
         public async Task OnNewInvoicePaymentSave(EventState<IEnumerable<InvoicePaymentDto>?> eventState)
         {
+            this.InvoicePaymentInProgress = true;
+            this.StateHasChanged();
             if(eventState is { Success : true, Payload : IEnumerable<InvoicePaymentDto>} && eventState.Payload.Any())
             {
                 var saveUrl = $"{BaseUrl}";
@@ -121,6 +124,9 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
                     await this.GetInvoicePayments(this.Id);
                 }
             }
+
+            this.InvoicePaymentInProgress = false;
+            this.StateHasChanged();
            
         }
         public Task OnNewInvoicePaymentClicked(EventState<InvoicePaymentDto?> eventState)

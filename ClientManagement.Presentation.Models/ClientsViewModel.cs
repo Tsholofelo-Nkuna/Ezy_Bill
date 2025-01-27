@@ -69,12 +69,12 @@ namespace ClientManagement.Presentation.Models
 
                 new InputFieldViewModel<ClientDto>(
                     nameof(ClientDto.CompanyName), 
-                    "Company Name",
+                    "Name / Company Name",
                     new ValidatorBase<ClientDto>(new ValidatorFn[] { Validators.Required()}, nameof(ClientDto.CompanyName))
                     ),
                 new InputFieldViewModel<ClientDto>(
                     nameof(ClientDto.TradingAs),
-                    "Trading As",
+                    "Surname / Trading As",
                     new ValidatorBase<ClientDto>(new ValidatorFn[] { Validators.Required()}, nameof(ClientDto.TradingAs))
                     ),
                  new InputFieldViewModel<ClientDto>(
