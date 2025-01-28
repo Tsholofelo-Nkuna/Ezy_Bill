@@ -134,13 +134,13 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
                 invoiceProduct.InvoiceId = this.Id;
                 
                 var serviceReponse = await this.AppApi.PostAsJsonAsync("api/InvoiceProducts", invoiceProduct);
-                if(serviceReponse is { IsSuccessStatusCode : true })
+                if(serviceReponse is { IsSuccessStatusCode : true } successServiceResponse && (await successServiceResponse.Content.ReadFromJsonAsync<bool>()))
                 {
-
+                    await this.GetData(true);
                 }
                 
             }
-
+            this.ViewModel.InvoiceProductViewModalModel.Show = false;
             this.InvoiceProductCreationInProgress = false;
             this.StateHasChanged();
         }

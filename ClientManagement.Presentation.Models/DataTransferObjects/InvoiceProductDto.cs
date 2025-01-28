@@ -10,6 +10,7 @@ namespace ClientManagement.Presentation.Models.DataTransferObjects
         public ProductDto Product { get; set; } = new ProductDto();
         public double Quantity { get; set; } = 1;
         public Guid InvoiceId { get; set; }
+        public InvoiceDto Invoice { get; set; } = new InvoiceDto();
         public double ProductAmount { get; set; }
         public string ProductName => Product?.Name ?? string.Empty;
         public string ProductDescription => Product?.Description ?? string.Empty;

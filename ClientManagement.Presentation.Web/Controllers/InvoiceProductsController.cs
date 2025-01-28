@@ -1,4 +1,5 @@
 ﻿using ClientManagement.BusinessLogicLayer.Interfaces;
+using ClientManagement.BusinessLogicLayer.Services;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 using Core.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -13,23 +14,51 @@ namespace ClientManagement.Presentation.Web.Controllers
     {
         private readonly ILogger<InvoiceProductsController> _logger;
         private readonly IInvoiceProductService _invoiceProductService;
+        private readonly IInvoiceService _invoiceService;
+        private readonly ProductService _productService;
         private readonly ControllerRequestHandler<InvoiceProductsController>  _requestHandler;
 
-        public InvoiceProductsController(ILogger<InvoiceProductsController> logger, IInvoiceProductService invoiceProductService)
+        public InvoiceProductsController(ILogger<InvoiceProductsController> logger, 
+            IInvoiceProductService invoiceProductService,
+            IInvoiceService invoiceService,
+            ProductService productService)
         {
             _logger = logger;
             _invoiceProductService = invoiceProductService;
             _requestHandler = new ControllerRequestHandler<InvoiceProductsController>(_logger);
+            _invoiceService = invoiceService;
+            _productService = productService;
         }
 
 
         // POST api/<InvoiceProductsController>/AddOrUpdate
         [HttpPost]
-        public Task<bool> Post([FromBody] InvoiceProductDto value)
+        public async Task<bool> Post([FromBody] InvoiceProductDto value)
         {
             //Investigate why this method can't be invoked by client, even though client
             //passes it a valid argument
-            return Task.FromResult(false);
+            return await _requestHandler.HandleRequest(
+                async () =>
+                {
+                    var invoice =  (await _invoiceService.Get( new InvoiceDto { Id = value.InvoiceId } )).FirstOrDefault();
+                    var product = (await _productService.Get(new ProductDto { Id = value.ProductId })).FirstOrDefault();
+                    value.Invoice = invoice ?? new InvoiceDto();
+                    value.Product = product ?? new ProductDto();
+                    value.ProductAmount = value.Product.Price;
+                    if(value.Invoice.Id != Guid.Empty && value.Product.Id != Guid.Empty)
+                    {
+                       var updates  = await this._invoiceProductService.Update(new() { value });
+                        return (updates is not null && updates.Any());
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                },
+                nameof(Post),
+                Task.FromResult(false),
+                value
+                );
         }
 
         [HttpGet("[action]/{invoiceProductId}")]
