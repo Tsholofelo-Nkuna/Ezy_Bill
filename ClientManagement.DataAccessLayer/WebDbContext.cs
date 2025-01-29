@@ -1,4 +1,5 @@
 ﻿using ClientManagement.DataAccessLayer.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,6 +12,7 @@ namespace ClientManagement.DataAccessLayer
 {
     public class WebDbContext : IdentityDbContext
     {
+      
         public WebDbContext(DbContextOptions<WebDbContext> options) : base(options) { }
 
         public virtual DbSet<ClientEntity> Clients { get; set; }
@@ -20,5 +22,7 @@ namespace ClientManagement.DataAccessLayer
         public virtual DbSet<InvoiceEntity> Invoices { get; set; }
         public virtual DbSet<InvoiceProductsEntity> InvoicesProducts { get; set; }
         public virtual DbSet<InvoicePaymentEntity> InvoicesPayments { get; set; }
+        public virtual DbSet<ProfileEntity> Profiles { get; set; }
+        public virtual DbSet<UserProfileEntity> UserProfiles { get; set; }
     }
 }

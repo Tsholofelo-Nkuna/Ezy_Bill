@@ -5,6 +5,8 @@ using ClientManagement.DataAccessLayer;
 using Core.Utils.Logging;
 using System.Globalization;
 using Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf;
+using ClientManagement.DataAccessLayer.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace ClientManagement.Presentation.Web
 {
@@ -19,11 +21,32 @@ namespace ClientManagement.Presentation.Web
 
             // Add services to the container.
             builder.Services.AddScoped(typeof(HtmlToPdfConverter));
-            builder.Services.AddDbContext<WebDbContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+            builder.Services
+                .AddDbContext<WebDbContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("Default")))
+                .AddIdentity<IdentityUser, IdentityRole>(c =>
+                {
+                    
+                    c.Password.RequireNonAlphanumeric = false;
+                    c.Password.RequireUppercase = false;
+                    c.Password.RequireNonAlphanumeric = false;
+                    c.Password.RequireLowercase = false;
+                    c.Password.RequireDigit = false;
+                    c.Password.RequiredLength = 4;
+                })
+                .AddEntityFrameworkStores<WebDbContext>()
+                .AddDefaultTokenProviders();
+                
             builder.Services.AddHttpClient("AppApi",config =>
             {
                 config.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]); 
             });
+
+            builder
+                .Services.AddAuthentication()
+                .AddCookie(c =>
+                {
+                    
+                });
             builder.Services.AddControllers();
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
@@ -46,7 +69,8 @@ namespace ClientManagement.Presentation.Web
             }
 
             app.UseHttpsRedirection();
-
+            //app.UseAuthentication();
+            //app.UseAuthorization();
             app.UseStaticFiles();
             app.UseAntiforgery();
             app.MapControllers();

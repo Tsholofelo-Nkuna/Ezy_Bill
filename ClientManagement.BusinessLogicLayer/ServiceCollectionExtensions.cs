@@ -19,7 +19,9 @@ namespace ClientManagement.BusinessLogicLayer
                 .AddScoped<IInvoiceService, InvoiceService> ()
                 .AddScoped<ProductService>() //Add interface for the ProductService
                 .AddScoped<IInvoiceProductService, InvoiceProductsService>()
-                .AddScoped<IInvoicePaymentService, InvoicePaymentService>();
+                .AddScoped<IInvoicePaymentService, InvoicePaymentService>()
+                .AddScoped<IProfileService, ProfileService>();
+
           
         }
     }

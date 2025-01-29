@@ -23,6 +23,8 @@ namespace ClientManagement.BusinessLogicLayer
                 .ReverseMap();
             this.CreateMap<InvoicePaymentDto, InvoicePaymentEntity>()
                 .ReverseMap();
+            this.CreateMap<ProfileDto, ProfileEntity>()
+                .ReverseMap();
         }
     }
 }
