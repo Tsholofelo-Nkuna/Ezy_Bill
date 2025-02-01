@@ -1,0 +1,51 @@
+﻿
+<div style="display:grid;place-items:center;grid-template-columns: 1fr; grid-template-rows:1fr; width:100vw;height:100vh;">
+    <form class="card" style="width:512px;">
+        <div class="card-body">
+            <div class="row">
+                <label class="col-form-label col-auto text-end">Username</label>
+                <input required name="email" class="form-control col-auto text-start" type="text" />
+            </div>
+            <div class="row">
+                <label class="col-f col-auto text-end">Password</label>
+                <input name="password" class="form-control col-auto text-start" type="password" />
+            </div>
+            <div style="display:flex;column-gap:0.5rem;" class="my-2">
+                <a style="font-size:0.85rem" href="#">Forgot password</a>
+                <a style="font-size:0.85rem" href="#">Register</a>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-primary" onclick="submitFormClick()">Submit</a>
+        </div>
+    </form>
+</div>
+<script>
+    async function submitFormClick(){
+
+    let submitted = [...document.querySelectorAll("input")]
+    .reduce((carry, next) => {
+    return {...carry, [next.name]:next.value}
+    }, {});
+
+    let response = await fetch("/login",{
+    body : JSON.stringify(submitted),
+    method: "post",
+    headers: {
+    "Content-Type": "application/json"
+    }
+
+    });
+    if(response.status === 200){
+
+    let tokenResponse = await response.json();
+    document.cookie+= `access_token=${tokenResponse.accessToken};refresh_token=${tokenResponse.refreshToken}`;
+    location.href = "/";
+    }
+    }
+</script>
+
+@code{
+    [Parameter]
+    public string TitleName { get; set; } = string.Empty;
+}

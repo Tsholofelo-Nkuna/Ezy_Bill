@@ -1,6 +1,7 @@
 ﻿using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 using Core.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize]
     public class InvoicesController : ControllerBase
     {
         private readonly IInvoiceService _invoiceService;

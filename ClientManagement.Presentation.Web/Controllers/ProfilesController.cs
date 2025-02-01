@@ -1,13 +1,14 @@
 ﻿using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 using ClientManagement.Presentation.Web.Controllers.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize]
     public class ProfilesController : ApiBaseController<ProfilesController>
     {
         private readonly IProfileService _profileService;

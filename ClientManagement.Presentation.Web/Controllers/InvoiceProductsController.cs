@@ -2,6 +2,7 @@
 using ClientManagement.BusinessLogicLayer.Services;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 using Core.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize]
     public class InvoiceProductsController : ControllerBase
     {
         private readonly ILogger<InvoiceProductsController> _logger;

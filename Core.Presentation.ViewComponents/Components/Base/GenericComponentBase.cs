@@ -12,6 +12,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace Core.Presentation.ViewComponents.Components.Base
 {
@@ -27,8 +32,10 @@ namespace Core.Presentation.ViewComponents.Components.Base
         [Inject]
         public NavigationManager NavManager { get; set; }
         [Inject] private IHttpClientFactory _httpClientFactory {  get; set; }
+        [Inject] private IHttpContextAccessor _httpContextAccessor { get; set; }
       
         public HttpClient AppApi => _httpClientFactory.CreateClient("AppApi");
+        public ClaimsPrincipal? CurrentUser => _httpContextAccessor.HttpContext?.User;
         public IEnumerable<string> BreadcrumbItems {
             get
             {
@@ -43,9 +50,29 @@ namespace Core.Presentation.ViewComponents.Components.Base
         {
             ViewModel = viewModel;
             viewModel.OnViewModelStateChangedEvent += this.OnViewModelStateChanged;
+           
 
         }
-      
+
+        protected override Task OnInitializedAsync()
+        {
+            var returned =  base.OnInitializedAsync();
+            if(!(this.CurrentUser?.Identity?.IsAuthenticated ?? false))
+            {
+                this.NavManager.NavigateTo("Accounts/Login", true);
+            }
+            return returned;
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            if (!(this.CurrentUser?.Identity?.IsAuthenticated ?? false))
+            {
+                this.NavManager.NavigateTo("Accounts/Login", true);
+            }
+        }
+
         public virtual void OnNavigate(string controllerName, string actionName, Guid stateId)
         {
             var baseUrl = string.IsNullOrEmpty(controllerName) ? "/" : "";

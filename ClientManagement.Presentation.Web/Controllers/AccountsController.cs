@@ -1,0 +1,22 @@
+﻿using Core.Presentation.ViewComponents.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Text;
+
+namespace ClientManagement.Presentation.Web.Controllers
+{
+    public class AccountsController : Controller
+    {
+        private readonly HtmlRenderer _htmlRenderer;
+        public AccountsController(IServiceProvider sp) {
+            this._htmlRenderer = new HtmlRenderer(sp, sp.GetService<ILoggerFactory>()!);
+        }
+        // GET: AccountsController
+        public IActionResult Login()
+        {
+          return View();    
+        }
+
+    }
+}

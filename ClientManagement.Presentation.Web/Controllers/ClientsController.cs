@@ -5,13 +5,14 @@ using ClientManagement.BusinessLogicLayer.Interfaces;
 
 using Core.Utils;
 using ClientManagement.Presentation.Models.DataTransferObjects;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize]
     public class ClientsController : ControllerBase
     {
         private readonly IClientService _clientService;
