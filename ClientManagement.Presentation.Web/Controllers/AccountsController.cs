@@ -8,10 +8,6 @@ namespace ClientManagement.Presentation.Web.Controllers
 {
     public class AccountsController : Controller
     {
-        private readonly HtmlRenderer _htmlRenderer;
-        public AccountsController(IServiceProvider sp) {
-            this._htmlRenderer = new HtmlRenderer(sp, sp.GetService<ILoggerFactory>()!);
-        }
         // GET: AccountsController
         public IActionResult Login()
         {
