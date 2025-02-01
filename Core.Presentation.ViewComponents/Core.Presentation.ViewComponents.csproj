@@ -15,6 +15,14 @@
     <ProjectReference Include="..\Core.Models\Core.Presentation.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DartSassBuilder" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Login\" />
+  </ItemGroup>
+
 
 
 </Project>
