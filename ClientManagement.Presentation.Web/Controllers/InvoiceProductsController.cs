@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController, Authorize]
+    [ApiController]
     public class InvoiceProductsController : ControllerBase
     {
         private readonly ILogger<InvoiceProductsController> _logger;

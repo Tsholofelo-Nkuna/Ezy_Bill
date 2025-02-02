@@ -1,13 +1,9 @@
 ﻿using ClientManagement.Presentation.Models;
 using ClientManagement.Presentation.Models.DataTransferObjects;
-using ClientManagement.Presentation.Web.Components.Pages.Products.State;
 using Core.Presentation.Models;
 
 using Core.Presentation.ViewComponents.Components;
 using Core.Presentation.ViewComponents.Components.Base;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Http.Extensions;
-using System.Globalization;
 
 namespace ClientManagement.Presentation.Web.Components.Pages.Products
 {
@@ -15,8 +11,6 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Products
     {
         public ProductDto SearchFormFilters => 
             this.ViewModel.ProductSearchViewModel.ViewModelState.FirstOrDefault() ?? new ProductDto();
-        [Inject]
-        public ProductStateManager StateManager { get; set; }
         public bool NewProductCreationInProgress { get; set; }
         public int ProductsTableEditIndex { get; set; } = -1;
         public bool ProductsTableIsLoading { get; set; }

@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController, Authorize]
+    [ApiController]
     public class ClientsController : ControllerBase
     {
         private readonly IClientService _clientService;
