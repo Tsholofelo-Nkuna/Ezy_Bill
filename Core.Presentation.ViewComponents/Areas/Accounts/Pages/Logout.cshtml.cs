@@ -1,3 +1,4 @@
+using Core.Utils.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -15,7 +16,7 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
         public async Task OnGetAsync()
         {
            await _signInManager.SignOutAsync();
-           this.HttpContext.Response.Redirect("/Accounts/Login");
+           this.HttpContext.Response.Redirect(LoginPathConstants.Login);
         }
     }
 }
