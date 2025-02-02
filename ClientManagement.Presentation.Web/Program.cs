@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.AspNetCore.Authentication.BearerToken;
+using Core.Utils.Constants;
 
 
 namespace ClientManagement.Presentation.Web
@@ -29,8 +30,12 @@ namespace ClientManagement.Presentation.Web
           
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped(typeof(HtmlToPdfConverter));
-            builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
-                .AddBearerToken(IdentityConstants.BearerScheme);
+            builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
+                .AddCookie(IdentityConstants.ApplicationScheme, c =>
+                {
+                    c.LoginPath = LoginPathConstants.Login;
+                    
+                });
                
             builder.Services.AddAuthorization();
             builder.Services
