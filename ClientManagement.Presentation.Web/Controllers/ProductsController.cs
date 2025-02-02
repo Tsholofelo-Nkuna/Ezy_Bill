@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController, Authorize]
+    [ApiController]
     public class ProductsController : ControllerBase
     {
         private readonly ProductService _productService;

@@ -1,8 +1,6 @@
 ﻿using ClientManagement.Presentation.Models;
 using ClientManagement.Presentation.Models.DataTransferObjects;
-using ClientManagement.Presentation.Web.Components.Pages.Clients.State.Index;
-using Core.Presentation.Models;
-using Core.Presentation.Models.DataTransferObjects;
+
 using Core.Presentation.ViewComponents.Components;
 using Core.Presentation.ViewComponents.Components.Base;
 using Microsoft.AspNetCore.Components;
@@ -16,8 +14,6 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Clients
         [SupplyParameterFromForm(FormName = "NewClientDetails")]
         public ClientDto? NewClientDetails { get; set; }
         public TableComponent<ClientDto> ClientsTable { get; set; }
-        [Inject]
-        public IndexStateManager StateManager { get; set; }
         public bool ClientsTableIsLoading { get; set; }
         public bool NewClientCreationInProgress { get; set; }
         public TableComponent<ClientDto>? ClientsTableComponent { get; set; }

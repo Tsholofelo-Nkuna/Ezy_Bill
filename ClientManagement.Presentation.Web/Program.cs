@@ -29,8 +29,12 @@ namespace ClientManagement.Presentation.Web
           
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped(typeof(HtmlToPdfConverter));
-            builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
-                .AddBearerToken(IdentityConstants.BearerScheme);
+            builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
+                .AddCookie(IdentityConstants.ApplicationScheme, c =>
+                {
+                    c.LoginPath = "/Accounts/Login";
+                    
+                });
                
             builder.Services.AddAuthorization();
             builder.Services
@@ -47,7 +51,7 @@ namespace ClientManagement.Presentation.Web
                 })
                 .AddEntityFrameworkStores<WebDbContext>()
                 .AddApiEndpoints();
-
+            builder.Services.AddRazorPages();
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddHttpClient("AppApi",config =>
@@ -56,24 +60,13 @@ namespace ClientManagement.Presentation.Web
             });
           
 
+         
            
-
-            //builder
-            //    .Services.AddAuthentication()
-                
-            //    .AddCookie(c =>
-            //    {
-                    
-            //    });
-           
-            builder.Services.AddControllersWithViews(c =>
-            {
-              //  c.Filters.Add(typeof(AuthFilter));
-            });
+            builder.Services.AddControllersWithViews();
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
             builder.Services.AddBusinessServices();
-            builder.Services.AddStateManagers();
+            builder.Services.AddAppStateService<AppState>();
             var app = builder.Build();
             app.UseRequestLocalization(options =>
             {
@@ -103,6 +96,7 @@ namespace ClientManagement.Presentation.Web
             app.UseAuthorization();
             app.UseStaticFiles();
             app.UseAntiforgery();
+            app.MapRazorPages();
             app.MapIdentityApi<IdentityUser>();
             app.MapControllers();
             app.MapDefaultControllerRoute();
