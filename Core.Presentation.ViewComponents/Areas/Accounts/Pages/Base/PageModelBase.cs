@@ -1,0 +1,18 @@
+﻿using Core.Presentation.Models.Base;
+using Core.Presentation.Models.DataTransferObjects.Base;
+using Core.Presentation.Models.Interfaces.Base;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages.Base
+{
+    public class PageModelBase<TViewModel>: PageModel where TViewModel : new()
+    {
+        public TViewModel ViewModel { get; set; } = new TViewModel();
+
+    }
+}

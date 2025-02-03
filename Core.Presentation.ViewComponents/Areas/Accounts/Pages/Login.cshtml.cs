@@ -1,3 +1,4 @@
+using Core.Presentation.Models;
 using Core.Presentation.Models.DataTransferObjects.login;
 using Core.Utils;
 using Core.Utils.Constants;
@@ -25,12 +26,12 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
             _signInManager = signInManager;
             _userManager = userManager;
         }
-        public UserCredentialsDto CredentialsDto { get; set; } = new UserCredentialsDto();
+        public LoginViewModel CredentialsDto { get; set; } = new LoginViewModel();
         public void OnGet()
         {
         }
 
-        public async Task OnPostAsync(UserCredentialsDto userCredentials) {
+        public async Task OnPostAsync(LoginViewModel userCredentials) {
             if (ModelState.IsValid)
             {
                   var response =  await this._httpClient.PostAsJsonAsync("/login?useCookies=true&useSessionCookies=true", new Dictionary<string, string> {

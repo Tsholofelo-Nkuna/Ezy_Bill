@@ -6,14 +6,13 @@
     Layout = "_Layout";
 }
 
-
-<div>
-    <form class="card" style="width:512px;" method="post">
+<div class="d-flex flex-column w-100 align-items-center">
+    <form class="card col-xs-10 col-sm-8 col-md-6 col-lg-4" method="post">
         <div asp-validation-summary="ModelOnly"></div>
         <div class="card-body">
             <div class="row">
                 <label asp-for="@Model.CredentialsDto.Username" class="col-form-label col-auto text-end"></label>
-                <input name="@nameof(Model.CredentialsDto.Username)" asp-for="@Model.CredentialsDto.Username" class="form-control col-auto text-start" type="email" />
+                <input placeholder="Email" name="@nameof(Model.CredentialsDto.Username)" asp-for="@Model.CredentialsDto.Username" class="form-control col-auto text-start" type="email" />
 
             </div>
             <div class="row">
@@ -22,7 +21,7 @@
             </div>
             <div style="display:flex;column-gap:0.5rem;" class="my-2">
                 <a style="font-size:0.85rem" href="#">Forgot password</a>
-                <a style="font-size:0.85rem" href="#">Register</a>
+                <a style="font-size:0.85rem" href="/Accounts/Register">Register</a>
             </div>
         </div>
         <div class="card-footer">
@@ -31,3 +30,4 @@
     </form>
     <div style="font-size:0.833rem;" class="text-center my-2">&copy;2025 Tsholofelo Nkuna</div>
 </div>
+
