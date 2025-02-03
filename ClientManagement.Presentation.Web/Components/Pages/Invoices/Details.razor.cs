@@ -6,12 +6,14 @@ using Core.Presentation.Models;
 using Core.Presentation.ViewComponents.Components.Base;
 using Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Identity.Client;
 
 namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
 {
     public partial class Details : GenericComponentBase<InvoiceDetailsViewModel, InvoiceDto>
     {
+        [Inject] private UserManager<IdentityUser>? _userManager { get; set; }
         [Parameter]
         public Guid Id { get; set; }
         public int InvoiceProductsTableEditIndex { get; set; } = -1;
@@ -102,10 +104,14 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
             PrintBusy = true;
             StateHasChanged();
             var invoiceTemplate = new InvoiceTemplate();
+            var currentUserData = (_userManager.Users.FirstOrDefault(x => x.UserName == this.CurrentUser.Identity.Name));
             var pdfContent =  await (this.HtmlToPdfConverter?.CreatePdfAsync(
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{DateTime.Now:yyyyMMddhhmmss}-{this.Id}.pdf"),
                 invoiceTemplate,
-                ParameterView.FromDictionary(new Dictionary<string, object?> { { nameof(InvoiceTemplate.Invoice), this.Invoice } })) ?? Task.FromResult(new byte[] { }));
+                ParameterView.FromDictionary(new Dictionary<string, object?> { 
+                    { nameof(InvoiceTemplate.Invoice), this.Invoice },
+                    { nameof(InvoiceTemplate.CurrentUserDetails), new UserDto{Id = currentUserData!.Id, UserName = currentUserData!.UserName!, PhoneNumber = currentUserData!.PhoneNumber! } }
+                })) ?? Task.FromResult(new byte[] { }));
             if(pdfContent is byte[] contents)
             {
                 this.InvoicePdfBase64 = $"data:application/pdf;base64,{Convert.ToBase64String(pdfContent)}";

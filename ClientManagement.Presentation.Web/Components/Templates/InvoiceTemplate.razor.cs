@@ -8,7 +8,7 @@ namespace ClientManagement.Presentation.Web.Components.Templates
     public partial class InvoiceTemplate : GenericComponentBase<InvoiceTemplateViewModel, InvoiceDto>
     {
         [Parameter]
-        public InvoiceDto? Invoice { 
+        public InvoiceDto? Invoice {
             get => this.ViewModel.ViewModelState.FirstOrDefault();
             set
             {
@@ -16,6 +16,9 @@ namespace ClientManagement.Presentation.Web.Components.Templates
 
             }
         }
+
+        [Parameter]
+        public UserDto CurrentUserDetails { get; set; } = new();
        
     }
 }

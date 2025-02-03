@@ -9,7 +9,8 @@ namespace ClientManagement.Presentation.Models.DataTransferObjects
 {
     public class UserDto
     {
-        string Id { get; set; } = string.Empty;
-        string UserName { get; set; } = string.Empty;
+        public string Id { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
     }
 }
