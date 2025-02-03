@@ -28,7 +28,7 @@ namespace Core.Presentation.Models
                 }
             }
         }
-        [Display(Name = "Password"), Required, DataType(DataType.Password), MinLength(4)]
+        [Display(Name = "Password"), Required, DataType(DataType.Password), MinLength(4, ErrorMessage = "Password must have atleast 4 characters")]
         public string Password
         {
             get => this.ViewModelState.FirstOrDefault()?.Password ?? string.Empty;

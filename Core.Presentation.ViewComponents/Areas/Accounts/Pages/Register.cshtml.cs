@@ -45,6 +45,11 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
                 else
                 {
                     this.Message = "Registration failed";
+                    this.ViewModel.CompanyPhone = registration.CompanyPhone;
+                    this.ViewModel.CompanyName = registration.CompanyName;
+                    this.ViewModel.CompanyEmail = registration.CompanyEmail;
+                    this.ViewModel.Password = registration.Password;
+                    this.ViewModel.ConfirmPassword = registration.ConfirmPassword;
                 }
             }
             else { 
