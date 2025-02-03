@@ -113,7 +113,7 @@ namespace ClientManagement.Presentation.Models
         public ModalViewModel<BaseDto> NewProductModalViewModel { get; set; } =
             new ModalViewModel<BaseDto>()
             {
-                Title = "New Product"
+                Title = "New Product/Service"
             };
         
     }

@@ -109,7 +109,7 @@ namespace ClientManagement.Presentation.Models
                 },
                   new InputFieldViewModel<InvoiceDto>(
                     nameof(InvoiceDto.ProductIdentifiers),
-                    "Products",
+                    "Products/Services",
                     new ValidatorBase<InvoiceDto>(new []{ Validators.Required()}, nameof(InvoiceDto.ClientId)))
                 {
                     ControlType = ControlType.MultiSelect,

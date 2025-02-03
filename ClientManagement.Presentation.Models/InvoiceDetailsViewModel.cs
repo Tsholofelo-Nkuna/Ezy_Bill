@@ -27,7 +27,7 @@ namespace ClientManagement.Presentation.Models
         public TabsComponentViewModel<InvoiceDto> TabsViewModel { get; set; } = new TabsComponentViewModel<InvoiceDto>()
         {
             TabItems = new List<TabItemViewModel> { 
-                new TabItemViewModel("Products","invoice-products-tab","Products"){ Active = true },
+                new TabItemViewModel("Products/Services","invoice-products-tab","Products"){ Active = true },
                 new TabItemViewModel("Payments","invoice-payments-tab","Payments")
             }
         };
@@ -133,7 +133,7 @@ namespace ClientManagement.Presentation.Models
 
         public ModalViewModel<InvoiceProductDto> InvoiceProductViewModalModel { get; set; } = new ModalViewModel<InvoiceProductDto>()
         {
-            Title = "New Invoice Product"
+            Title = "New Invoice Product/Service"
         };
 
         public FormComponentViewModel<InvoiceProductDto> NewInvoiceProductFormViewModel { get; set; } = new()
@@ -141,7 +141,7 @@ namespace ClientManagement.Presentation.Models
             ViewModelState = Enumerable.Empty<InvoiceProductDto>().Append(new InvoiceProductDto()),
             Fields = new()
             {
-                new InputFieldViewModel<InvoiceProductDto>( nameof(InvoiceProductDto.ProductId), "Product")
+                new InputFieldViewModel<InvoiceProductDto>( nameof(InvoiceProductDto.ProductId), "Product/Service")
                 {
                     ControlType = ControlType.Select,
                 },
