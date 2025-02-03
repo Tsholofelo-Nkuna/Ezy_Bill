@@ -28,7 +28,7 @@ namespace Core.Presentation.Models
                 }
             }
         }
-        [Display(Name = "Password"), Required]
+        [Display(Name = "Password"), Required, DataType(DataType.Password), MinLength(4)]
         public string Password
         {
             get => this.ViewModelState.FirstOrDefault()?.Password ?? string.Empty;

@@ -12,7 +12,7 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
     {
         private readonly HttpClient _httpClient;
         public string Message { get; set; } = string.Empty;
-        public string ConfirmPassword { get; set; } = string.Empty;
+        
         public string MessageColor => this.Message.Contains("success", StringComparison.OrdinalIgnoreCase) ? "success" : "danger";
         private readonly UserManager<IdentityUser> _userManager;
        // private readonly IUserProfileService _userProfileService;
@@ -53,7 +53,8 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
                 this.ViewModel.CompanyName = registration.CompanyName;
                 this.ViewModel.CompanyEmail = registration.CompanyEmail;
                 this.ViewModel.Password = registration.Password;
-                
+                this.ViewModel.ConfirmPassword = registration.ConfirmPassword;
+
             }
 
         }
