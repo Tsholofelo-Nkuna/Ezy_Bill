@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize]
     public class InvoicePaymentsController : ApiBaseController<InvoicePaymentsController>
     {
         private readonly IInvoicePaymentService _invoicePaymentService;

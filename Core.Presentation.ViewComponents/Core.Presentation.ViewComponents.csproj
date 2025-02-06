@@ -19,6 +19,10 @@
     <PackageReference Include="DartSassBuilder" Version="1.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Login\" />
+  </ItemGroup>
+
 
 
 </Project>

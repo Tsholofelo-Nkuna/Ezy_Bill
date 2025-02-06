@@ -50,17 +50,19 @@ namespace Core.Presentation.ViewComponents.Components.Base
         {
             ViewModel = viewModel;
             viewModel.OnViewModelStateChangedEvent += this.OnViewModelStateChanged;
+           
+
         }
 
-        //protected override Task OnInitializedAsync()
-        //{
-        //    var returned =  base.OnInitializedAsync();
-        //    if(!(this.CurrentUser?.Identity?.IsAuthenticated ?? false))
-        //    {
-        //        this.NavManager.NavigateTo("Accounts/Login", true);
-        //    }
-        //    return returned;
-        //}
+        protected override Task OnInitializedAsync()
+        {
+            var returned =  base.OnInitializedAsync();
+            if(!(this.CurrentUser?.Identity?.IsAuthenticated ?? false))
+            {
+                this.NavManager.NavigateTo("Accounts/Login", true);
+            }
+            return returned;
+        }
 
         protected override void OnInitialized()
         {

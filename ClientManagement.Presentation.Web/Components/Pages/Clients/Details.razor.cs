@@ -1,6 +1,7 @@
 ﻿
 using ClientManagement.Presentation.Models;
 using ClientManagement.Presentation.Models.DataTransferObjects;
+using ClientManagement.Presentation.Web.Components.Pages.Clients.State.Details;
 
 using Core.Presentation.ViewComponents.Components.Base;
 using Microsoft.AspNetCore.Components;
@@ -14,7 +15,8 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Clients
          public Guid Id { get; set; }
         [SupplyParameterFromQuery]
         public bool Archived { get; set; }
-      
+        [Inject]
+        public DetailsStateManager StateManager { get; set; }
         private string _detailsTabId = string.Empty;
         public string DetailsTabId
         { 
