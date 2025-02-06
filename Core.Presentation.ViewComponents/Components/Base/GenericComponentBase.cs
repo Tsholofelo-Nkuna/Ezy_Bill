@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using System.Security.Principal;
+using Core.Utils.Constants;
 
 namespace Core.Presentation.ViewComponents.Components.Base
 {
@@ -69,7 +70,7 @@ namespace Core.Presentation.ViewComponents.Components.Base
             base.OnInitialized();
             if (!(this.CurrentUser?.Identity?.IsAuthenticated ?? false))
             {
-                this.NavManager.NavigateTo("Accounts/Login", true);
+               // this.NavManager.NavigateTo(LoginPathConstants.Login, true);
             }
         }
 

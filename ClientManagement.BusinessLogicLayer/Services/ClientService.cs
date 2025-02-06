@@ -6,6 +6,8 @@ using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Entities;
 using System.Linq.Expressions;
 using ClientManagement.Presentation.Models.DataTransferObjects;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 
 
@@ -13,7 +15,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
 {
     public class ClientService : GenericService<ClientDto, ClientEntity>, IClientService
     {
-        public ClientService(WebDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
+        public ClientService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager) : base(dbContext, mapper, httpContextAccessor, userManager)
         {
         }
 
@@ -47,19 +49,9 @@ namespace ClientManagement.BusinessLogicLayer.Services
             }
         }
 
-        public async Task<bool> Archive(IEnumerable<Guid> identifiers)
-        {
-            var toBeArchived = (await this.Get(x => !x.Archived && identifiers.Contains(x.Id))).Select(x =>
-            {
-                x.Archived = true;
-                return x;
-            }).ToList();
-            return (await this.Update(toBeArchived)).Any();
-        }
-
         public override Task<IEnumerable<ClientDto>> Get(ClientDto filter)
         {
-            var query = this._entitySet.AsNoTracking();
+            var query = this._entitySet.AsNoTracking().Where(x => x.ProfileId == this.CurrentProfileId);
             if (filter.Archived)
             {
                 query = query.Where(x => x.Archived);
@@ -90,7 +82,8 @@ namespace ClientManagement.BusinessLogicLayer.Services
         public override Task<IEnumerable<ClientDto>> Get(Expression<Func<ClientEntity, bool>> filter)
         {
            var clients =  this._entitySet
-                .Where(filter).AsNoTracking().Include(x => x.ContactPerson)
+                .Where(filter)
+                .Where(x=> x.ProfileId == this.CurrentProfileId).AsNoTracking().Include(x => x.ContactPerson)
                 .OrderByDescending(x => x.CreatedOn)
                 .ToList();
            return Task.FromResult<IEnumerable<ClientDto>>(this._mapper.Map<IEnumerable<ClientDto>>(clients));

@@ -7,6 +7,8 @@ using ClientManagement.DataAccessLayer.Entities;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 
 using Core.Utils;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System;
@@ -19,7 +21,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
 {
     public class InvoiceService : GenericService<InvoiceDto, InvoiceEntity>, IInvoiceService
     {
-        public InvoiceService(WebDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
+        public InvoiceService(WebDbContext dbContext, IMapper mapper,IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager) : base(dbContext, mapper, httpContextAccessor, userManager)
         {
         }
 

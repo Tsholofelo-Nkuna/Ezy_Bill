@@ -52,7 +52,7 @@ namespace ClientManagement.Presentation.Web
                 })
                 .AddEntityFrameworkStores<WebDbContext>()
                 .AddApiEndpoints();
-
+            builder.Services.AddRazorPages();
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddHttpClient("AppApi",config =>
@@ -71,7 +71,7 @@ namespace ClientManagement.Presentation.Web
                     
             //    });
            
-            builder.Services.AddControllersWithViews(c =>
+            builder.Services.AddControllers(c =>
             {
               //  c.Filters.Add(typeof(AuthFilter));
             });
@@ -110,7 +110,7 @@ namespace ClientManagement.Presentation.Web
             app.UseAntiforgery();
             app.MapIdentityApi<IdentityUser>();
             app.MapControllers();
-            app.MapDefaultControllerRoute();
+            app.MapRazorPages();
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
           

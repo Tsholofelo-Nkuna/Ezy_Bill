@@ -4,13 +4,12 @@ using ClientManagement.BusinessLogicLayer.Interfaces.Base;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Entities.Base;
 using Core.Presentation.Models.DataTransferObjects.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection.Metadata.Ecma335;
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using ClientManagement.DataAccessLayer.Entities;
 
 namespace ClientManagement.BusinessLogicLayer.Services.Base
 {
@@ -18,15 +17,40 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
     {
         protected readonly WebDbContext _dbContext;
         protected readonly DbSet<TEntity> _entitySet;
+        protected readonly IHttpContextAccessor _httpContextAccessor;
         protected readonly IMapper _mapper;
-        public GenericService(WebDbContext dbContext, IMapper mapper)
+        protected readonly UserManager<IdentityUser> _userManager;
+        public GenericService(
+            WebDbContext dbContext, 
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor,
+            UserManager<IdentityUser> userManager)
         {
             _dbContext = dbContext;
             _entitySet = _dbContext.Set<TEntity>();
             _mapper = mapper;
-       
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
+
         }
 
+        protected Guid CurrentProfileId
+        {
+            get
+            {
+                if(_httpContextAccessor?.HttpContext?.User is ClaimsPrincipal userPrincipal 
+                    && this._userManager.GetUserAsync(userPrincipal).Result is IdentityUser currentUser)
+                {
+                    return this._dbContext.UserProfiles.FirstOrDefault(x => x.User.Id == currentUser.Id)?.Profile?.Id ?? Guid.Empty;
+                }
+                else
+                {
+                    return Guid.Empty;
+                }
+            }
+        }
+
+      
         public virtual async Task<bool> AddOrUpdate(List<TDto> payload)
         {
            var added = payload.Where(x => x.Id == Guid.Empty);
@@ -38,7 +62,7 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
 
         public virtual async Task<bool> Archive(IEnumerable<Guid> identifiers)
         {
-            var toBeArchived = this._entitySet.AsNoTracking().Where(x => identifiers.Contains(x.Id))
+            var toBeArchived = this._entitySet.AsNoTracking().Where(x => identifiers.Contains(x.Id) && x.ProfileId == this.CurrentProfileId)
                 .ToList();
                 toBeArchived.ForEach(x => {
                     x.Archived = true;
@@ -49,21 +73,24 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
 
         public virtual async Task<bool> Delete(IEnumerable<Guid> identifiers)
         {
-            var removed = _entitySet.Where(x => identifiers.Contains(x.Id)).ToList();
+            var removed = _entitySet.Where(x => identifiers.Contains(x.Id) && x.ProfileId == this.CurrentProfileId).ToList();
             _entitySet.RemoveRange(removed);
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
         public virtual async Task<IEnumerable<TDto>> Get(Expression<Func<TEntity, bool>> filter)
         {
-            var list = await _entitySet.Where(filter).AsNoTracking().OrderByDescending(x=> x.CreatedOn).ToListAsync();
+         
+            var list = await _entitySet
+                .Where(filter)
+                .Where(x => x.ProfileId == this.CurrentProfileId).AsNoTracking().OrderByDescending(x=> x.CreatedOn).ToListAsync();
             return _mapper.Map<List<TDto>>(list);
         }
 
         public virtual async Task<IEnumerable<TDto>> Get(TDto filter)
         {
             var query = _entitySet.AsNoTracking()
-                .Where(x => x.Archived == filter.Archived);
+                .Where(x => x.Archived == filter.Archived && x.ProfileId == this.CurrentProfileId);
             if(filter.Id != Guid.Empty)
             {
                 query = query.Where(x => x.Id == filter.Id);
@@ -75,14 +102,17 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
 
         public virtual async Task<IEnumerable<TDto>> Insert(List<TDto> inserted)
         {
+
             var toBeInserted = _mapper.Map<List<TEntity>>(inserted);
-            _entitySet.AddRange(toBeInserted);
+            toBeInserted.ForEach(x => x.ProfileId = this.CurrentProfileId);
+            _entitySet.UpdateRange(toBeInserted);
             var insertSuccess = await _dbContext.SaveChangesAsync() > 0;
             toBeInserted.ForEach(x =>
             {
                 _dbContext.Entry(x).State = EntityState.Detached;
             });
             return insertSuccess ? _mapper.Map<List<TDto>>(toBeInserted) : Enumerable.Empty<TDto>();
+
         }
 
         public virtual async Task<IEnumerable<TDto>> Update(List<TDto> updates)

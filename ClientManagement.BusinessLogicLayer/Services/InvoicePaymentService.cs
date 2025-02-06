@@ -11,13 +11,15 @@ using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Entities;
 using ClientManagement.Presentation.Models.DataTransferObjects;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClientManagement.BusinessLogicLayer.Services
 {
     public class InvoicePaymentService : GenericService<InvoicePaymentDto, InvoicePaymentEntity>, IInvoicePaymentService
     {
-        public InvoicePaymentService(WebDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
+        public InvoicePaymentService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager) : base(dbContext, mapper, httpContextAccessor, userManager)
         {
         }
 

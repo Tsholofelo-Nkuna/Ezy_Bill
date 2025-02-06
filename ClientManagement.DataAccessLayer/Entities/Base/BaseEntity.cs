@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
+
+using Microsoft.EntityFrameworkCore;
 
 namespace ClientManagement.DataAccessLayer.Entities.Base
 {
+    //[Index("EntityId")]
     public class BaseEntity
     {
         public Guid Id { get; set; }
         public bool Archived { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public Guid ProfileId { get;set; }
     }
 }

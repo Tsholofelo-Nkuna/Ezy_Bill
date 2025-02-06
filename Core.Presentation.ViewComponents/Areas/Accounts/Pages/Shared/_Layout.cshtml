@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿﻿
+<!DOCTYPE html>
 <html lang="en">
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <head>
@@ -8,13 +9,13 @@
     <link href="bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="app.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
-    
+
 </head>
 
-<body  class="bg-primary-subtle">
-    <div style="display:grid;place-items:center;grid-template-columns: 1fr; width:100vw;height:100vh;">
+<body>
+  <div style="display:grid; height:100vh;width:100vw;grid-template-columns:1fr;place-items:center">
         @RenderBody()
-    </div>
+  </div>
 </body>
 
 </html>

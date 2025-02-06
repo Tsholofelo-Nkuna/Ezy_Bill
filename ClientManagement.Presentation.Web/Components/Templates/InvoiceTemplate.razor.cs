@@ -2,6 +2,7 @@
 using ClientManagement.Presentation.Models;
 using Core.Presentation.ViewComponents.Components.Base;
 using Microsoft.AspNetCore.Components;
+using Core.Presentation.Models.DataTransferObjects;
 
 namespace ClientManagement.Presentation.Web.Components.Templates
 {

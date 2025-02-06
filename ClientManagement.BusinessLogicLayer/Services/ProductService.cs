@@ -4,12 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.Presentation.Models.DataTransferObjects;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace ClientManagement.BusinessLogicLayer.Services
 {
     public class ProductService : GenericService<ProductDto, ProductEntity>
     {
-        public ProductService(WebDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
+        public ProductService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager) : base(dbContext, mapper, httpContextAccessor, userManager)
         {
             
         }

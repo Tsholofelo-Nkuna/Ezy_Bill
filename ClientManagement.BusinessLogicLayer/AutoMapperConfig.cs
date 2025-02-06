@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClientManagement.DataAccessLayer.Entities;
 using ClientManagement.Presentation.Models.DataTransferObjects;
+using Core.Presentation.Models.DataTransferObjects;
 
 
 

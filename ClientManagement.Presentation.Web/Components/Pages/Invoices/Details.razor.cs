@@ -7,7 +7,7 @@ using Core.Presentation.ViewComponents.Components.Base;
 using Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Identity.Client;
+using Core.Presentation.Models.DataTransferObjects;
 
 namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
 {
