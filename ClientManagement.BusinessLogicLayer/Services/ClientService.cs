@@ -51,7 +51,8 @@ namespace ClientManagement.BusinessLogicLayer.Services
 
         public override Task<IEnumerable<ClientDto>> Get(ClientDto filter)
         {
-            var query = this._entitySet.AsNoTracking().Where(x => x.ProfileId == this.CurrentProfileId);
+            var pId =  this.CurrentProfileId;
+            var query = this._entitySet.AsNoTracking().Where(x => x.ProfileId == pId);
             if (filter.Archived)
             {
                 query = query.Where(x => x.Archived);

@@ -2,6 +2,7 @@
 using ClientManagement.DataAccessLayer.Entities;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 using Core.Presentation.Models.DataTransferObjects;
+using Microsoft.AspNetCore.Identity;
 
 
 
@@ -27,6 +28,8 @@ namespace ClientManagement.BusinessLogicLayer
             this.CreateMap<ProfileDto, ProfileEntity>()
                 .ReverseMap();
             this.CreateMap<UserProfileDto, UserProfileEntity>()
+                .ReverseMap();
+            this.CreateMap<IdentityUser, UserDto>()
                 .ReverseMap();
         }
     }

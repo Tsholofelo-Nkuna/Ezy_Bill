@@ -1,5 +1,7 @@
 using Core.Presentation.Models;
+using Core.Presentation.Models.DataTransferObjects;
 using Core.Presentation.ViewComponents.Areas.Accounts.Pages.Base;
+using Core.Utils.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -40,7 +42,23 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
                     var newUser = _userManager.Users.FirstOrDefault(x => x.UserName == registration.CompanyEmail)!;
                     newUser.PhoneNumber = registration.CompanyPhone;
                     await _userManager.UpdateAsync(newUser);
-
+                    var userProfile = new ProfileDto
+                    {
+                        Email = registration.CompanyEmail,
+                        Phone = registration.CompanyPhone,
+                        Name = registration.CompanyName,
+                    };
+                   var response =  await this._httpClient.PostAsJsonAsync($"{ApiEndPointConstants.CreateProfile}/{newUser.Id}", userProfile);
+                    if (response.IsSuccessStatusCode
+                        && await response.Content.ReadFromJsonAsync<ResponseDto<UserProfileDto>>() is ResponseDto<UserProfileDto> validResponse
+                        )
+                    {
+                        this.Message = validResponse.Message;
+                    }
+                    else
+                    {
+                        this.Message = "Login and complete your profile";
+                    }
                 }
                 else
                 {

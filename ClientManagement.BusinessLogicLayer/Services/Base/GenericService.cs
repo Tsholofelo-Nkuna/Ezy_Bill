@@ -41,7 +41,7 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
                 if(_httpContextAccessor?.HttpContext?.User is ClaimsPrincipal userPrincipal 
                     && this._userManager.GetUserAsync(userPrincipal).Result is IdentityUser currentUser)
                 {
-                    return this._dbContext.UserProfiles.FirstOrDefault(x => x.User.Id == currentUser.Id)?.Profile?.Id ?? Guid.Empty;
+                    return this._dbContext.UserProfiles.Where(x => x.User.Id == currentUser.Id).Include(x => x.Profile).FirstOrDefault()?.Profile?.Id ?? Guid.Empty;
                 }
                 else
                 {
