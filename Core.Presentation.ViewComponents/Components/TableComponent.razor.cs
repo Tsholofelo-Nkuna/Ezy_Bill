@@ -214,8 +214,7 @@ namespace Core.Presentation.ViewComponents.Components
                 var requestResponse = await this.AppApi.PostAsJsonAsync(fetchUrl, filters);
                 
                 if (requestResponse.IsSuccessStatusCode)
-                {
-                   
+                {  
                     returnedResult = (await requestResponse.Content.ReadFromJsonAsync<IEnumerable<TRecordType>>()) ?? Enumerable.Empty<TRecordType>();
                     
                 }

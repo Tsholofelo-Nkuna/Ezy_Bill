@@ -1,8 +1,8 @@
-﻿using ClientManagement.Presentation.Web.Interfaces;
+﻿using Core.Utils.Interfaces;
 using System.Reflection;
 
 
-namespace ClientManagement.Presentation.Web
+namespace Core.Utils.State
 {
     public class AppStateManager<TState> : IAppStateManager<TState> where TState : new()
     {

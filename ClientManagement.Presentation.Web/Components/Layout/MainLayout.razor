@@ -11,11 +11,31 @@
     </nav>
     <main>
         <div class="top-row px-4 bg-primary-subtle">
-            <div class="d-flex flex-row-reverse">
-              <a href="/Accounts/Logout" title="Signout">
-                    <i class="bi bi-box-arrow-right"></i>
-              </a>
+            <div class="d-flex flex-row-reverse position-relative">
+                <span @onclick="() =>{ShowUserProfileModal = true;}" style="cursor:pointer">
+                    <a class="bg-body-tertiary rounded-circle d-inline-flex justify-content-center align-items-center position-relative"
+                       style="width:1.5rem;height:1.5rem;"
+                     >
+                        <i class="bi bi-person"></i>
+
+                    </a>
+                   <span class="text-primary text-decoration-underline">
+                        @Username
+                   </span>
+                </span>
+                <div class="position-absolute d-inline-block top-50 end-0">
+                    <ModalComponent ViewModel="ViewModel.UserProfileModalViewModel" @bind-Show="ShowUserProfileModal">
+                        <Body>
+                            <div class="d-flex flex-column w-100">
+                                <a href="/Accounts/Logout" title="Signout">
+                                    <i class="bi bi-box-arrow-right me-1"></i><span>Signout</span>
+                                </a>
+                            </div>
+                        </Body>
+                    </ModalComponent>
+                </div>
             </div>
+           
         </div>
         <article class="content px-4">
             @Body

@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Core.Utils.Constants;
+using Microsoft.AspNetCore.Authentication;
+using Core.Utils.ActionFilters;
 
 
 namespace ClientManagement.Presentation.Web
@@ -35,9 +37,11 @@ namespace ClientManagement.Presentation.Web
                 {
                     c.LoginPath = LoginPathConstants.Login;
                     
-                });
-               
-            builder.Services.AddAuthorization();
+                })
+               .AddBearerToken(BearerTokenDefaults.AuthenticationScheme);
+
+
+           
             builder.Services
                 .AddDbContext<WebDbContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("Default")))
                 .AddIdentityCore<IdentityUser>(c =>
@@ -63,22 +67,15 @@ namespace ClientManagement.Presentation.Web
 
            
 
-            //builder
-            //    .Services.AddAuthentication()
-                
-            //    .AddCookie(c =>
-            //    {
-                    
-            //    });
            
             builder.Services.AddControllers(c =>
             {
-              //  c.Filters.Add(typeof(AuthFilter));
+               //c.Filters.Add(typeof(ApiKeyActionFilter));
             });
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
             builder.Services.AddBusinessServices();
-            builder.Services.AddStateManagers();
+         
             var app = builder.Build();
             app.UseRequestLocalization(options =>
             {

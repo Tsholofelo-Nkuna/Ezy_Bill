@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.BusinessLogicLayer.Interfaces.Base;
+using ClientManagement.BusinessLogicLayer.Models;
 using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Entities;
 using ClientManagement.Presentation.Models.DataTransferObjects;
+using Core.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,18 +21,21 @@ namespace ClientManagement.BusinessLogicLayer.Services
 {
     public class InvoicePaymentService : GenericService<InvoicePaymentDto, InvoicePaymentEntity>, IInvoicePaymentService
     {
-        public InvoicePaymentService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager) : base(dbContext, mapper, httpContextAccessor, userManager)
+        public InvoicePaymentService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
+              IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
         {
         }
 
         public async Task<InvoicePaymentDto?> AddPaymentToInvoice(Guid invoiceId, InvoicePaymentDto paymentDto)
         {
-            var targetInvoice = _dbContext.Invoices.AsNoTracking().Include(i => i.Client)
+            var pId = this.CurrentProfileId;
+            var targetInvoice = _dbContext.Invoices.AsNoTracking().Where(x => x.ProfileId == pId).Include(i => i.Client)
                 .FirstOrDefault(x => !x.Archived && x.Id == invoiceId);
             if (targetInvoice is InvoiceEntity validInvoice) 
             {
                paymentDto.Invoice = _mapper.Map<InvoiceDto>(targetInvoice);
-               var updates = await this.Update(new List<InvoicePaymentDto> { paymentDto });
+                paymentDto.ProfileId = pId;
+                var updates = await this.Update(new List<InvoicePaymentDto> { paymentDto });
                return updates.FirstOrDefault();
             }
             else
@@ -42,7 +47,8 @@ namespace ClientManagement.BusinessLogicLayer.Services
 
         public override async Task<IEnumerable<InvoicePaymentDto>> Get(InvoicePaymentDto filter)
         {
-            var query = _entitySet.AsNoTracking();
+            var pId = this.CurrentProfileId;
+            var query = _entitySet.AsNoTracking().Where(x => x.ProfileId == pId);
             if(filter.InvoiceId != Guid.Empty)
             {
                 query = query.Where(invPayment => invPayment.Invoice.Id == filter.InvoiceId);

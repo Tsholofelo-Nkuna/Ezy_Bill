@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.BusinessLogicLayer.Interfaces.Base;
+using ClientManagement.BusinessLogicLayer.Models;
 using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Entities;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 
 using Core.Utils;
+using Core.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +23,8 @@ namespace ClientManagement.BusinessLogicLayer.Services
 {
     public class InvoiceService : GenericService<InvoiceDto, InvoiceEntity>, IInvoiceService
     {
-        public InvoiceService(WebDbContext dbContext, IMapper mapper,IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager) : base(dbContext, mapper, httpContextAccessor, userManager)
+        public InvoiceService(WebDbContext dbContext, IMapper mapper,IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
+              IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
         {
         }
 
@@ -67,10 +70,11 @@ namespace ClientManagement.BusinessLogicLayer.Services
 
         public override async Task<bool> AddOrUpdate(List<InvoiceDto> payload)
         {
+            var pId = this.CurrentProfileId;
             var clientIdentifiers = payload
                 .Where(x => x.Client != null && x.Client.Id != Guid.Empty).Select(x => x.Client!.Id);
             var clients = (from x in this._dbContext.Clients.AsNoTracking()
-                             .Where(y => clientIdentifiers.Contains(y.Id))
+                             .Where(y => clientIdentifiers.Contains(y.Id) && y.ProfileId == pId)
                               select x
                              ).ToList();
             payload.ForEach(invoice =>
@@ -79,6 +83,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
                 {
                     invoice.Client = _mapper.Map<ClientDto>(clients.FirstOrDefault(x => x.Id == invoice.Client.Id));
                 }
+                invoice.ProfileId = pId;
             });
             var toBeUpdated = payload.Where(x => x.Id != Guid.Empty && x.Client is not null && x.Client.Id != Guid.Empty);
             var toBeCreated = payload.Where(x => x.Id == Guid.Empty && x.Client is not null && x.Client.Id != Guid.Empty);
@@ -141,7 +146,8 @@ namespace ClientManagement.BusinessLogicLayer.Services
 
         public override async Task<IEnumerable<InvoiceDto>> Get(InvoiceDto filter)
         {
-            var query = this._entitySet.AsNoTracking();
+            var pId = this.CurrentProfileId;
+            var query = this._entitySet.AsNoTracking().Where(x => x.ProfileId == pId);
             query = query.Where(x => x.Archived ==  filter.Archived)
                 .Include(invoice => invoice.Client)
                 .ThenInclude(client=> client.ContactPerson);

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController, Authorize]
+    [ApiController]
     public class ProfilesController : ApiBaseController<ProfilesController>
     {
         private readonly IProfileService _profileService;

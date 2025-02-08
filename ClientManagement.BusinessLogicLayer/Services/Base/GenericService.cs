@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using ClientManagement.DataAccessLayer.Entities;
+using Core.Utils.Interfaces;
+using ClientManagement.BusinessLogicLayer.Models;
+using Core.Utils.Constants;
 
 namespace ClientManagement.BusinessLogicLayer.Services.Base
 {
@@ -20,17 +23,20 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
         protected readonly IHttpContextAccessor _httpContextAccessor;
         protected readonly IMapper _mapper;
         protected readonly UserManager<IdentityUser> _userManager;
+        protected readonly IAppStateManager<ApplicationState> _appStateManager;
         public GenericService(
             WebDbContext dbContext, 
             IMapper mapper,
             IHttpContextAccessor httpContextAccessor,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IAppStateManager<ApplicationState> appStateManager)
         {
             _dbContext = dbContext;
             _entitySet = _dbContext.Set<TEntity>();
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
+            _appStateManager = appStateManager;
 
         }
 
@@ -38,15 +44,19 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
         {
             get
             {
-                if(_httpContextAccessor?.HttpContext?.User is ClaimsPrincipal userPrincipal 
-                    && this._userManager.GetUserAsync(userPrincipal).Result is IdentityUser currentUser)
+                if((_appStateManager.Get<Guid>(nameof(ApplicationState.ProfileId)) == Guid.Empty) 
+                    && this._httpContextAccessor.HttpContext.Request.Headers.TryGetValue(AuthConstants.XApiKey, out var apiKey)
+                    && this._userManager.Users.FirstOrDefault(x => x.UserName == apiKey.ToString()) is IdentityUser currentUser)
                 {
-                    return this._dbContext.UserProfiles.Where(x => x.User.Id == currentUser.Id).Include(x => x.Profile).FirstOrDefault()?.Profile?.Id ?? Guid.Empty;
+                    var pId = this._dbContext.UserProfiles
+                        .Where(x => x.User.Id == currentUser.Id)
+                        .Include(x => x.Profile)
+                        .FirstOrDefault()?.Profile?.Id ?? Guid.Empty;
+                    _appStateManager.Set(nameof(ApplicationState.ProfileId), pId);
+                  
+                   
                 }
-                else
-                {
-                    return Guid.Empty;
-                }
+                return _appStateManager.Get<Guid>(nameof(ApplicationState.ProfileId));
             }
         }
 
@@ -118,6 +128,7 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
         public virtual async Task<IEnumerable<TDto>> Update(List<TDto> updates)
         {
             var toBeUpdated = _mapper.Map<List<TEntity>>(updates);
+            toBeUpdated.ForEach(x => x.ProfileId = this.CurrentProfileId);
             _entitySet.UpdateRange(toBeUpdated);
             var updated = await _dbContext.SaveChangesAsync() > 0;
             var entityProps = typeof(TEntity).GetProperties();

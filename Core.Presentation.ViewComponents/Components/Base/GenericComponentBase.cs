@@ -35,7 +35,16 @@ namespace Core.Presentation.ViewComponents.Components.Base
         [Inject] private IHttpClientFactory _httpClientFactory {  get; set; }
         [Inject] private IHttpContextAccessor _httpContextAccessor { get; set; }
       
-        public HttpClient AppApi => _httpClientFactory.CreateClient("AppApi");
+        public HttpClient AppApi
+        {
+            get
+            {
+                var httpC = _httpClientFactory.CreateClient("AppApi");
+               
+                httpC.DefaultRequestHeaders.Add(AuthConstants.XApiKey, $"{this.CurrentUser.Identity.Name}");
+                return httpC;
+            }
+        }
         public ClaimsPrincipal? CurrentUser => _httpContextAccessor.HttpContext?.User;
         public IEnumerable<string> BreadcrumbItems {
             get
@@ -55,22 +64,22 @@ namespace Core.Presentation.ViewComponents.Components.Base
 
         }
 
-        protected override Task OnInitializedAsync()
-        {
-            var returned =  base.OnInitializedAsync();
-            if(!(this.CurrentUser?.Identity?.IsAuthenticated ?? false))
-            {
-                this.NavManager.NavigateTo("Accounts/Login", true);
-            }
-            return returned;
-        }
+        //protected override Task OnInitializedAsync()
+        //{
+        //    var returned =  base.OnInitializedAsync();
+        //    if(!(this.CurrentUser?.Identity?.IsAuthenticated ?? false))
+        //    {
+        //        this.NavManager.NavigateTo("Accounts/Login", true);
+        //    }
+        //    return returned;
+        //}
 
         protected override void OnInitialized()
         {
             base.OnInitialized();
             if (!(this.CurrentUser?.Identity?.IsAuthenticated ?? false))
             {
-               // this.NavManager.NavigateTo(LoginPathConstants.Login, true);
+                this.NavManager.NavigateTo(LoginPathConstants.Login, true);
             }
         }
 

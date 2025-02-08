@@ -1,6 +1,6 @@
-﻿namespace ClientManagement.Presentation.Web.Interfaces
+﻿namespace Core.Utils.Interfaces
 {
-    public interface IAppStateManager<TState> where TState :  new()
+    public interface IAppStateManager<TState> where TState : new()
     {
         public TState State { get; init; }
         public TState Set<TTarget>(string propName, TTarget value);

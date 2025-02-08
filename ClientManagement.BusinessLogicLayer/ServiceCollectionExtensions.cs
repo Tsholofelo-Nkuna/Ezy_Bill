@@ -1,12 +1,11 @@
 ﻿using ClientManagement.BusinessLogicLayer.Services;
 using Microsoft.Extensions.DependencyInjection;
 using ClientManagement.BusinessLogicLayer.Interfaces;
-using ClientManagement.BusinessLogicLayer.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Core.Utils.Interfaces;
+using Core.Utils.State;
+using ClientManagement.BusinessLogicLayer.Models;
+
+
 
 namespace ClientManagement.BusinessLogicLayer
 {
@@ -21,7 +20,8 @@ namespace ClientManagement.BusinessLogicLayer
                 .AddScoped<IInvoiceProductService, InvoiceProductsService>()
                 .AddScoped<IInvoicePaymentService, InvoicePaymentService>()
                 .AddScoped<IProfileService, ProfileService>()
-                .AddScoped<IUserProfileService, UserProfileService>();
+                .AddScoped<IUserProfileService, UserProfileService>()
+                .AddScoped<IAppStateManager<ApplicationState>, AppStateManager<ApplicationState>>(); ;
                 
 
           

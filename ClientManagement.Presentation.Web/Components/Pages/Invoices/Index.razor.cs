@@ -1,19 +1,15 @@
 ﻿using ClientManagement.Presentation.Models;
 using ClientManagement.Presentation.Models.DataTransferObjects;
-using ClientManagement.Presentation.Web.Components.Pages.Invoices.State;
 using Core.Presentation.Models;
 
 using Core.Presentation.ViewComponents.Components;
 using Core.Presentation.ViewComponents.Components.Base;
-using Microsoft.AspNetCore.Components;
-
 
 namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
 {
     public partial class Index : GenericComponentBase<InvoicesViewModel, InvoiceDto>
     {
-        [Inject]
-        public InvoiceStateManager StateManager { get; set; }
+      
         public bool NewInvoiceCreationInProgress { get; set; }
         protected override async Task OnInitializedAsync()
         {

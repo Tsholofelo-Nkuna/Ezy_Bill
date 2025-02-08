@@ -8,6 +8,8 @@ using System.Linq.Expressions;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Core.Utils.Interfaces;
+using ClientManagement.BusinessLogicLayer.Models;
 
 
 
@@ -15,7 +17,12 @@ namespace ClientManagement.BusinessLogicLayer.Services
 {
     public class ClientService : GenericService<ClientDto, ClientEntity>, IClientService
     {
-        public ClientService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager) : base(dbContext, mapper, httpContextAccessor, userManager)
+        public ClientService(
+            WebDbContext dbContext, 
+            IMapper mapper, 
+            IHttpContextAccessor httpContextAccessor, 
+            UserManager<IdentityUser> userManager,
+            IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
         {
         }
 

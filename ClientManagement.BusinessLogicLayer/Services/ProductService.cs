@@ -6,19 +6,23 @@ using ClientManagement.DataAccessLayer;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using ClientManagement.BusinessLogicLayer.Models;
+using Core.Utils.Interfaces;
 
 namespace ClientManagement.BusinessLogicLayer.Services
 {
     public class ProductService : GenericService<ProductDto, ProductEntity>
     {
-        public ProductService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager) : base(dbContext, mapper, httpContextAccessor, userManager)
+        public ProductService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
+              IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
         {
             
         }
 
         public override Task<IEnumerable<ProductDto>> Get(ProductDto filter)
         {
-            var query = this._entitySet.Where(x => true).AsNoTracking();
+            var pId = this.CurrentProfileId;
+            var query = this._entitySet.Where(x => true && x.ProfileId == pId).AsNoTracking();
             if (filter.Archived)
             {
                 query = query.Where(x => x.Archived);
