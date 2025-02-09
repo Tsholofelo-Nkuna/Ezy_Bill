@@ -1,4 +1,5 @@
 ﻿@page
+@using Core.Presentation.ViewComponents.Components
 @model Core.Presentation.ViewComponents.Areas.Accounts.Pages.RegisterModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
@@ -46,9 +47,7 @@
             <button class="btn btn-primary">Submit</button>
         </div>
     </form>
-    <div style="font-size:.8rem">
-        &copy;2025 Tsholofelo Nkuna
-    </div>
+    <component type="typeof(CopyRightComponent)" render-mode="ServerPrerendered"></component>
 </div>
 
 

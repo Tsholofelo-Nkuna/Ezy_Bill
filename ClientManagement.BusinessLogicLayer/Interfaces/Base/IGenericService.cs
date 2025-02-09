@@ -16,5 +16,6 @@ namespace ClientManagement.BusinessLogicLayer.Interfaces.Base
         Task<IEnumerable<TDto>> Insert(List<TDto> inserted);
         Task<bool> AddOrUpdate(List<TDto> payload);
         Task<bool> Archive(IEnumerable<Guid> identifiers);
+        IQueryable<TEntity> GetQueryable(TDto filter);
     }
 }

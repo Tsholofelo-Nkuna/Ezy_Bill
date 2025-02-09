@@ -83,7 +83,7 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
 
         public virtual async Task<bool> Delete(IEnumerable<Guid> identifiers)
         {
-            var removed = _entitySet.Where(x => identifiers.Contains(x.Id) && x.ProfileId == this.CurrentProfileId).ToList();
+            var removed = _entitySet.Where(x => identifiers.Contains(x.Id)).ToList();
             _entitySet.RemoveRange(removed);
             return await _dbContext.SaveChangesAsync() > 0;
         }
@@ -108,7 +108,18 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
             var result = await query.ToListAsync();
             return  _mapper.Map<IEnumerable<TDto>>( result);
         }
-       
+
+        public virtual IQueryable<TEntity> GetQueryable(TDto filter)
+        {
+            var query = _entitySet.AsNoTracking()
+                .Where(x => x.Archived == filter.Archived && x.ProfileId == this.CurrentProfileId);
+            if (filter.Id != Guid.Empty)
+            {
+                query = query.Where(x => x.Id == filter.Id);
+            }
+
+            return query;
+        }
 
         public virtual async Task<IEnumerable<TDto>> Insert(List<TDto> inserted)
         {

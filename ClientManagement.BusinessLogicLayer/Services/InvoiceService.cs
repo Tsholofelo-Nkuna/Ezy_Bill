@@ -126,6 +126,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
                             Product = p,
                             Invoice = x.NewlyCreatedInvoice,
                             ProductAmount = p.Price,
+                            ProfileId = pId
                         });
                        
                     });

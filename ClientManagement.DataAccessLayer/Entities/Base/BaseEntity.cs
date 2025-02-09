@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClientManagement.DataAccessLayer.Entities.Base
 {
-    //[Index("EntityId")]
+    [Index("ProfileId")]
     public class BaseEntity
     {
         public Guid Id { get; set; }
