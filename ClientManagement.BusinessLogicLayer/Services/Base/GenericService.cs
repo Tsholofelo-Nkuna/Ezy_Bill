@@ -83,7 +83,7 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
 
         public virtual async Task<bool> Delete(IEnumerable<Guid> identifiers)
         {
-            var removed = _entitySet.Where(x => identifiers.Contains(x.Id)).ToList();
+            var removed = _entitySet.Where(x => identifiers.Contains(x.Id) && x.ProfileId == this.CurrentProfileId).ToList();
             _entitySet.RemoveRange(removed);
             return await _dbContext.SaveChangesAsync() > 0;
         }
