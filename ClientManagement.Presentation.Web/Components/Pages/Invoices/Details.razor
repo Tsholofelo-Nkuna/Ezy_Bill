@@ -1,6 +1,8 @@
 ﻿@using ClientManagement.Presentation.Models.DataTransferObjects
 @using Core.Presentation.ViewComponents.Components.Templates
+@using Microsoft.AspNetCore.Authorization
 @page "/Invoices/Details/{id:guid}"
+@attribute [Authorize]
 @inherits GenericComponentBase<InvoiceDetailsViewModel, InvoiceDto>
 @{
     var contactPerson = OverviewModelState?.Client?.ContactPerson?.FirstOrDefault(contact => contact.IsPrimaryContact);

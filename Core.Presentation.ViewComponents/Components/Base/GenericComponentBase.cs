@@ -79,7 +79,7 @@ namespace Core.Presentation.ViewComponents.Components.Base
             base.OnInitialized();
             if (!(this.CurrentUser?.Identity?.IsAuthenticated ?? false))
             {
-                this.NavManager.NavigateTo(LoginPathConstants.Login, true);
+                //this.NavManager.NavigateTo(LoginPathConstants.Login, true);
             }
         }
 

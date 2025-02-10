@@ -1,7 +1,8 @@
 ﻿@page "/Clients"
 @using ClientManagement.Presentation.Models.DataTransferObjects
 @using Core.Presentation.ViewComponents.Components.Templates
-
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 @inherits GenericComponentBase<ClientsViewModel, ClientDto>
 
 <PageTitle>Client - Management</PageTitle>

@@ -1,6 +1,7 @@
 ﻿@page "/Clients/Details/{id:guid}"
 @using ClientManagement.Presentation.Models.DataTransferObjects
-
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 @inherits GenericComponentBase<ClientDetailsViewModel, ClientDto>
 
 @{

@@ -37,8 +37,7 @@ namespace ClientManagement.Presentation.Web
                 {
                     c.LoginPath = LoginPathConstants.Login;
                     
-                })
-               .AddBearerToken(BearerTokenDefaults.AuthenticationScheme);
+                });
 
 
            

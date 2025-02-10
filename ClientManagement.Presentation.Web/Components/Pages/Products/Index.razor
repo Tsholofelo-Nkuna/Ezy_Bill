@@ -1,7 +1,7 @@
 ﻿@page "/Products"
 @using ClientManagement.Presentation.Models.DataTransferObjects
-
-
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 @inherits GenericComponentBase<ProductsViewModel, ProductDto>
 <PageTitle>Products</PageTitle>
 <PageComponent>
