@@ -1,10 +1,11 @@
 ﻿@using Core.Presentation.Models
 @using Core.Presentation.Models.DataTransferObjects.Base
+@using Core.Presentation.Models.Validation
 @typeparam TRecord where TRecord : BaseDto, new()
 
 @switch (ViewModel.ControlType)
 {
-   
+
     case ControlType.Text:
     case ControlType.Email:
 
@@ -13,10 +14,13 @@
             <div class="col">
 
                 <input class="form-control @(!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage) ? "border-danger": string.Empty)"
-                       name="@ViewModel.Name"
-                       value="@(_genericListViewModel.Get<string>(ViewModelState.Id, ViewModel.Name))"
-                       @oninput="(eventArgs) => { this.OnInputChange(ViewModelState.Id, ViewModel, eventArgs.Value);}" />
-                @if (!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage))
+                name="@ViewModel.Name"
+                value="@(_genericListViewModel.Get<string>(ViewModelState.Id, ViewModel.Name))"
+                @onchange="(eventArgs) => { this.OnInputChange(ViewModelState.Id, ViewModel, eventArgs.Value);}" />
+                @if(ViewModel.Validator?.Validators?.Any( x => x.Name == nameof(Validators.Number)) ?? false){
+                    <div class="text-secondary mt-1" style="font-size:0.63rem">e.g. 9,99</div>
+                }
+                    @if (!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage))
                 {
                     <div class="text-danger">@ViewModel.ValidationMessage</div>
                 }
@@ -68,11 +72,12 @@
                        name="@ViewModel.Name"
                        value="@(_genericListViewModel.Get<string>(ViewModelState.Id, ViewModel.Name, true))"
                        placeholder="dd/MM/yyyy"
-                       @oninput="(eventArgs) => { this.OnInputChange(ViewModelState.Id, ViewModel, eventArgs.Value);}" />
-                @if (!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage))
-                {
-                    <div class="text-danger">@ViewModel.ValidationMessage</div>
-                }
+                       @onchange="(eventArgs) => { this.OnInputChange(ViewModelState.Id, ViewModel, eventArgs.Value);}" />
+                <div class="text-secondary mt-1" style="font-size:0.63rem">dd/MM/yyyy</div>
+                       @if (!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage))
+                        {
+                            <div class="text-danger">@ViewModel.ValidationMessage</div>
+                        }
             </div>
         </div>
         break;

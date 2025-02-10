@@ -91,7 +91,7 @@ namespace Core.Presentation.Models.Validation
         {
             var result = new ValidatorFn()
             {
-                Name = nameof(Date),
+                Name = nameof(Number),
                 Message = CultureInfo.InvariantCulture.TextInfo.ToTitleCase("Invalid numeric format")
             };
             result.Validator = (val) =>
