@@ -102,7 +102,6 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
         public async Task OnPrintInvoice()
         { 
             PrintBusy = true;
-            await Task.Delay(3000);
            // StateHasChanged();
             var invoiceTemplate = new InvoiceTemplate();
             var currentUserData = (_userManager.Users.FirstOrDefault(x => x.UserName == this.CurrentUser.Identity.Name));
