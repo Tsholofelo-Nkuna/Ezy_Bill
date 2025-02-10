@@ -102,7 +102,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
         public async Task OnPrintInvoice()
         { 
             PrintBusy = true;
-           // StateHasChanged();
+            StateHasChanged();
             var invoiceTemplate = new InvoiceTemplate();
             var currentUserData = (_userManager.Users.FirstOrDefault(x => x.UserName == this.CurrentUser.Identity.Name));
             var pdfContent =  await (this.HtmlToPdfConverter?.CreatePdfAsync(
@@ -118,7 +118,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
                
             }
             PrintBusy = false;
-            //StateHasChanged();
+            StateHasChanged();
         }
         public async Task OnEditInvoicePaymentSaveClick(EventState<InvoicePaymentDto?> eventState)
         {
