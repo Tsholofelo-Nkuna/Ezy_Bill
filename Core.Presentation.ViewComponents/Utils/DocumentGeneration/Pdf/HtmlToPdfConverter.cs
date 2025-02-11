@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.Playwright;
+using SelectPdf;
 
 
 namespace Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf
@@ -32,13 +31,9 @@ namespace Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf
                     return component.ToHtmlString();
                 });
            
-
-            var browser =  await Playwright.CreateAsync().Result.Chromium.LaunchAsync();
-            var page = await browser.NewPageAsync();
-            await page.SetContentAsync(html);
-            var bytes =  await page.PdfAsync();
-            browser.CloseAsync().Wait();
-            return bytes;
+            HtmlToPdf htmlToPdf = new HtmlToPdf();
+            var doc = htmlToPdf.ConvertHtmlString(html);
+            return doc.Save(); 
         }
     }
 
