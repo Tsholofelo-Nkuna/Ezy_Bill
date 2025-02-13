@@ -3,6 +3,7 @@ using Core.Presentation.Models.DataTransferObjects.Base;
 using Core.Presentation.ViewComponents.Components.Base;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System.Diagnostics.Contracts;
 namespace Core.Presentation.ViewComponents.Components
 {
     public partial class ModalComponent<TRecordType> : GenericComponentBase<ModalViewModel<TRecordType>, TRecordType> where TRecordType : BaseDto, new()
@@ -21,6 +22,11 @@ namespace Core.Presentation.ViewComponents.Components
                 this.ViewModel.Show = value;
             }
         }
+
+        [Parameter]
+        public string Width { get; set; } = "auto";
+        [Parameter]
+        public string Height { get; set; } = "auto";
 
         [Parameter]
         public EventCallback<bool> ShowChanged { get; set; }

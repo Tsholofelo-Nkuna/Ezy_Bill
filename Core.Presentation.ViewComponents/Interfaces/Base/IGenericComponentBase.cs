@@ -21,5 +21,6 @@ namespace Core.Presentation.ViewComponents.Interfaces.Base
         public void OnNavigate(string controllerName, string actionName, Guid stateId);
         public Task OnViewModelStateChanged(IEnumerable<TRecordType> update);
         public IEnumerable<KeyValuePair<string, object?>> RecordAsKeyValuePairs(TRecordType record);
+        public IEnumerable<string> CssClassList { get; set; }
     }
 }
