@@ -23,20 +23,29 @@ namespace ClientManagement.BusinessLogicLayer.Services
             if((_userManager.Users.FirstOrDefault(x => x.Id == userId)) is IdentityUser newUser)
             {
                 var profile = this._mapper.Map<ProfileEntity>(newProfile);
-                if(profile.Id == Guid.Empty)
+                var userProfileMap = _dbContext.UserProfiles.FirstOrDefault(x => x.User.Id == userId && x.Profile.Id == newProfile.Id && !x.Archived);
+                //if (profile.Id == Guid.Empty)
+                //{
+                //    _dbContext.Profiles.Add(profile);
+                //}
+                //else
+                //{
+                //    _dbContext.Profiles.Update(profile);
+                //}
+              
+                if(userProfileMap is not null)
                 {
-                    _dbContext.Profiles.Add(profile);
+                    userProfileMap.Profile = profile;
                 }
                 else
                 {
-                    _dbContext.Profiles.Update(profile);
+                     userProfileMap = new UserProfileEntity
+                    {
+                        User = newUser,
+                        Profile = profile
+                    };
                 }
-              
-                var userProfileMap = new UserProfileEntity
-                {
-                    User = newUser,
-                    Profile = profile
-                };
+            
                 _dbContext.Update(userProfileMap);
                 var saveCount = await _dbContext.SaveChangesAsync();
                 return _mapper.Map<UserProfileDto>(userProfileMap);

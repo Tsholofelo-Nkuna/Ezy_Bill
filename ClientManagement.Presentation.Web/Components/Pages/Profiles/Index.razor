@@ -12,7 +12,10 @@
                     <p class="text-info fw-bold"> Data provided here will be displayed in your generated invoices</p>
                 </div>
                 @if(@tabItemContext.Name == "Details"){
-                    <FormComponent ViewModel="ViewModel.UserProfileFormViewModel"></FormComponent>
+                    <FormComponent
+                        ViewModel="ViewModel.UserProfileFormViewModel"
+                        OnFormSubmitClicked="OnUserProfileDataSubmit"
+                    ></FormComponent>
                 }
             </TabItem>
         </TabsComponent>

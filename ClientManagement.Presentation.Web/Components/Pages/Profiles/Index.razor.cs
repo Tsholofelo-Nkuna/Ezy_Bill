@@ -1,4 +1,5 @@
 ﻿using ClientManagement.Presentation.Models.Profiles;
+using Core.Presentation.Models;
 using Core.Presentation.Models.DataTransferObjects;
 using Core.Presentation.ViewComponents.Components.Base;
 using Microsoft.AspNetCore.Components;
@@ -18,10 +19,10 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Profiles
 
         public UserProfileDto UserProfile 
         { 
-            get => this.ViewModel.ViewModelState.FirstOrDefault() ?? new UserProfileDto();
+            get => this.ViewModel.UserProfileFormViewModel.ViewModelState.FirstOrDefault() ?? new UserProfileDto();
             set
             {
-                this.ViewModel.ViewModelState = [value];
+                this.ViewModel.UserProfileFormViewModel.ViewModelState = [value];
                 StateHasChanged();
             }
         }
@@ -34,7 +35,22 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Profiles
                 this.UserProfile = validUserProfile;
                
             }
-           
+        }
+
+        public async Task OnUserProfileDataSubmit(EventState<IEnumerable<UserProfileDto>> eventState)
+        {
+            if (eventState.Success && eventState.Payload.FirstOrDefault() is UserProfileDto submittedRecord)
+            {
+               var response = await this.AppApi.PostAsJsonAsync($"{this.BaseUrl}/{this.UserProfile.User.Id}", submittedRecord.Profile);
+                if(response is { IsSuccessStatusCode : true } successResponse)
+                {
+                    var result = await successResponse.Content.ReadFromJsonAsync<ResponseDto<UserProfileDto>>();
+                    if(result is { Data : UserProfileDto } successResult && successResult.Data.User.Id == this.UserProfile.User.Id)
+                    {
+                        await this.GetData();
+                    }
+                }
+            }
         }
     }
 }
