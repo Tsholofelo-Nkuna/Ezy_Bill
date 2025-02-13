@@ -29,10 +29,10 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Profiles
 
         public async Task GetData()
         {
-            var userProfileResponse = await this.AppApi.GetFromJsonAsync<UserProfileDto>($"{this.BaseUrl}/{this.UserId}");
-            if(userProfileResponse is UserProfileDto validUserProfile)
+            var userProfileResponse = await this.AppApi.GetFromJsonAsync<ResponseDto<UserProfileDto>>($"{this.BaseUrl}/{this.UserId}");
+            if(userProfileResponse is { Data: UserProfileDto} validUserProfile)
             {
-                this.UserProfile = validUserProfile;
+                this.UserProfile = validUserProfile.Data;
                
             }
         }

@@ -19,7 +19,7 @@ namespace ClientManagement.Presentation.Web.Components.Templates
         }
 
         [Parameter]
-        public UserDto CurrentUserDetails { get; set; } = new();
-       
+        public UserProfileDto UserProfile { get; set; } = new();    
+
     }
 }
