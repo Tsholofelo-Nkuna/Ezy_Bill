@@ -1,19 +1,24 @@
 ﻿@using ClientManagement.Presentation.Models.DataTransferObjects
 @using Core.Presentation.ViewComponents.Components.Templates;
 @inherits GenericComponentBase<InvoiceTemplateViewModel, InvoiceDto>
-<div style="display:flex; justify-content:space-between;padding: 0.5rem 1rem;">
+<div style="display:flex; justify-content:space-between;padding: 0.5rem 1rem;border-top:1px solid gray; border-bottom:1px solid gray;">
     <div>
         <h3>
             From:
         </h3>
         <div>
             <LabelValueTemplate>
-                <Value>@CurrentUserDetails.UserName</Value>
+                <Value>@UserProfile.ProfileName</Value>
             </LabelValueTemplate>
         </div>
         <div>
             <LabelValueTemplate>
-                <Value>@CurrentUserDetails.PhoneNumber</Value>
+                <Value>@UserProfile.ProfileEmail</Value>
+            </LabelValueTemplate>
+        </div>
+        <div>
+            <LabelValueTemplate>
+                <Value>@UserProfile.ProfilePhone</Value>
             </LabelValueTemplate>
         </div>
     </div>
@@ -37,9 +42,9 @@
     <h3>
         Billed Items
     </h3>
-    <table style="width:100%">
+    <table style="width:100%;">
         <thead>
-            <tr>
+            <tr style="padding:1rem;background-color:lightgray;">
                 <th>Description</th>
                 <th>Quantity</th>
                 <th>Price Per Item</th>
@@ -49,7 +54,7 @@
         <tbody>
             @foreach(var item in (this.Invoice?.InvoiceProducts ?? Enumerable.Empty<InvoiceProductDto>()))
             {
-                <tr>
+                <tr style="border-bottom:1px solid gray;">
                     <td style="text-align:center">@(string.Join(" | ",item.ProductName, item.ProductDescription))</td>
                     <td style="text-align:center">@item.Quantity</td>
                     <td style="text-align:center">@($"{item.ProductPrice:C}")</td>
