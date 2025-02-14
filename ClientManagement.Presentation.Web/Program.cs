@@ -40,7 +40,7 @@ namespace ClientManagement.Presentation.Web
                 });
 
 
-           
+            builder.Services.AddUtilServices(builder.Configuration);
             builder.Services
                 .AddDbContext<WebDbContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("Default")))
                 .AddIdentityCore<IdentityUser>(c =>
