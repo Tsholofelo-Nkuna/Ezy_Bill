@@ -2,11 +2,14 @@ using Core.Presentation.Models;
 using Core.Presentation.Models.DataTransferObjects;
 using Core.Presentation.ViewComponents.Areas.Accounts.Pages.Base;
 using Core.Utils.Constants;
+using Core.Utils.Mail;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Globalization;
 using System.Net.Http.Json;
+using System.Text;
 
 namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
 {
@@ -17,10 +20,13 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
         
         public string MessageColor => this.Message.Contains("success", StringComparison.OrdinalIgnoreCase) ? "success" : "danger";
         private readonly UserManager<IdentityUser> _userManager;
-       // private readonly IUserProfileService _userProfileService;
-        public RegisterModel(IHttpClientFactory httpClientFactory, UserManager<IdentityUser> userManager) { 
+        private readonly MailSender _emailSender;
+        public RegisterModel(IHttpClientFactory httpClientFactory,
+            UserManager<IdentityUser> userManager,
+            MailSender emailSender) { 
            this._httpClient = httpClientFactory.CreateClient("AppApi");
             this._userManager = userManager;
+            _emailSender = emailSender;
         }
         public void OnGet()
         {
@@ -38,7 +44,7 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
 
                 if (apiResponse is { IsSuccessStatusCode: true })
                 {
-                    this.Message = "Registration successful";
+                    this.Message = "Registration successful.";
                     var newUser = _userManager.Users.FirstOrDefault(x => x.UserName == registration.CompanyEmail)!;
                     newUser.PhoneNumber = registration.CompanyPhone;
                     await _userManager.UpdateAsync(newUser);
@@ -53,7 +59,19 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
                         && await response.Content.ReadFromJsonAsync<ResponseDto<UserProfileDto>>() is ResponseDto<UserProfileDto> validResponse
                         )
                     {
-                        this.Message = validResponse.Message;
+                        this.Message = validResponse.Message+ ", email verification required. A verification link has been sent to your email.";
+                        var token =  await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+                        var tokenBytes = Encoding.UTF8.GetBytes(token);
+                        var qBuilder = QueryString.Create(new Dictionary<string, string>
+                        {
+                            { "changedEmail", newUser.Email },
+                            { "userid", newUser.Id },
+                            { "code", Convert.ToBase64String(tokenBytes)  }
+                        });
+                       
+                        await _emailSender.SendConfirmationLinkAsync(newUser, newUser.Email, $"{this.HttpContext.Request.Scheme}://{this.HttpContext.Request.Host}/confirmemail{qBuilder.Value}");
+                        //var confirmEmail = await this._httpClient.GetAsync($"/confirmemail?{qBuilder.Value}");
+                        //var text = await confirmEmail.Content.ReadAsStringAsync();
                     }
                     else
                     {

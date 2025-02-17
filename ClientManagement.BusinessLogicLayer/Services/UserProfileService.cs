@@ -8,6 +8,7 @@ using Core.Presentation.Models.DataTransferObjects;
 using Core.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClientManagement.BusinessLogicLayer.Services
 {
@@ -17,26 +18,34 @@ namespace ClientManagement.BusinessLogicLayer.Services
               IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
         {
         }
-
         public async Task<UserProfileDto> CreateProfile(string userId, ProfileDto newProfile)
         {
             if((_userManager.Users.FirstOrDefault(x => x.Id == userId)) is IdentityUser newUser)
             {
                 var profile = this._mapper.Map<ProfileEntity>(newProfile);
-                if(profile.Id == Guid.Empty)
+                var userProfileMap = _dbContext.UserProfiles.FirstOrDefault(x => x.User.Id == userId && x.Profile.Id == newProfile.Id && !x.Archived);
+                //if (profile.Id == Guid.Empty)
+                //{
+                //    _dbContext.Profiles.Add(profile);
+                //}
+                //else
+                //{
+                //    _dbContext.Profiles.Update(profile);
+                //}
+              
+                if(userProfileMap is not null)
                 {
-                    _dbContext.Profiles.Add(profile);
+                    userProfileMap.Profile = profile;
                 }
                 else
                 {
-                    _dbContext.Profiles.Update(profile);
+                     userProfileMap = new UserProfileEntity
+                    {
+                        User = newUser,
+                        Profile = profile
+                    };
                 }
-              
-                var userProfileMap = new UserProfileEntity
-                {
-                    User = newUser,
-                    Profile = profile
-                };
+            
                 _dbContext.Update(userProfileMap);
                 var saveCount = await _dbContext.SaveChangesAsync();
                 return _mapper.Map<UserProfileDto>(userProfileMap);
@@ -45,6 +54,17 @@ namespace ClientManagement.BusinessLogicLayer.Services
             {
                 return new UserProfileDto();
             }
+        }
+
+        public override async  Task<IEnumerable<UserProfileDto>> Get(UserProfileDto filter)
+        {
+            var query = base.GetQueryable(filter);
+            if (filter.User is UserDto userFilter)
+            {
+                query = query.Where(x => x.User.Id == userFilter.Id);
+            }
+            var results = await query.Include(x => x.User).Include(x => x.Profile).ToListAsync();
+            return  _mapper.Map<List<UserProfileDto>>(results);
         }
     }
 }

@@ -10,5 +10,8 @@ namespace Core.Utils.Constants
     {
         public const string Login = "/Accounts/Login";
         public const string Logout = "/Accounts/Logout";
+        public const string ForgotPassword = "/Accounts/ForgotPassword";
+        public const string Register = "/Accounts/Register";
+        public const string ResetPassword = "/Accounts/ResetPasswordLink";
     }
 }
