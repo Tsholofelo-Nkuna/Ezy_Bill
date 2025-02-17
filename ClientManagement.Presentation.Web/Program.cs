@@ -29,7 +29,7 @@ namespace ClientManagement.Presentation.Web
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Logging.AddProvider(new FileLoggerProvider());
-          
+            builder.Services.AddSession();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped(typeof(HtmlToPdfConverter));
             builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
@@ -76,6 +76,7 @@ namespace ClientManagement.Presentation.Web
             builder.Services.AddBusinessServices();
          
             var app = builder.Build();
+            app.UseSession();
             app.UseRequestLocalization(options =>
             {
                 options.SupportedCultures = new[] { new CultureInfo("en-ZA") };
