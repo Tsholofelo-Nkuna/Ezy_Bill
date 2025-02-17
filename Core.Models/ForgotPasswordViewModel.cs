@@ -15,7 +15,7 @@ namespace Core.Presentation.Models
 
         [Required, DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
-        [Required, Compare(nameof(Password)), Display(Name ="Confirm Password")]
+        [Required, Compare(nameof(Password)), Display(Name ="Confirm Password"), DataType(DataType.Password)]
         public string ConfirmPassword { get; set; } = string.Empty;
     }
 }

@@ -52,7 +52,7 @@ namespace Core.Utils.Mail
 
                 message.From.Add(new MailboxAddress("IzyBill", _emailSettings.SendFrom));
                 message.To.Add(new MailboxAddress(user.UserName, email));
-                message.Subject = "Verify Email";
+                message.Subject = "Reset Password";
                 message.Body = new TextPart("html") { Text = @$"<p>Click <a href='{resetLink}'>here</a> to reset your password</p>" };
 
                 using (var client = new SmtpClient())
