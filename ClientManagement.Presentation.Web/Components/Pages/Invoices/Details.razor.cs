@@ -104,19 +104,25 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
             PrintBusy = true;
             StateHasChanged();
             var invoiceTemplate = new InvoiceTemplate();
+           
             var currentUserData = (_userManager.Users.FirstOrDefault(x => x.UserName == this.CurrentUser.Identity.Name));
-            var pdfContent =  await (this.HtmlToPdfConverter?.CreatePdfAsync(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{DateTime.Now:yyyyMMddhhmmss}-{this.Id}.pdf"),
-                invoiceTemplate,
-                ParameterView.FromDictionary(new Dictionary<string, object?> { 
-                    { nameof(InvoiceTemplate.Invoice), this.Invoice },
-                    { nameof(InvoiceTemplate.CurrentUserDetails), new UserDto{Id = currentUserData!.Id, UserName = currentUserData!.UserName!, PhoneNumber = currentUserData!.PhoneNumber! } }
-                })) ?? Task.FromResult(new byte[] { }));
-            if(pdfContent is byte[] contents)
+            var userProfileResponse = await this.AppApi.GetFromJsonAsync<ResponseDto<UserProfileDto>> ($"api/UserProfiles/{currentUserData.Id}");
+            if(userProfileResponse is { Data: UserProfileDto} successUserProfileResponse)
             {
-                this.InvoicePdfBase64 = $"data:application/pdf;base64,{Convert.ToBase64String(pdfContent)}";
-               
+               var pdfContent = await (this.HtmlToPdfConverter?.CreatePdfAsync(
+               Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{DateTime.Now:yyyyMMddhhmmss}-{this.Id}.pdf"),
+               invoiceTemplate,
+               ParameterView.FromDictionary(new Dictionary<string, object?> {
+                    { nameof(InvoiceTemplate.Invoice), this.Invoice },
+                    { nameof(InvoiceTemplate.UserProfile), successUserProfileResponse.Data }
+               })) ?? Task.FromResult(new byte[] { }));
+                if (pdfContent is byte[] contents)
+                {
+                    this.InvoicePdfBase64 = $"data:application/pdf;base64,{Convert.ToBase64String(pdfContent)}";
+
+                }
             }
+           
             PrintBusy = false;
             StateHasChanged();
         }

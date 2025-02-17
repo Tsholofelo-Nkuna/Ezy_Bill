@@ -16,7 +16,7 @@ namespace Core.Utils
         public static IServiceCollection AddUtilServices(this IServiceCollection services, IConfiguration config) 
         {
             services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
-            services.AddScoped<IEmailSender<IdentityUser>, MailSender>();
+            services.AddScoped<MailSender>();
             return services;
         }
     }

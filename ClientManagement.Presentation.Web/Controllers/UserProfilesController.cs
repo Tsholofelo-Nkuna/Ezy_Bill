@@ -31,6 +31,14 @@ namespace ClientManagement.Presentation.Web.Controllers
             };
         }
 
-
+        [HttpGet("{userId}")]
+        public async Task<ResponseDto<UserProfileDto?>> Get(string userId)
+        { 
+            return await this.requestHandler.HandleRequest(async () =>
+            {
+                var result = (await _userProfileService.Get(new UserProfileDto { User = new() { Id = userId } })).FirstOrDefault();
+                return new() { Data = result } ;
+            }, nameof(Get), Task.FromResult<ResponseDto<UserProfileDto?>>( new() { Data = new() }), userId);
+        }
     }
 }
