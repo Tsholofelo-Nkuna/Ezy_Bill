@@ -1,5 +1,6 @@
 ﻿@page
 @using Core.Presentation.ViewComponents.Components
+@using Core.Utils.Constants
 @model Core.Presentation.ViewComponents.Areas.Accounts.Pages.RegisterModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
@@ -40,7 +41,7 @@
             </div>
         </div>
         <div class="card-footer">
-            <a class="btn btn-outline-primary m-2" href="/Accounts/Login">
+            <a class="btn btn-outline-primary m-2" href="@LoginPathConstants.Login">
                 <i class="bi bi-arrow-left"></i>
                 <span>Login</span>
             </a>
