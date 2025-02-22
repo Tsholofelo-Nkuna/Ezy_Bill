@@ -1,9 +1,11 @@
-﻿@using Microsoft.Extensions.Configuration
-@inject IConfiguration Config;
+﻿@using Core.Presentation.Models
+@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Options
+@inject IOptions<AppInfo> appInfo;
 <div class="d-flex w-100 text-center flex-column" style="font-size:0.78rem;">
-    <div>&copy;2025 @Config["AppInfo:Name"]</div>
-    <div>Version @Config["AppInfo:Version"]</div>
-    <div>Powered by <span class="text-primary">@Config["AppInfo:PoweredBy"]</span></div>
+    <div>&copy;2025 @appInfo.Value.Name</div>
+    <div>Version @appInfo.Value.Version</div>
+    <div>Powered by <span class="text-primary">@appInfo.Value.PoweredBy</span></div>
 </div>
 
 @code{
