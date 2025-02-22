@@ -24,6 +24,9 @@ namespace Core.Presentation.ViewComponents.Components
         }
 
         [Parameter]
+        public override IEnumerable<string> CssClassList { get; set; } = ["col-lg-4", "position-absolute", "top-0"];
+
+        [Parameter]
         public string Width { get; set; } = "auto";
         [Parameter]
         public string Height { get; set; } = "auto";

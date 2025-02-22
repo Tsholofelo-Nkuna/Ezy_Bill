@@ -30,7 +30,7 @@ namespace Core.Presentation.ViewComponents.Components.Base
         [Parameter]
         public TViewModel ViewModel { get; set; }
         [Parameter]
-        public IEnumerable<string> CssClassList { get; set; } = ["position-absolute","top-0","start-50 start-xs-0"];
+        public virtual IEnumerable<string> CssClassList { get; set; } = ["position-absolute","top-0","start-50 start-xs-0"];
 
         public string CssClass => string.Join(" ", CssClassList);
 
