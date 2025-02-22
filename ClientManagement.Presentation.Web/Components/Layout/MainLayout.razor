@@ -1,14 +1,23 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="page">
-    <nav class="sidebar nav nav-pills flex-column border-end">
-        <span class="navbar-brand m-0 py-0 ps-2 border-bottom border-2 border-primary mb-3 pt-2" style="height:3.5rem"><span class="badge bg-primary">I</span>zyBill</span>
-
-        <a href="/" class="nav-link mx-3 active"><i class="bi bi-house me-1"></i> Home</a>
-        <a href="/Clients" class="nav-link mx-3"><i class="bi bi-people me-1"></i>Clients</a>
-        <a href="/Products" class="nav-link mx-3"><i class="bi bi-cart4 me-1"></i>Products/Services</a>
-        <a href="/Invoices" class="nav-link mx-3"><i class="bi bi-receipt-cutoff me-1"></i>Invoices</a>
-    </nav>
+    <div class="sidebar flex-column border-end">
+        <div class="d-flex justify-content-between border-bottom border-2 border-primary m-0 py-0 px-2 mb-3 pt-2" style="height:3.5rem">
+            <div class="navbar-brand">
+                <span class="badge bg-primary">I</span>zyBill
+            </div>
+            <div>
+                <i id="left-menu-button" @onclick="() => {ViewModel.ShowSideMenuItems = !ViewModel.ShowSideMenuItems;}" style="cursor:pointer" class="bi bi-list d-md-none"></i>
+            </div>
+        </div>
+        <nav id="left-menu-items" class="nav nav-pills flex-column @(!ViewModel.ShowSideMenuItems ? "d-none":"") d-md-flex">
+            <a href="/" class="nav-link mx-3 active"><i class="bi bi-house me-1"></i> Home</a>
+            <a href="/Clients" class="nav-link mx-3"><i class="bi bi-people me-1"></i>Clients</a>
+            <a href="/Products" class="nav-link mx-3"><i class="bi bi-cart4 me-1"></i>Products/Services</a>
+            <a href="/Invoices" class="nav-link mx-3"><i class="bi bi-receipt-cutoff me-1"></i>Invoices</a>
+        </nav>
+       
+    </div>
     <main>
         <div class="top-row px-4 bg-primary-subtle">
             <div class="d-flex flex-row-reverse">
@@ -62,10 +71,26 @@
 </div>
 
 <script>
+  
     [...document.querySelectorAll(".sidebar .nav-link")].forEach((e,index, currentCollection) => {
        e.addEventListener("click",eventPayload => {
            eventPayload.currentTarget.classList.add("active");
            currentCollection.filter(x => x!==e).forEach(otherE => otherE.classList.remove("active"));
        })
-    })
+    });
+
+    // window.addEventListener("resize",function(){
+    //     let leftMenuButton = document.querySelector("#left-menu-button");
+    //     let leftMenuItemsContainer = document.querySelector("#left-menu-items");
+    //     let disaply = leftMenuButton.style.display
+    //     console.log(display);
+    //    if(!leftMenuButton.classList.contains("d-md-none")){
+    //       leftMenuItemsContainer.classList.remove("d-none");
+    //       console.log("show");
+    //    }
+    //    else{
+    //         leftMenuItemsContainer.classList.add("d-none");
+    //         console.log("hide");
+    //    }
+    // });
 </script>
