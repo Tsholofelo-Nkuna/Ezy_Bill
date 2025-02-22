@@ -79,18 +79,18 @@
        })
     });
 
-    // window.addEventListener("resize",function(){
-    //     let leftMenuButton = document.querySelector("#left-menu-button");
-    //     let leftMenuItemsContainer = document.querySelector("#left-menu-items");
-    //     let disaply = leftMenuButton.style.display
-    //     console.log(display);
-    //    if(!leftMenuButton.classList.contains("d-md-none")){
-    //       leftMenuItemsContainer.classList.remove("d-none");
-    //       console.log("show");
-    //    }
-    //    else{
-    //         leftMenuItemsContainer.classList.add("d-none");
-    //         console.log("hide");
-    //    }
-    // });
+     (function(){
+        let leftMenuButton = document.querySelector("#left-menu-button");
+        let leftMenuItemsContainer = document.querySelector("#left-menu-items");
+        [...document.querySelectorAll("#left-menu-items > a")]
+        .forEach( ele => {
+          ele.addEventListener("click", function(){
+            if(innerWidth < 768){
+                leftMenuItemsContainer.classList.add("d-none");
+            }
+          })
+        });
+        
+     })();
+    
 </script>
