@@ -19,7 +19,7 @@ namespace ClientManagement.Presentation.Models
         new FormComponentViewModel<ProductDto>(Enumerable.Empty<ProductDto>().Append(new ProductDto()), "Product-Search-Form")
         {
             Collapse = true,
-            Title = "Search",
+            Title = "Filter",
             ActionName = "Get",
             ControllerName = "Products",
             Fields = new List<InputFieldViewModel<ProductDto>>

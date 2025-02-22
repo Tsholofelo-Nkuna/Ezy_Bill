@@ -19,7 +19,7 @@ namespace ClientManagement.Presentation.Models
         public FormComponentViewModel<ClientDto> SearchFormComponentViewModel { get; set; } = new FormComponentViewModel<ClientDto>(Enumerable.Empty<ClientDto>().Append(new ClientDto()), "ClientSearchForm")
         {
             Collapse = true,
-            Title = "Search",
+            Title = "Filter",
             SubmitButtonText = "Filter",
             Fields = new(){
 
