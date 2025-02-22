@@ -10,8 +10,8 @@
     case ControlType.Email:
 
         <div class="row">
-            <div class="col-auto text-end"><label class="form-label">@ViewModel.Label</label></div>
-            <div class="col">
+            <div class="col-12"><label class="form-label">@ViewModel.Label</label></div>
+            <div class="col-12">
 
                 <input class="form-control @(!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage) ? "border-danger": string.Empty)"
                 name="@ViewModel.Name"
@@ -31,23 +31,23 @@
     case ControlType.Checkbox:
 
         <div class="row">
-            <div class="col-auto text-end"><label class="form-label">@ViewModel.Label</label></div>
+            <div class="col-12"><label class="form-label">@ViewModel.Label</label></div>
             @if ((_genericListViewModel.Get<bool>(ViewModelState.Id, ViewModel.Name)))
             {
-                <div class="col-auto text-start"> <input @oninput="(e) => { this._genericListViewModel.Set(ViewModelState.Id, ViewModel.Name, e.Value); }" checked type="checkbox" class="form-check-input" name="@ViewModel.Name" value="@bool.TrueString" /></div>
+                <div class="col-auto"> <input @oninput="(e) => { this._genericListViewModel.Set(ViewModelState.Id, ViewModel.Name, e.Value); }" checked type="checkbox" class="form-check-input" name="@ViewModel.Name" value="@bool.TrueString" /></div>
             }
             else
             {
 
-                <div class="col-auto text-start"> <input @oninput="(e) => { this._genericListViewModel.Set(ViewModelState.Id, ViewModel.Name, e.Value); }" type="checkbox" class=" form-check-input" name="@ViewModel.Name" value="@bool.TrueString" /></div>
+                <div class="col-auto"> <input @oninput="(e) => { this._genericListViewModel.Set(ViewModelState.Id, ViewModel.Name, e.Value); }" type="checkbox" class=" form-check-input" name="@ViewModel.Name" value="@bool.TrueString" /></div>
             }
 
         </div>
         break;
     case ControlType.Select:
         <div class="row">
-            <div class="col-auto text-end"><label class="form-label">@ViewModel.Label</label></div>
-            <div class="col-auto text-start">
+            <div class="col-12"><label class="form-label">@ViewModel.Label</label></div>
+            <div class="col-12">
                 <select class="form-select @(!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage) ? "border-danger":"")"
                         value="@(_genericListViewModel.Get<string>(ViewModelState.Id, ViewModel.Name))"
                         @onchange="(e) => _genericListViewModel.Set(ViewModelState.Id, ViewModel.Name, e.Value)">
@@ -66,8 +66,8 @@
         break;
     case ControlType.Date:
         <div class="row">
-            <div class="col-auto text-end"><label class="form-label">@ViewModel.Label</label></div>
-            <div class="col-auto text-start">
+            <div class="col-12"><label class="form-label">@ViewModel.Label</label></div>
+            <div class="col-12">
                 <input class="form-control  @(!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage) ? "border-danger": string.Empty)"
                        name="@ViewModel.Name"
                        value="@(_genericListViewModel.Get<string>(ViewModelState.Id, ViewModel.Name, true))"
@@ -83,10 +83,10 @@
         break;
     case ControlType.MultiSelect:
         <div class="row">
-            <div class="col-auto text-end">
+            <div class="col-12 text-end">
                 <label class="form-label">@ViewModel.Label</label>
             </div>
-            <div class="col-auto text-start">
+            <div class="col-12 text-start">
                 <div class="row" style="width:256px;">
                     <div class="col-12 py-3 rounded @(!string.IsNullOrWhiteSpace(ViewModel.ValidationMessage)?"border-danger":string.Empty)" style="border:1px dotted gray;cursor:pointer" @onclick="()=> {ViewModel.SearchBoxOptionsVisible=true;}">
                         @if (_genericListViewModel.Get<IEnumerable<string>?>(ViewModelState.Id, ViewModel.Name) is IEnumerable<string> multiSelectOptions)
