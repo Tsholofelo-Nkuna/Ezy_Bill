@@ -1,12 +1,12 @@
-﻿<div class="d-flex w-100 text-center flex-column" style="font-size:0.78rem;">
-    <div>&copy;2025 @Author</div>
-    <div>Version @VersionNumber</div>
-    <div>Powered by <span class="text-primary">Enxure</span></div>
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Config;
+<div class="d-flex w-100 text-center flex-column" style="font-size:0.78rem;">
+    <div>&copy;2025 @Config["AppInfo:Name"]</div>
+    <div>Version @Config["AppInfo:Version"]</div>
+    <div>Powered by <span class="text-primary">@Config["AppInfo:PoweredBy"]</span></div>
 </div>
 
 @code{
-    [Parameter]
-    public string Author { get; set; } = "IzyBill";
-    [Parameter] 
-    public string VersionNumber { get; set; } = "0.0.0";
+
+    
 }
