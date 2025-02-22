@@ -17,7 +17,7 @@ namespace Core.Presentation.Models
         }
 
         public List<InputFieldViewModel<TRecordType>> Fields { get; set; } = new List<InputFieldViewModel<TRecordType>>();
-        public string ColClass { get; set; } = "col-4";
+        public string ColClass { get; set; } = "col-sm-12 col-md-2 col-lg-3";
         public string SubmitButtonText { get; set; } = "Submit";
         public string ActionName { get; set; } = string.Empty;
         public string FormName { get; set; }
