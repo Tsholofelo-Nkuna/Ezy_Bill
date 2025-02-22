@@ -15,7 +15,8 @@ namespace Core.Presentation.Models
         public FormComponentViewModel(IEnumerable<TRecordType> vModelState, string formName) : base(vModelState) {
             this.FormName = formName;
         }
-
+        public string Title { get; set; } = string.Empty;
+        public bool Collapse { get; set; } = false;
         public List<InputFieldViewModel<TRecordType>> Fields { get; set; } = new List<InputFieldViewModel<TRecordType>>();
         public string ColClass { get; set; } = "col-md-6 col-lg-4";
         public string SubmitButtonText { get; set; } = "Submit";
