@@ -21,6 +21,8 @@ namespace ClientManagement.Presentation.Models
             set;
         } = new FormComponentViewModel<InvoiceDto>(new[] {new InvoiceDto()}, "Invoices-Search-Form")
         {
+            Collapse = true,
+            Title = "Filter",
             ActionName = "Invoices",
             ControllerName = "Get",
             Fields = new List<InputFieldViewModel<InvoiceDto>>

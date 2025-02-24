@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Authentication.BearerToken;
 using Core.Utils.Constants;
 using Microsoft.AspNetCore.Authentication;
 using Core.Utils.ActionFilters;
+using Core.Presentation.Models;
 
 
 namespace ClientManagement.Presentation.Web
@@ -39,7 +40,7 @@ namespace ClientManagement.Presentation.Web
                     
                 });
 
-
+            builder.Services.Configure<AppInfo>(builder.Configuration.GetSection("AppInfo"));
             builder.Services.AddUtilServices(builder.Configuration);
             builder.Services
                 .AddDbContext<WebDbContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("Default")))
