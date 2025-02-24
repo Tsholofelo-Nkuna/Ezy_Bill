@@ -69,7 +69,7 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
                             { "code", Convert.ToBase64String(tokenBytes)  }
                         });
                        
-                        await _emailSender.SendConfirmationLinkAsync(newUser, newUser.Email, $"{this.HttpContext.Request.Scheme}://{this.HttpContext.Request.Host}/confirmemail{qBuilder.Value}");
+                        await _emailSender.SendConfirmationLinkAsync(newUser, newUser.Email, $"{this.HttpContext.Request.Scheme}://{this.HttpContext.Request.Host}/api/Accounts/confirmemail{qBuilder.Value}");
                         //var confirmEmail = await this._httpClient.GetAsync($"/confirmemail?{qBuilder.Value}");
                         //var text = await confirmEmail.Content.ReadAsStringAsync();
                     }

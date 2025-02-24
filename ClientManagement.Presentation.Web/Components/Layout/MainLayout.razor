@@ -85,6 +85,7 @@
         [...document.querySelectorAll("#left-menu-items > a")]
         .forEach( ele => {
           ele.addEventListener("click", function(){
+           
             if(innerWidth < 768){
                 leftMenuItemsContainer.classList.add("d-none");
             }
