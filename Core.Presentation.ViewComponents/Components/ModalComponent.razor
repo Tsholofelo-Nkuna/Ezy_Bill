@@ -3,7 +3,7 @@
 @using Core.Presentation.ViewComponents.Components.Base
 @typeparam TRecordType where TRecordType : BaseDto, new()
 @inherits  GenericComponentBase<ModalViewModel<TRecordType>, TRecordType>
-<div class="modal fade @ViewModel.ShowhowClass @CssClass" style="display:@ViewModel.DisplayStyle;z-index:1;width:@Width;height:@Height" tabindex="-1" role="dialog" id="new-client-modal">
+<div class="modal fade @ViewModel.ShowhowClass @CssClass" style="display:@ViewModel.DisplayStyle;height:@Height" tabindex="-1" role="dialog" id="new-client-modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

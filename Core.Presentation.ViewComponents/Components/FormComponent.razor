@@ -12,8 +12,15 @@
 {
 
     <div class="card">
-
-        <form class="card-body"  id="@ViewModel.FormName" method="post">
+        <div class="card-header" @onclick="()=>{ViewModel.Collapse = !ViewModel.Collapse;}" style="cursor:pointer">
+            <div class="d-flex justify-content-between">
+                <h6 class="text-primary">@ViewModel.Title</h6>
+                <div>
+                    <i class="bi bi-chevron-@(ViewModel.Collapse ? "down":"up")"></i>
+                </div>
+            </div>
+        </div>
+        <form class="card-body @(ViewModel.Collapse ? "d-none":"")"  id="@ViewModel.FormName" method="post">
 
             @{
 
@@ -43,7 +50,7 @@
         </form>
         @if (!ViewModel.CollapseFooter)
         {
-            <div class="card-footer">
+            <div class="card-footer  @(ViewModel.Collapse ? "d-none":"")">
                 <ButtonTemplate 
                     Text="@ViewModel.SubmitButtonText"
                     OnClick="OnFormSubmit"
