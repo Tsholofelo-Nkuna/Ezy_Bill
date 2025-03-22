@@ -74,6 +74,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
 
         public async Task OnInvoiceSearchClick(IEnumerable<InvoiceDto> invoices)
         {
+            this.InvoiceTableComponent.ViewModel.PageRequest.PageIndex = 0;
             await this.GetData(SearchFormFilters);
            
         }
