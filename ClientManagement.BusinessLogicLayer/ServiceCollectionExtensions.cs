@@ -16,7 +16,7 @@ namespace ClientManagement.BusinessLogicLayer
                 .AddAutoMapper(typeof(AutoMapperConfig))
                 .AddScoped<IClientService, ClientService> ()
                 .AddScoped<IInvoiceService, InvoiceService> ()
-                .AddScoped<ProductService>() //Add interface for the ProductService
+                .AddScoped<IProductService,ProductService>() //Add interface for the ProductService
                 .AddScoped<IInvoiceProductService, InvoiceProductsService>()
                 .AddScoped<IInvoicePaymentService, InvoicePaymentService>()
                 .AddScoped<IProfileService, ProfileService>()

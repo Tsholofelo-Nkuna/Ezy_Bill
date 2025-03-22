@@ -31,9 +31,11 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Clients
             var response = await this.AppApi.PostAsJsonAsync<ClientDto>(this.BaseUrl, newClient);
             return response.IsSuccessStatusCode && (await response.Content.ReadFromJsonAsync<bool>());
         }
-        private async Task GetData(ClientDto filters)
+        private async Task<IEnumerable<ClientDto>> GetData(ClientDto filters)
         {
-            await (ClientsTableComponent?.GetData(filters) ?? Task.FromResult(Enumerable.Empty<ClientDto>()));
+            ClientsTableComponent.ViewModel.PageRequest.Filters = filters;
+            var response = await ClientsTableComponent.GetPageData(ClientsTableComponent.ViewModel.PageRequest);
+            return response?.Items ?? Enumerable.Empty<ClientDto>();
         }
 
         public async Task OnNewClientFormSubmitted(ClientDto? details, ClientDto? primaryContact)

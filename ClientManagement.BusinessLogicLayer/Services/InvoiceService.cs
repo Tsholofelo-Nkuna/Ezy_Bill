@@ -6,7 +6,7 @@ using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Entities;
 using ClientManagement.Presentation.Models.DataTransferObjects;
-
+using Core.Presentation.Models.DataTransferObjects;
 using Core.Utils;
 using Core.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -145,11 +145,12 @@ namespace ClientManagement.BusinessLogicLayer.Services
             return (await this.Get(addedInvoice)).FirstOrDefault();
         }
 
-        public override async Task<IEnumerable<InvoiceDto>> Get(InvoiceDto filter)
+        public override async Task<(IEnumerable<InvoiceDto> Items, int TotalRecords)> Get(PageRequestDto<InvoiceDto> pageRequest)
         {
             var pId = this.CurrentProfileId;
-            var query = this._entitySet.AsNoTracking().Where(x => x.ProfileId == pId);
-            query = query.Where(x => x.Archived ==  filter.Archived)
+            var filter = pageRequest.Filters;
+            var query = this.GetQueryable(filter);
+            query = query
                 .Include(invoice => invoice.Client)
                 .ThenInclude(client=> client.ContactPerson);
            
@@ -218,8 +219,8 @@ namespace ClientManagement.BusinessLogicLayer.Services
                 invoicesWithPaymentAndPriceInfoQ = invoicesWithPaymentAndPriceInfoQ.Where(x => x.Invoice.Client.Id == clientIdFilter);
 
             }
-
-            return (await invoicesWithPaymentAndPriceInfoQ.ToListAsync()).Select( x =>
+            var pagedQuery = !pageRequest.GetAllPages ? invoicesWithPaymentAndPriceInfoQ.Skip(pageRequest.PageIndex * pageRequest.PageSize).Take(pageRequest.PageSize) : invoicesWithPaymentAndPriceInfoQ;
+            var results = (await pagedQuery.ToListAsync()).Select( x =>
             {
                 var invoiceDto = this._mapper.Map<InvoiceDto>(x.Invoice);
               
@@ -235,6 +236,8 @@ namespace ClientManagement.BusinessLogicLayer.Services
                
                 return invoiceDto;  
             });
+
+            return (results, invoicesWithPaymentAndPriceInfoQ.Count());
         }
     }
 }

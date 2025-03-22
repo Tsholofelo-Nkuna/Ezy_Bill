@@ -1,5 +1,8 @@
-﻿using ClientManagement.BusinessLogicLayer.Services;
+﻿using ClientManagement.BusinessLogicLayer.Interfaces;
+using ClientManagement.BusinessLogicLayer.Services;
 using ClientManagement.Presentation.Models.DataTransferObjects;
+using ClientManagement.Presentation.Web.Controllers.Base;
+using Core.Presentation.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,17 +12,19 @@ namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : ApiBaseController<ProductsController>
     {
-        private readonly ProductService _productService;
-        public ProductsController(ProductService productService) { 
+        private readonly IProductService _productService;
+        private readonly ILogger<ProductsController> _logger;
+        public ProductsController(ILogger<ProductsController> logger, IProductService productService): base(logger) { 
             _productService = productService;
         }
         // GET: api/<ProductsController>/<action>
         [HttpPost("[action]")]
-        public async Task<IEnumerable<ProductDto>> Get([FromBody] ProductDto filters)
+        public async Task<PageResponseDto<ProductDto>> Get([FromBody] PageRequestDto<ProductDto> pageRequest)
         {
-            return  await this._productService.Get(filters);
+            var results = await this.Get(pageRequest, _productService);
+            return results;
         }
 
         // GET api/<ProductsController>/5

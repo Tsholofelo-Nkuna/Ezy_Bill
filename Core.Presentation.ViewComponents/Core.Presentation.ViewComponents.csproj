@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BootstrapBlazor" Version="8.11.0" />
     <PackageReference Include="DartSassBuilder" Version="1.1.0" />
   </ItemGroup>
 

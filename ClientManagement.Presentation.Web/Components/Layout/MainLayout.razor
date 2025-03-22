@@ -78,6 +78,12 @@
            currentCollection.filter(x => x!==e).forEach(otherE => otherE.classList.remove("active"));
        })
     });
+     function getWindowDimensions(){
+            return {
+                innerWidth,
+                innerHeight
+            }
+        }
 
      (function(){
         
@@ -92,6 +98,8 @@
           })
         });
         
+       
+       
      })();
     
 </script>
