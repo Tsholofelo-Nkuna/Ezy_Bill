@@ -1,4 +1,6 @@
-﻿using Core.Utils;
+﻿using ClientManagement.BusinessLogicLayer.Interfaces.Base;
+using Core.Presentation.Models.DataTransferObjects;
+using Core.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClientManagement.Presentation.Web.Controllers.Base
@@ -13,6 +15,17 @@ namespace ClientManagement.Presentation.Web.Controllers.Base
         {
             this.logger = logger;
             this.requestHandler = new ControllerRequestHandler<TCategoryName>(this.logger);
+        }
+
+        protected virtual async Task<PageResponseDto<TDto>> Get<TDto, TEntity>(PageRequestDto<TDto> pRequest, IGenericService<TDto, TEntity> service) where TDto: new(){ 
+           var response =   await service.Get(pRequest);
+
+            return new PageResponseDto<TDto> { 
+              Items = response.Items,
+              PageIndex = pRequest.PageIndex,
+              PageSize = pRequest.PageSize,
+              TotalRecords = response.TotalRecords,
+            };
         }
     }
 }

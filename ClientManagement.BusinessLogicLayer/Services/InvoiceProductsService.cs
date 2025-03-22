@@ -5,6 +5,7 @@ using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Entities;
 using ClientManagement.Presentation.Models.DataTransferObjects;
+using Core.Presentation.Models.DataTransferObjects;
 using Core.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -24,17 +25,17 @@ namespace ClientManagement.BusinessLogicLayer.Services
         {
         }
 
-        public override async Task<IEnumerable<InvoiceProductDto>> Get(InvoiceProductDto filter)
+        public override async Task<(IEnumerable<InvoiceProductDto> Items, int TotalRecords)> Get(PageRequestDto<InvoiceProductDto> pageRequest)
         {
-            var query = base.GetQueryable(filter)
+            var query = base.GetQueryable(pageRequest.Filters)
                 .Include(x => x.Product)
                 .Include(x => x.Invoice)
                 .ThenInclude(x => x.Client);
               
-                
-            var list = await query.ToListAsync();
+            var pagedQuery =  !pageRequest.GetAllPages ? query.Skip(pageRequest.PageSize * pageRequest.PageIndex).Take(pageRequest.PageSize) : query;
+            var list = await pagedQuery.ToListAsync();
             var results = _mapper.Map<List<InvoiceProductDto>>(list);
-            return results;
+            return (results, query.Count());
         }
     }
 }

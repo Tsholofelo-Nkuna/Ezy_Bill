@@ -1,5 +1,7 @@
 ﻿using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.Presentation.Models.DataTransferObjects;
+using ClientManagement.Presentation.Web.Controllers.Base;
+using Core.Presentation.Models.DataTransferObjects;
 using Core.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,25 +13,23 @@ namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InvoicesController : ControllerBase
+    public class InvoicesController : ApiBaseController<InvoicesController>
     {
         private readonly IInvoiceService _invoiceService;
-        private readonly ILogger<InvoicesController> _logger;
-        private readonly ControllerRequestHandler<InvoicesController> _requestHandler;
-        public InvoicesController(IInvoiceService invoiceService, ILogger<InvoicesController> logger) {
+      
+        public InvoicesController(IInvoiceService invoiceService, ILogger<InvoicesController> logger): base(logger) {
            this._invoiceService = invoiceService;
-           this._logger = logger;
-           this._requestHandler = new ControllerRequestHandler<InvoicesController>(this._logger);
+         
         }
         // GET: api/<InvoicesController>/Get
         [HttpPost("[action]")]
-        public async Task<IEnumerable<InvoiceDto>> Get([FromBody] InvoiceDto filter)
+        public async Task<PageResponseDto<InvoiceDto>> Get([FromBody] PageRequestDto<InvoiceDto> pageRequest)
         {
-            return  await this._requestHandler.HandleRequest(
-                async () => await this._invoiceService.Get(filter),
+            return  await this.requestHandler.HandleRequest(
+                async () => await this.Get(pageRequest, _invoiceService),
                 nameof(Get),
-                Task.FromResult(Enumerable.Empty<InvoiceDto>()),
-                filter
+                Task.FromResult<PageResponseDto<InvoiceDto>>( new() { Items = Enumerable.Empty<InvoiceDto>() }),
+                pageRequest
                 );
         }
 
@@ -37,7 +37,7 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpGet("{id}")]
         public async Task<InvoiceDto?> Get(Guid id)
         {
-            return await this._requestHandler.HandleRequest(
+            return await this.requestHandler.HandleRequest(
                 async () => (await this._invoiceService.Get(new InvoiceDto { Id = id })).FirstOrDefault(),
                 nameof(Get),
                 Task.FromResult<InvoiceDto?>(null),
@@ -49,7 +49,7 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpPost]
         public async Task<bool> Post([FromBody] InvoiceDto value)
         {
-            return await this._requestHandler.HandleRequest(
+            return await this.requestHandler.HandleRequest(
                 async () => await this._invoiceService.AddOrUpdate(new List<InvoiceDto> { value }),
                 nameof(Post),
                 Task.FromResult(false),
@@ -61,7 +61,7 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpPost("AddPayment")]
         public async Task<InvoiceDto?> Post([FromQuery] Guid id, [FromBody] double amount)
         {
-            return await this._requestHandler.HandleRequest(async () =>
+            return await this.requestHandler.HandleRequest(async () =>
                await this._invoiceService.AddPaymentToInvoice(id, amount),
                nameof(Post),
                Task.FromResult<InvoiceDto?>(null),
@@ -74,7 +74,7 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpPost("AddProducts")]
         public async Task<InvoiceDto?> Post([FromQuery] Guid id, [FromBody] IEnumerable<Guid> productsIdentifiers)
         {
-            return await this._requestHandler.HandleRequest(async () =>
+            return await this.requestHandler.HandleRequest(async () =>
              await this._invoiceService.AddProductsToInvoice(id, productsIdentifiers),
              nameof(Post),
              Task.FromResult<InvoiceDto?>(null),
@@ -92,7 +92,7 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpDelete("[action]/{id}")]
         public async Task<bool> Delete(Guid id)
         {
-            return await this._requestHandler
+            return await this.requestHandler
                 .HandleRequest(
                  async () => await this._invoiceService.Delete(new[] {id}),
                  nameof(Delete),
@@ -104,7 +104,7 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpPost("[action]/{id}")]
         public async Task<bool> Archive(Guid id)
         {
-            return await this._requestHandler.HandleRequest(
+            return await this.requestHandler.HandleRequest(
                 async () => await this._invoiceService.Archive(new[] { id }),
                 nameof(Archive),
                 Task.FromResult(false),

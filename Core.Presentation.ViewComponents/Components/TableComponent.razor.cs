@@ -1,8 +1,11 @@
-﻿using Core.Presentation.Models;
+﻿using BootstrapBlazor.Components;
+using Core.Presentation.Models;
+using Core.Presentation.Models.DataTransferObjects;
 using Core.Presentation.Models.DataTransferObjects.Base;
 using Core.Presentation.ViewComponents.Components.Base;
 using Core.Utils;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Configuration;
 using System.Globalization;
 using System.Net.Http.Json;
 
@@ -31,10 +34,14 @@ namespace Core.Presentation.ViewComponents.Components
         public bool IsLoading { get; set; }
         [Parameter] 
         public EventCallback<bool> IsLoadingChanged { get; set; }
-        [Parameter]
+        [Parameter, Obsolete("Use IsLoadingChanged")]
         public EventCallback<bool> IsLoaddingChanged { get; set; }
 
         private TRecordType? _updatedRecordStateBeforeEdit;
+
+        [Inject]
+        private IConfiguration _appSettings { get; set; }
+       
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -46,8 +53,24 @@ namespace Core.Presentation.ViewComponents.Components
                     cConfig.EditInputFieldViewModel.Label = string.Empty; //Edit fields used during inline edits shouldn't have labels set
                 }
             });
-            await this.GetData(Filter);
+           int.TryParse(this._appSettings["Pagination:PageSize"], out var pSize);
+           this.ViewModel.PageRequest.PageSize = pSize;
+           await this.GetPageData(this.ViewModel.PageRequest);
         }
+
+        //protected override async Task OnAfterRenderAsync(bool firstRender)
+     
+        //{
+        //    await base.OnAfterRenderAsync(firstRender);
+        //    var bDimenstions = await this.JS.InvokeAsync<BrowserDimensions>("getWindowDimenstions", null);
+        //    this.ViewModel.InnerHeight = bDimenstions.InnerHeight;
+        //    this.ViewModel.InnerWidth = bDimenstions.InnerWidth;
+        //    //if (firstRender)
+        //    //{
+        //    //    StateHasChanged();
+        //    //}
+
+        //}
         public void OnView(Guid recordId) {
             OnViewClick?.Invoke(recordId);
         }
@@ -72,6 +95,12 @@ namespace Core.Presentation.ViewComponents.Components
         [Parameter]
         public TRecordType Filter { get; set; } = new TRecordType();
 
+        public async Task OnPageIndexChange(int pageIndex)
+        {
+            ViewModel.PageRequest.PageIndex = pageIndex;
+            await this.GetPageData(ViewModel.PageRequest);
+            await Task.CompletedTask;
+        }
         public async Task OnDelete(Guid id)
         {
             var deleteEventState = new EventState<TRecordType?> { Success = false, Payload = ViewModel.ViewModelState.FirstOrDefault(x => x.Id == id) };
@@ -202,10 +231,43 @@ namespace Core.Presentation.ViewComponents.Components
             return Task.CompletedTask;
         }
 
+        public async Task<PageResponseDto<TRecordType>?> GetPageData(PageRequestDto<TRecordType> pageRequest)
+        {
+            IsLoading = true;
+            if(pageRequest.PageSize <= 0)
+            {
+                pageRequest.PageSize = ViewModel.PageRequest.PageSize;
+            }
+            ViewModel.PageRequest = pageRequest;
+            await IsLoadingChanged.InvokeAsync(IsLoading);
+            StateHasChanged();
+           
+            if (!string.IsNullOrWhiteSpace(ViewModel.GetDataController))
+            {
+                var fetchUrl = $"api/{ViewModel.GetDataController}/{ViewModel.GetDataAction}";
+                var requestResponse = await this.AppApi.PostAsJsonAsync(fetchUrl, pageRequest);
+
+                if (requestResponse.IsSuccessStatusCode)
+                {
+                    ViewModel.PageResponse = (await requestResponse.Content.ReadFromJsonAsync<PageResponseDto<TRecordType>>());
+
+                }
+
+            }
+            ViewModel.ViewModelState = ViewModel.PageResponse?.Items ?? Enumerable.Empty<TRecordType>();
+          
+            IsLoading = false;
+            await IsLoadingChanged.InvokeAsync(IsLoading);
+            StateHasChanged();
+            return ViewModel.PageResponse;
+        }
+
+        [Obsolete("Use GetPageData instead")]
         public async Task<IEnumerable<TRecordType>> GetData(TRecordType filters)
         {
             IsLoading = true;
             await IsLoaddingChanged.InvokeAsync(IsLoading);
+            await IsLoadingChanged.InvokeAsync(IsLoading);
             StateHasChanged();
             var returnedResult = Enumerable.Empty<TRecordType>();
             if (!string.IsNullOrWhiteSpace(ViewModel.GetDataController))

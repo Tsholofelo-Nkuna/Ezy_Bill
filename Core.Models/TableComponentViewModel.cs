@@ -19,6 +19,8 @@ namespace Core.Presentation.Models
        public string ArchiveController = string.Empty;
        public string SaveOrUpdateController = string.Empty;
        public string SaveOrUpdateAction = string.Empty;
+       public float InnerWidth { get; set; }
+       public float InnerHeight { get; set; }
        public bool ShowDeleteButton { get; set; } = true;
        public bool ShowArchiveButton { get; set; } = true;
        public bool ShowViewButton { get; set; } = true;
@@ -26,6 +28,10 @@ namespace Core.Presentation.Models
        public string ViewController { get; set; } = string.Empty;
        public string GetDataAction { get; set; } = string.Empty;
        public string GetDataController { get; set;} = string.Empty;
+       public PageRequestDto<TRecordType> PageRequest { get; set; } = new PageRequestDto<TRecordType>();
+       public PageResponseDto<TRecordType>? PageResponse { get; set; } = new PageResponseDto<TRecordType>();
+     
+       public int PageCount => (PageResponse?.TotalRecords ?? 0) > 0 ? (int)Math.Ceiling((PageResponse?.PageSize ?? 0) / (float)(PageResponse?.TotalRecords ?? 0)) : 0;
       
     }
 
