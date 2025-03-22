@@ -31,7 +31,7 @@ namespace Core.Presentation.Models
        public PageRequestDto<TRecordType> PageRequest { get; set; } = new PageRequestDto<TRecordType>();
        public PageResponseDto<TRecordType>? PageResponse { get; set; } = new PageResponseDto<TRecordType>();
      
-       public int PageCount => (PageResponse?.TotalRecords ?? 0) > 0 ? (int)Math.Ceiling((PageResponse?.PageSize ?? 0) / (float)(PageResponse?.TotalRecords ?? 0)) : 0;
+       public int PageCount => (PageResponse?.PageSize ?? 0) > 0 ? (int)Math.Ceiling((PageResponse?.TotalRecords ?? 0) / (float)(PageResponse?.PageSize ?? 0)) : 0;
       
     }
 
