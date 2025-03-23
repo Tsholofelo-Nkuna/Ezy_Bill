@@ -37,7 +37,7 @@ namespace Core.Presentation.Models
             {
                 if (PageRequest.GetAllPages)
                 {
-                    return PageResponse?.TotalRecords ?? 0;
+                    return PageResponse.TotalRecords > 0 ? (PageResponse.Items.Count() / PageResponse?.TotalRecords ?? 0) : 0;
                 }
                 else
                 {
