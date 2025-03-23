@@ -12,6 +12,7 @@ using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Entities;
 using ClientManagement.Presentation.Models.DataTransferObjects;
+using Core.Presentation.Models.DataTransferObjects;
 using Core.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -45,21 +46,23 @@ namespace ClientManagement.BusinessLogicLayer.Services
 
         }
 
-        public override async Task<IEnumerable<InvoicePaymentDto>> Get(InvoicePaymentDto filter)
+        public override async Task<(IEnumerable<InvoicePaymentDto> Items, int TotalRecords)> Get(PageRequestDto<InvoicePaymentDto> pageRequest)
         {
             var pId = this.CurrentProfileId;
-            var query = _entitySet.AsNoTracking().Where(x => x.ProfileId == pId);
+            var query = this.GetQueryable(pageRequest.Filters);
+            var filter = pageRequest.Filters;
             if(filter.InvoiceId != Guid.Empty)
             {
                 query = query.Where(invPayment => invPayment.Invoice.Id == filter.InvoiceId);
             }
-            
-            var queryResults = await query.Include(ip => ip.Invoice).ToListAsync();
+            var count = query.Count();
+            var pagedQuery = !pageRequest.GetAllPages ? query.Include(ip => ip.Invoice).Skip(pageRequest.PageIndex * pageRequest.PageSize).Take(pageRequest.PageSize) : query.Include(ip => ip.Invoice);
+            var queryResults = await pagedQuery.ToListAsync();
             var returedResults = _mapper.Map<List<InvoicePaymentDto>>(queryResults);
             returedResults.ForEach(invPayment => { 
              invPayment.InvoiceId = invPayment.Invoice.Id;
             });
-            return returedResults;
+            return ((returedResults, count));
         }
     }
 }

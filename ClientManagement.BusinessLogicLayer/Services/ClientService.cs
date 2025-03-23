@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Core.Utils.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
+using Core.Presentation.Models.DataTransferObjects;
 
 
 
@@ -56,27 +57,19 @@ namespace ClientManagement.BusinessLogicLayer.Services
             }
         }
 
-        public override Task<IEnumerable<ClientDto>> Get(ClientDto filter)
+        public override Task<(IEnumerable<ClientDto> Items, int TotalRecords)> Get(PageRequestDto<ClientDto> pageRequest)
         {
             var pId =  this.CurrentProfileId;
-            var query = this._entitySet.AsNoTracking().Where(x => x.ProfileId == pId);
-            if (filter.Archived)
-            {
-                query = query.Where(x => x.Archived);
-            }
-            else
-            {
-                query = query.Where(x => !x.Archived);
-            }
+            var query = this.GetQueryable(pageRequest.Filters);
+            var filter = pageRequest.Filters;
+           
 
             if(filter.CompanyName?.Trim() is string validCompanyName and { Length: > 0 })
             {
                 query = query.Where(x => x.CompanyName.Contains(filter.CompanyName));
             }
-            if (filter.Id != Guid.Empty) { 
-               query = query.Where(x => x.Id == filter.Id);
-            }
-            var returned = this._mapper.Map<List<ClientDto>>(query.Include(x => x.ContactPerson).OrderByDescending(x => x.CreatedOn).ToList());
+            var pagedQuery = pageRequest.GetAllPages ? query.Include(x => x.ContactPerson).OrderByDescending(x => x.CreatedOn) : query.Include(x => x.ContactPerson).OrderByDescending(x => x.CreatedOn).Skip(pageRequest.PageIndex * pageRequest.PageSize).Take(pageRequest.PageSize);
+            var returned = this._mapper.Map<List<ClientDto>>(pagedQuery.ToList());
             returned.ForEach(x =>
             {
                 var primaryContact = x.ContactPerson.FirstOrDefault(x => x.IsPrimaryContact);
@@ -84,7 +77,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
                 x.PrimaryContactPhone = primaryContact?.Phone ?? string.Empty;
                 x.PrimaryContactName = primaryContact?.Name ?? string.Empty;
             });
-            return Task.FromResult<IEnumerable<ClientDto>>(returned.OrderByDescending(x => x.CreatedOn));
+            return Task.FromResult<(IEnumerable<ClientDto> Items, int TotalRecords)>((returned.OrderByDescending(x => x.CreatedOn), query.Count()));
         }
 
         public override Task<IEnumerable<ClientDto>> Get(Expression<Func<ClientEntity, bool>> filter)

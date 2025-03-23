@@ -57,6 +57,8 @@ namespace ClientManagement.Presentation.Models
                 ShowArchiveButton = false,
                 ViewAction = "Details",
                 ViewController = "Invoices",
+                GetDataController="Invoices",
+                GetDataAction="Get"
             };
     }
 }

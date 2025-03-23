@@ -13,10 +13,11 @@ using ClientManagement.DataAccessLayer.Entities;
 using Core.Utils.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
 using Core.Utils.Constants;
+using Core.Presentation.Models.DataTransferObjects;
 
 namespace ClientManagement.BusinessLogicLayer.Services.Base
 {
-    public class GenericService<TDto, TEntity> : IGenericService<TDto, TEntity> where TEntity : BaseEntity where TDto : BaseDto
+    public class GenericService<TDto, TEntity> : IGenericService<TDto, TEntity> where TEntity : BaseEntity where TDto : BaseDto, new()
     {
         protected readonly WebDbContext _dbContext;
         protected readonly DbSet<TEntity> _entitySet;
@@ -107,6 +108,14 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
             }
             var result = await query.ToListAsync();
             return  _mapper.Map<IEnumerable<TDto>>( result);
+        }
+
+        public virtual async Task<(IEnumerable<TDto> Items, int TotalRecords)> Get(PageRequestDto<TDto> pageRequest)
+        {
+            var query = this.GetQueryable(pageRequest.Filters);
+            var totalRecords = query.Count();
+            var items = pageRequest.GetAllPages ? await query.Skip(pageRequest.PageIndex*pageRequest.PageSize).Take(pageRequest.PageSize).ToListAsync() : await query.ToListAsync();
+            return (_mapper.Map<List<TDto>>(items), totalRecords);
         }
 
         public virtual IQueryable<TEntity> GetQueryable(TDto filter)

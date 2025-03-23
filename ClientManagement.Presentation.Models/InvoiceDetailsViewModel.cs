@@ -74,7 +74,10 @@ namespace ClientManagement.Presentation.Models
 
             },
             DeleteAction = "Delete",
-            DeleteController = "InvoiceProducts"
+            DeleteController = "InvoiceProducts",
+            GetDataAction = "Get",
+            GetDataController = "InvoiceProducts"
+
             
         };
         public TableComponentViewModel<InvoicePaymentDto> InvoicePaymentsTableViewModel { get; set; }
@@ -123,7 +126,9 @@ namespace ClientManagement.Presentation.Models
             ShowCreateNewButton = true,
             ShowDeleteButton = true,
             ShowArchiveButton = false,
-            ShowViewButton = false
+            ShowViewButton = false,
+            GetDataController= "InvoicePayments",
+            GetDataAction="Get"
         };
 
         public ModalViewModel<InvoicePaymentDto> InvoicePaymentModalViewModel { get; set; } = new ModalViewModel<InvoicePaymentDto>

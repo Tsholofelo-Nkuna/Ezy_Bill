@@ -25,12 +25,15 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Products
 
         public async Task OnSearchClick(IEnumerable<ProductDto> searchState)
         {
+            this.ProductsTableComponent.ViewModel.PageRequest.PageIndex = 0;
             await this.GetData(this.SearchFormFilters);
           
         }
         public async Task<IEnumerable<ProductDto>> GetData(ProductDto filters)
         {
-           return await (this.ProductsTableComponent?.GetData(filters) ?? Task.FromResult(Enumerable.Empty<ProductDto>()) );
+           this.ProductsTableComponent.ViewModel.PageRequest.Filters = filters;
+           var pageResponse = await this.ProductsTableComponent.GetPageData(this.ProductsTableComponent.ViewModel.PageRequest);
+           return pageResponse?.Items ?? Enumerable.Empty<ProductDto>();
         }
 
         public async  Task OnSaveProductUpdates(EventState<ProductDto?> eventState)

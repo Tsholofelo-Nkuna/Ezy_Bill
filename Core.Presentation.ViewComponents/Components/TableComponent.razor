@@ -18,105 +18,130 @@
             </div>
         </div>
     }
+   
     <div class="card-body position-relative">
         @if(IsLoading){
             <div class="spinner-border position-absolute top-50 end-50"></div>
         }
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    @foreach (var colConfig in ViewModel.ColumnConfigs)
-                    {
-                        if(colConfig.Name != _actionColumnName){
-                            <th>@(CultureInfo.InvariantCulture.TextInfo.ToTitleCase(colConfig.Name))</th>
-                        }
-                        else{
-                            <th></th>
-                        }
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @if (!ViewModel.ViewModelState.Any())
-                {
+      
+        <Pagination
+            PageCount="ViewModel.PageCount" 
+            Alignment="Alignment.Left"
+            PageIndex="ViewModel.PageRequest.PageIndex+1"
+            NextPageIcon="bi bi-chevron-right"
+            PrevPageIcon="bi bi-chevron-left"
+            OnPageLinkClick="OnPageIndexChange"
+            
+            />
+        @if(this.ViewModel.InnerWidth >= Core.Utils.Constants.Device.Width.Sm || true){
+            <table class="table table-bordered">
+                <thead>
                     <tr>
-                        <td colspan="@ViewModel.ColumnConfigs.Count()" class="text-center">
-                            No Data
-                        </td>
-                    </tr>
-                }
-                else
-                {
-
-                    @for (var rowIndex = 0; rowIndex < ViewModel.ViewModelState.Count(); rowIndex++)
-                    {
-                        var rec = ViewModel.ViewModelState.ElementAtOrDefault(rowIndex);
-                        if(rec is not null)
+                        @foreach (var colConfig in ViewModel.ColumnConfigs)
                         {
-                            <tr>
-                                @foreach (var config in ViewModel.ColumnConfigs)
-                                {
-                                   
-                                    if (config.Name != _actionColumnName)
-                                    {
-                                         <td>
-                                            <ConditionalTemplate Condition="rowIndex == EditIndex && config.EditInputFieldViewModel is not null" ContextIfTrue="config.EditInputFieldViewModel" ContextIfFalse="rec">
-                                                <IfTrue Context="fieldConfig">
-                                                    <InputComponent 
-                                                        ViewModel="fieldConfig"
-                                                        ViewModelState="rec"
-                                                    >
-                                                    </InputComponent>
-                                                </IfTrue>
-                                                <ElseIfFalse>
-                                                    @(ViewModel.Get<string>(rec.Id, config.Index, true))
-                                                 </ElseIfFalse>
-                                            </ConditionalTemplate>
-                                         </td>
-                                 
-                                    }
-                                    else
-                                    {
-                                        <HtmlTemplate  TemplateContext="rowIndex">
-                                            <ContentTemplate>
-                                                
-                                                <div class="d-flex">
-                                                    @if (ViewModel.ShowDeleteButton)
-                                                    {
-                                                        <i title="Delete" @onclick="() => OnDelete(rec.Id)" style="cursor:pointer" class="bi bi-trash text-danger me-3"></i>
-                                                    }
-                                                    @if (!rec.Archived && ViewModel.ShowArchiveButton)
-                                                    {
-                                                        <i title="Archive" @onclick="() => OnArchive(rec.Id)" style="cursor:pointer" class="bi bi-archive text-secondary me-3"></i>
-                                                    }
+                            if (colConfig.Name != _actionColumnName)
+                            {
+                                <th>@(CultureInfo.InvariantCulture.TextInfo.ToTitleCase(colConfig.Name))</th>
+                            }
+                            else
+                            {
+                                <th></th>
+                            }
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!ViewModel.ViewModelState.Any())
+                    {
+                        <tr>
+                            <td colspan="@ViewModel.ColumnConfigs.Count()" class="text-center">
+                                No Data
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
 
-                                                    @if (ViewModel.ShowViewButton)
-                                                    {
-                                                        <i title="View" @onclick="() => OnView(rec.Id)" style="cursor:pointer" class="bi bi-info-circle text-primary me-3"></i>
-                                                    }
-                                                    @if (_shouldAllowInlineEdit)
-                                                    {
-                                                        if (EditIndex != context)
+                        @for (var rowIndex = 0; rowIndex < ViewModel.ViewModelState.Count(); rowIndex++)
+                        {
+                            var rec = ViewModel.ViewModelState.ElementAtOrDefault(rowIndex);
+                            if (rec is not null)
+                            {
+                                <tr>
+                                    @foreach (var config in ViewModel.ColumnConfigs)
+                                    {
+
+                                        if (config.Name != _actionColumnName)
+                                        {
+                                            <td>
+                                                <ConditionalTemplate Condition="rowIndex == EditIndex && config.EditInputFieldViewModel is not null" ContextIfTrue="config.EditInputFieldViewModel" ContextIfFalse="rec">
+                                                    <IfTrue Context="fieldConfig">
+                                                        <InputComponent ViewModel="fieldConfig"
+                                                                        ViewModelState="rec">
+                                                        </InputComponent>
+                                                    </IfTrue>
+                                                    <ElseIfFalse>
+                                                        @(ViewModel.Get<string>(rec.Id, config.Index, true))
+                                                    </ElseIfFalse>
+                                                </ConditionalTemplate>
+                                            </td>
+
+                                        }
+                                        else
+                                        {
+                                            <HtmlTemplate TemplateContext="rowIndex">
+                                                <ContentTemplate>
+
+                                                    <div class="d-flex">
+                                                        @if (ViewModel.ShowDeleteButton)
                                                         {
-                                                            <i title="Edit" @onclick="(e) => OnEditClicked(context, rec)" style="cursor:pointer" class="bi bi-pencil-square text-secondary me-3"></i>
+                                                            <i title="Delete" @onclick="() => OnDelete(rec.Id)" style="cursor:pointer" class="bi bi-trash text-danger me-3"></i>
                                                         }
-                                                        if (EditIndex == context)
+                                                        @if (!rec.Archived && ViewModel.ShowArchiveButton)
                                                         {
-                                                            <i title="Save" @onclick="(e) => OnUpdate(rec.Id)" class="bi bi-check-circle-fill text-success me-3" style="cursor:pointer"></i>
-                                                            <i @onclick="() => OnCancelUpdate()" title="Cancel Edit" class="bi bi-x-circle text-secondary me-3" style="cursor:pointer"></i>
+                                                            <i title="Archive" @onclick="() => OnArchive(rec.Id)" style="cursor:pointer" class="bi bi-archive text-secondary me-3"></i>
                                                         }
-                                                    }
-                                                </div>
-                                            </ContentTemplate>
-                                        </HtmlTemplate>
+
+                                                        @if (ViewModel.ShowViewButton)
+                                                        {
+                                                            <i title="View" @onclick="() => OnView(rec.Id)" style="cursor:pointer" class="bi bi-info-circle text-primary me-3"></i>
+                                                        }
+                                                        @if (_shouldAllowInlineEdit)
+                                                        {
+                                                            if (EditIndex != context)
+                                                            {
+                                                                <i title="Edit" @onclick="(e) => OnEditClicked(context, rec)" style="cursor:pointer" class="bi bi-pencil-square text-secondary me-3"></i>
+                                                            }
+                                                            if (EditIndex == context)
+                                                            {
+                                                                <i title="Save" @onclick="(e) => OnUpdate(rec.Id)" class="bi bi-check-circle-fill text-success me-3" style="cursor:pointer"></i>
+                                                                <i @onclick="() => OnCancelUpdate()" title="Cancel Edit" class="bi bi-x-circle text-secondary me-3" style="cursor:pointer"></i>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </ContentTemplate>
+                                            </HtmlTemplate>
+                                        }
                                     }
-                                }
-                               
-                            </tr>
+
+                                </tr>
+                            }
                         }
                     }
-                }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        }
+        else{
+            <span>
+                This table only renders on medium and larger devices
+            </span>
+        }
+
+        <Pagination PageCount="ViewModel.PageCount"
+                    Alignment="Alignment.Left"
+                    PageIndex="ViewModel.PageRequest.PageIndex+1"
+                    NextPageIcon="bi bi-chevron-right"
+                    PrevPageIcon="bi bi-chevron-left"
+                    OnPageLinkClick="OnPageIndexChange" />
     </div>
 </div>

@@ -13,6 +13,7 @@ namespace ClientManagement.Presentation.Models
     public class MainLayoutViewModel : GenericListViewModel<UserCredentialsDto>
     {
         public bool ShowSideMenuItems { get; set; } = false;
+        public float InnerWidth { get; set; }
         public MainLayoutViewModel(): this(Enumerable.Empty<UserCredentialsDto>())
         {
 

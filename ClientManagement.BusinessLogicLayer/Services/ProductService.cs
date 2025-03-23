@@ -8,10 +8,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using ClientManagement.BusinessLogicLayer.Models;
 using Core.Utils.Interfaces;
+using ClientManagement.BusinessLogicLayer.Interfaces;
+using Core.Presentation.Models.DataTransferObjects;
 
 namespace ClientManagement.BusinessLogicLayer.Services
 {
-    public class ProductService : GenericService<ProductDto, ProductEntity>
+    public class ProductService : GenericService<ProductDto, ProductEntity>, IProductService
     {
         public ProductService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
               IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
@@ -19,30 +21,19 @@ namespace ClientManagement.BusinessLogicLayer.Services
             
         }
 
-        public override Task<IEnumerable<ProductDto>> Get(ProductDto filter)
+        public override Task<(IEnumerable<ProductDto> Items, int TotalRecords)> Get(PageRequestDto<ProductDto> pageRequest)
         {
             var pId = this.CurrentProfileId;
-            var query = this._entitySet.Where(x => true && x.ProfileId == pId).AsNoTracking();
-            if (filter.Archived)
-            {
-                query = query.Where(x => x.Archived);
-            }
-            else
-            {
-               query =  query.Where(x => !x.Archived);
+            var query = this.GetQueryable(pageRequest.Filters);
+      
+
+            if (!string.IsNullOrWhiteSpace(pageRequest.Filters.Name)) {
+                query = query.Where(x => x.Name.Contains(pageRequest.Filters.Name));
             }
 
-            if (filter.Id != Guid.Empty) { 
-              query = query.Where(x => x.Id == filter.Id);
-            }
+            var result = !pageRequest.GetAllPages ?  query.OrderByDescending(x => x.CreatedOn).Skip(pageRequest.PageIndex*pageRequest.PageSize).Take(pageRequest.PageSize).ToList() : query.OrderByDescending(x => x.CreatedOn).ToList();
 
-            if (!string.IsNullOrWhiteSpace(filter.Name)) {
-                query = query.Where(x => x.Name.Contains(filter.Name));
-            }
-
-            var result =  query.OrderByDescending(x => x.CreatedOn).ToList();
-
-            return  Task.FromResult<IEnumerable<ProductDto>>(this._mapper.Map<List<ProductDto>>(result));
+            return  Task.FromResult<(IEnumerable<ProductDto> Items, int TotalRecords)>((this._mapper.Map<List<ProductDto>>(result), query.Count()));
         }
     }
 }

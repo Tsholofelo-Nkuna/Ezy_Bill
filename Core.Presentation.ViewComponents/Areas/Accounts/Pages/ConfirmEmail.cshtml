@@ -1,0 +1,14 @@
+﻿@page
+@using Core.Presentation.ViewComponents.Areas.Accounts.Pages
+@using Core.Presentation.ViewComponents.Components
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@model ConfirmEmailModel
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-flex flex-column w-100 align-items-center">
+    <h6>@Model.Message</h6>
+    <a class="btn btn-primary" href="@Core.Utils.Constants.LoginPathConstants.Login">Login</a>
+    <component type="typeof(CopyRightComponent)" render-mode="ServerPrerendered"></component>
+</div>

@@ -1,7 +1,7 @@
 ﻿using ClientManagement.Presentation.Models;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 using Core.Presentation.Models;
-
+using Core.Presentation.Models.DataTransferObjects;
 using Core.Presentation.ViewComponents.Components;
 using Core.Presentation.ViewComponents.Components.Base;
 
@@ -25,7 +25,9 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
         public TableComponent<InvoiceDto>? InvoiceTableComponent {  get; set; }
         public async Task<IEnumerable<InvoiceDto>> GetData(InvoiceDto filters)
         {
-            return await (InvoiceTableComponent?.GetData(filters) ?? Task.FromResult(Enumerable.Empty<InvoiceDto>()));
+            InvoiceTableComponent.ViewModel.PageRequest.Filters = filters;
+            var response = await InvoiceTableComponent.GetPageData(this.InvoiceTableComponent.ViewModel.PageRequest);
+            return  response?.Items ?? Enumerable.Empty<InvoiceDto>();
         }
 
         public async Task PopulateDropdowns()
@@ -44,11 +46,11 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
                 );
             if(productsDropdown is { ControlType : ControlType.MultiSelect })
             {
-                var response = await this.AppApi.PostAsJsonAsync("api/products/get", new ProductDto());
+                var response = await this.AppApi.PostAsJsonAsync<PageRequestDto<ProductDto>>("api/products/get", new() { GetAllPages = true});
                 if(response is { IsSuccessStatusCode: true} validResponse)
                 {
-                    productsDropdown.Options = (await validResponse.Content.ReadFromJsonAsync<IEnumerable<ProductDto>>())
-                        ?.Select(x => (new KeyValuePair<string, string>(x.Id.ToString(), $"{x.Name} | {x.Description}")))
+                    productsDropdown.Options = (await validResponse.Content.ReadFromJsonAsync<PageResponseDto<ProductDto>>())
+                        ?.Items?.Select(x => (new KeyValuePair<string, string>(x.Id.ToString(), $"{x.Name} | {x.Description}")))
                         ?? Enumerable.Empty<KeyValuePair<string, string>>();
                 }
             }
@@ -72,17 +74,18 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
 
         public async Task OnInvoiceSearchClick(IEnumerable<InvoiceDto> invoices)
         {
+            this.InvoiceTableComponent.ViewModel.PageRequest.PageIndex = 0;
             await this.GetData(SearchFormFilters);
            
         }
         public async Task<IEnumerable<KeyValuePair<string, string>>> GetClientDropListData()
         {
-           var response = await this.AppApi.PostAsJsonAsync("api/clients/get", new ClientDto());
+           var response = await this.AppApi.PostAsJsonAsync<PageRequestDto<ClientDto>>("api/clients/get", new() { GetAllPages = true} );
             if (response.IsSuccessStatusCode)
             {
-                var dropListData = await response.Content.ReadFromJsonAsync<IEnumerable<ClientDto>>();
+                var dropListData = await response.Content.ReadFromJsonAsync<PageResponseDto<ClientDto>>();
 
-                return dropListData
+                return dropListData?.Items
                     ?.Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.CompanyName} | {x.TradingAs}"))
                     ?? Enumerable.Empty<KeyValuePair<string, string>>();
             }
