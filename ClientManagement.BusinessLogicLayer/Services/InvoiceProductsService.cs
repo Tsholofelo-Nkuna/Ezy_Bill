@@ -27,11 +27,16 @@ namespace ClientManagement.BusinessLogicLayer.Services
 
         public override async Task<(IEnumerable<InvoiceProductDto> Items, int TotalRecords)> Get(PageRequestDto<InvoiceProductDto> pageRequest)
         {
-            var query = base.GetQueryable(pageRequest.Filters)
-                .Include(x => x.Product)
+            var query = base.GetQueryable(pageRequest.Filters);
+               
+            if(pageRequest.Filters.InvoiceId != Guid.Empty)
+            {
+                query = query.Where(x => x.Invoice.Id == pageRequest.Filters.InvoiceId);
+            }  
+
+            query = query.Include(x => x.Product)
                 .Include(x => x.Invoice)
                 .ThenInclude(x => x.Client);
-              
             var pagedQuery =  !pageRequest.GetAllPages ? query.Skip(pageRequest.PageSize * pageRequest.PageIndex).Take(pageRequest.PageSize) : query;
             var list = await pagedQuery.ToListAsync();
             var results = _mapper.Map<List<InvoiceProductDto>>(list);

@@ -81,7 +81,7 @@
             <TabItem> 
                 @if(context.Name.Equals("products", StringComparison.OrdinalIgnoreCase)){
 
-                    <TableComponent 
+                    <TableComponent @ref="InvoiceProductTable"
                         ViewModel="ViewModel.InvoiceProductsTableViewModel"
                         OnSaveUpdatesClick="OnSaveInvoiceProduct"
                         @bind-EditIndex="InvoiceProductsTableEditIndex"
@@ -105,7 +105,7 @@
                     </div>
                 }
                 else if(context.Name.Equals("payments",StringComparison.OrdinalIgnoreCase)){
-                   <TableComponent
+                   <TableComponent @ref="InvoicePaymentTable"
                        ViewModel="ViewModel.InvoicePaymentsTableViewModel"
                        OnDeleteClicked="OnDeleteInvoicePayment"
                        OnNewClicked="OnNewInvoicePaymentClicked"

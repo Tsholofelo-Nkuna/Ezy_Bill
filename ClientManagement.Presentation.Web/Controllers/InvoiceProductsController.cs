@@ -1,6 +1,8 @@
 ﻿using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.BusinessLogicLayer.Services;
 using ClientManagement.Presentation.Models.DataTransferObjects;
+using ClientManagement.Presentation.Web.Controllers.Base;
+using Core.Presentation.Models.DataTransferObjects;
 using Core.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,26 +13,36 @@ namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InvoiceProductsController : ControllerBase
+    public class InvoiceProductsController : ApiBaseController<InvoiceProductsController>
     {
-        private readonly ILogger<InvoiceProductsController> _logger;
+      //  private readonly ILogger<InvoiceProductsController> _logger;
         private readonly IInvoiceProductService _invoiceProductService;
         private readonly IInvoiceService _invoiceService;
-        private readonly ProductService _productService;
-        private readonly ControllerRequestHandler<InvoiceProductsController>  _requestHandler;
+        private readonly IProductService _productService;
+     //   private readonly ControllerRequestHandler<InvoiceProductsController>  _requestHandler;
 
         public InvoiceProductsController(ILogger<InvoiceProductsController> logger, 
             IInvoiceProductService invoiceProductService,
             IInvoiceService invoiceService,
-            ProductService productService)
+            IProductService productService): base(logger)
         {
-            _logger = logger;
+           
             _invoiceProductService = invoiceProductService;
-            _requestHandler = new ControllerRequestHandler<InvoiceProductsController>(_logger);
+         
             _invoiceService = invoiceService;
             _productService = productService;
         }
 
+        [HttpPost("Get")]
+        public async Task<PageResponseDto<InvoiceProductDto>> GetInvoiceProducts(PageRequestDto<InvoiceProductDto> pageRequest)
+        {
+            return await this.requestHandler.HandleRequest(
+                () => this.Get(pageRequest, _invoiceProductService),
+                nameof(GetInvoiceProducts),
+                Task.FromResult<PageResponseDto<InvoiceProductDto>>(new()),
+                pageRequest
+                );
+        }
 
         // POST api/<InvoiceProductsController>/AddOrUpdate
         [HttpPost]
@@ -38,7 +50,7 @@ namespace ClientManagement.Presentation.Web.Controllers
         {
             //Investigate why this method can't be invoked by client, even though client
             //passes it a valid argument
-            return await _requestHandler.HandleRequest(
+            return await requestHandler.HandleRequest(
                 async () =>
                 {
                     var invoice =  (await _invoiceService.Get( new InvoiceDto { Id = value.InvoiceId } )).FirstOrDefault();
@@ -65,7 +77,7 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpGet("[action]/{invoiceProductId}")]
         public async Task<bool> UpdateInvoiceProductQuantity(Guid invoiceProductId, int quantity)
         {
-            return await _requestHandler.HandleRequest(
+            return await requestHandler.HandleRequest(
                  async () => {
                      var updatedInvoiceProduct = (await _invoiceProductService.Get(new InvoiceProductDto { Id = invoiceProductId})).FirstOrDefault();
                      if(updatedInvoiceProduct is not null)
@@ -89,7 +101,7 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpDelete("[action]/{id}")]
         public async Task<bool> Delete(Guid id)
         {
-            return await _requestHandler.HandleRequest(
+            return await requestHandler.HandleRequest(
                 async () => await this._invoiceProductService.Delete(new[] {id}),
                 nameof(Delete),
                 Task.FromResult(false),

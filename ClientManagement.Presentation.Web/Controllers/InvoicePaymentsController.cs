@@ -1,6 +1,7 @@
 ﻿using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 using ClientManagement.Presentation.Web.Controllers.Base;
+using Core.Presentation.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,12 +53,12 @@ namespace ClientManagement.Presentation.Web.Controllers
         }
 
         [HttpPost("Get")]
-        public async Task<IEnumerable<InvoicePaymentDto>> GetInvoicePayments(InvoicePaymentDto filter) {
+        public async Task<PageResponseDto<InvoicePaymentDto>> GetInvoicePayments(PageRequestDto<InvoicePaymentDto> pageRequest) {
             return await this.requestHandler.HandleRequest(
-                 async () => await this._invoicePaymentService.Get(filter),
+                 async () => await this.Get(pageRequest, this._invoicePaymentService),
                  nameof(GetInvoicePayments),
-                 Task.FromResult(Enumerable.Empty<InvoicePaymentDto>()),
-                 filter);
+                 Task.FromResult<PageResponseDto<InvoicePaymentDto>>(new()),
+                 pageRequest);
         }
 
         [HttpDelete("[action]/{id}")]
