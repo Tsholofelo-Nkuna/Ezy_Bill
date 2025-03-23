@@ -1,8 +1,8 @@
 ﻿
 using ClientManagement.Presentation.Models;
 using ClientManagement.Presentation.Models.DataTransferObjects;
-
-
+using Core.Presentation.Models.DataTransferObjects;
+using Core.Presentation.ViewComponents.Components;
 using Core.Presentation.ViewComponents.Components.Base;
 using Microsoft.AspNetCore.Components;
 
@@ -31,6 +31,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Clients
         }
 
         public ClientDto DetailsFilter => this.ViewModel.ViewModelState.FirstOrDefault() ?? new ClientDto();
+        public TableComponent<InvoiceDto>? ClientInvoiceTable {  get; set; }
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -60,14 +61,15 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Clients
 
         public async Task GetClientInvoices(bool invokeStateHasChanged = false)
         {
-            var apiResponse = await this.AppApi.PostAsJsonAsync("api/invoices/get", new InvoiceDto { ClientId = this.Id.ToString() });
-            if (apiResponse.IsSuccessStatusCode) {
-                this.ViewModel.ClientInvoiceTableViewModel
-                   .ViewModelState = await apiResponse.Content.ReadFromJsonAsync<IEnumerable<InvoiceDto>>() ?? Enumerable.Empty<InvoiceDto>();
-                if (invokeStateHasChanged)
-                {
-                    StateHasChanged();
-                }
+         
+            var apiResponse = await this.ClientInvoiceTable.GetPageData(new() { Filters = new InvoiceDto { ClientId = this.Id.ToString() } });
+            if (apiResponse is PageResponseDto<InvoiceDto> validResponse) {
+                //this.ViewModel.ClientInvoiceTableViewModel
+                //   .ViewModelState = validResponse.Items;
+                //if (invokeStateHasChanged)
+                //{
+                //    StateHasChanged();
+                //}
             }
         }
 

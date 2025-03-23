@@ -56,7 +56,7 @@ namespace ClientManagement.Presentation.Web.Controllers
         public async Task<ClientDto?> Get(Guid id,[FromQuery] bool archived)
         {
             return await this.requestHandler.HandleRequest(
-                async () => (await _clientService.Get(new ClientDto { Id = id, Archived = archived })).FirstOrDefault(),
+                async () => (await _clientService.Get(new PageRequestDto<ClientDto> { Filters = new ClientDto { Id = id, Archived = archived }, GetAllPages = true })).Items.FirstOrDefault(),
                 nameof(Get),
                 Task.FromResult<ClientDto?>(null),
                 id, archived
