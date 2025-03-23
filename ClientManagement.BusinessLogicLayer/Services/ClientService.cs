@@ -68,7 +68,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
             {
                 query = query.Where(x => x.CompanyName.Contains(filter.CompanyName));
             }
-            var pagedQuery = !pageRequest.GetAllPages ? query.Include(x => x.ContactPerson).OrderByDescending(x => x.CreatedOn) : query.Include(x => x.ContactPerson).OrderByDescending(x => x.CreatedOn).Skip(pageRequest.PageIndex * pageRequest.PageSize).Take(pageRequest.PageSize);
+            var pagedQuery = pageRequest.GetAllPages ? query.Include(x => x.ContactPerson).OrderByDescending(x => x.CreatedOn) : query.Include(x => x.ContactPerson).OrderByDescending(x => x.CreatedOn).Skip(pageRequest.PageIndex * pageRequest.PageSize).Take(pageRequest.PageSize);
             var returned = this._mapper.Map<List<ClientDto>>(pagedQuery.ToList());
             returned.ForEach(x =>
             {
@@ -77,7 +77,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
                 x.PrimaryContactPhone = primaryContact?.Phone ?? string.Empty;
                 x.PrimaryContactName = primaryContact?.Name ?? string.Empty;
             });
-            return Task.FromResult<(IEnumerable<ClientDto> Items, int TotalRecords)>((returned.OrderByDescending(x => x.CreatedOn), 0));
+            return Task.FromResult<(IEnumerable<ClientDto> Items, int TotalRecords)>((returned.OrderByDescending(x => x.CreatedOn), query.Count()));
         }
 
         public override Task<IEnumerable<ClientDto>> Get(Expression<Func<ClientEntity, bool>> filter)

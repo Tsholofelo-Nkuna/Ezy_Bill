@@ -74,6 +74,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Clients
    
         public async Task OnSubmitSearchFilters(IEnumerable<ClientDto> searchFilters)
         {
+            this.ClientsTableComponent.ViewModel.PageRequest.PageIndex = 0;
             await this.GetData(this.SearchFormFilters);
            
         }

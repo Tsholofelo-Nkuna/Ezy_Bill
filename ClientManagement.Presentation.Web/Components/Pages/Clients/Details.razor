@@ -46,7 +46,7 @@
                 }
                 else if(context.Name.Equals("invoices", StringComparison.OrdinalIgnoreCase)){
                   
-                   <TableComponent
+                   <TableComponent @ref="ClientInvoiceTable"
                        ViewModel="ViewModel.ClientInvoiceTableViewModel"
                        OnViewClick="OnViewClientInvoiceClicked">
 

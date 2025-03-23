@@ -23,7 +23,16 @@
         @if(IsLoading){
             <div class="spinner-border position-absolute top-50 end-50"></div>
         }
-       
+      
+        <Pagination
+            PageCount="ViewModel.PageCount" 
+            Alignment="Alignment.Left"
+            PageIndex="ViewModel.PageRequest.PageIndex+1"
+            NextPageIcon="bi bi-chevron-right"
+            PrevPageIcon="bi bi-chevron-left"
+            OnPageLinkClick="OnPageIndexChange"
+            
+            />
         @if(this.ViewModel.InnerWidth >= Core.Utils.Constants.Device.Width.Sm || true){
             <table class="table table-bordered">
                 <thead>
@@ -127,6 +136,12 @@
                 This table only renders on medium and larger devices
             </span>
         }
-        
+
+        <Pagination PageCount="ViewModel.PageCount"
+                    Alignment="Alignment.Left"
+                    PageIndex="ViewModel.PageRequest.PageIndex+1"
+                    NextPageIcon="bi bi-chevron-right"
+                    PrevPageIcon="bi bi-chevron-left"
+                    OnPageLinkClick="OnPageIndexChange" />
     </div>
 </div>

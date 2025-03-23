@@ -97,7 +97,7 @@ namespace Core.Presentation.ViewComponents.Components
 
         public async Task OnPageIndexChange(int pageIndex)
         {
-            ViewModel.PageRequest.PageIndex = pageIndex;
+            ViewModel.PageRequest.PageIndex = pageIndex -1;
             await this.GetPageData(ViewModel.PageRequest);
             await Task.CompletedTask;
         }

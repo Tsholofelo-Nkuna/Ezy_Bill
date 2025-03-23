@@ -8,6 +8,7 @@ using Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Core.Presentation.Models.DataTransferObjects;
+using Core.Presentation.ViewComponents.Components;
 
 namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
 {
@@ -26,6 +27,8 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
         public bool PrintBusy { get; set; }
         public bool InvoicePaymentInProgress { get; set; }
         public bool InvoiceProductCreationInProgress { get; set; }
+        public TableComponent<InvoicePaymentDto>? InvoicePaymentTable { get; set; }
+        public TableComponent<InvoiceProductDto>? InvoiceProductTable { get; set; }
         public string InvoiceDetailsTab 
         {
             get => _invoiceDetailsTab;
@@ -35,6 +38,10 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
                 if(_invoiceDetailsTab.Equals("invoice-payments-tab", StringComparison.OrdinalIgnoreCase))
                 {
                     this.GetInvoicePayments(this.Id);
+                }
+                else if(_invoiceDetailsTab.Equals("invoice-products-tab", StringComparison.OrdinalIgnoreCase))
+                {
+                    this.GetInvoiceProducts(this.Id);
                 }
             }
         }
@@ -52,27 +59,29 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
         {
             await base.OnInitializedAsync();
             this.BaseUrl = "api/InvoicePayments";
-            await this.GetData();
+            await this.GetInvoice();
+            await this.GetInvoiceProducts(this.Id);
         }
 
-        public async Task GetData(bool invokeStateHasChange = false)
+        public async Task GetInvoice(bool invokeStateHasChange = false)
         {
-            var apiReaponse = await this.AppApi.PostAsJsonAsync($"api/Invoices/Get", new InvoiceDto { Id = this.Id});
+            var apiReaponse = await this.AppApi.PostAsJsonAsync<PageRequestDto<InvoiceDto>>($"api/Invoices/Get", new() { Filters = new() { Id = this.Id }, GetAllPages = true });
+            
             if (apiReaponse.IsSuccessStatusCode)
             {
-              this.ViewModel.OverviewModel.ViewModelState = (await apiReaponse.Content.ReadFromJsonAsync<IEnumerable<InvoiceDto>>()) ?? Enumerable.Empty<InvoiceDto>(); 
-              this.ViewModel.InvoiceProductsTableViewModel.ViewModelState =
-              this.ViewModel.OverviewModel.ViewModelState.FirstOrDefault()?.InvoiceProducts ?? this.ViewModel.InvoiceProductsTableViewModel.ViewModelState;
+              this.ViewModel.OverviewModel.ViewModelState = (await apiReaponse.Content.ReadFromJsonAsync<PageResponseDto<InvoiceDto>>())?.Items ?? []; 
+            //  this.ViewModel.InvoiceProductsTableViewModel.ViewModelState =
+             // this.ViewModel.OverviewModel.ViewModelState.FirstOrDefault()?.InvoiceProducts ?? this.ViewModel.InvoiceProductsTableViewModel.ViewModelState;
                 if (invokeStateHasChange)
                 {
                     StateHasChanged();
                 }
             }
 
-            var productRequestResponse = await this.AppApi.PostAsJsonAsync($"api/Products/Get", new ProductDto());
+            var productRequestResponse = await this.AppApi.PostAsJsonAsync<PageRequestDto<ProductDto>>($"api/Products/Get", new() { GetAllPages = true});
             if(productRequestResponse is { IsSuccessStatusCode : true} successResponse)
             {
-                var productList = await successResponse.Content.ReadFromJsonAsync<IEnumerable<ProductDto>>() ;
+                var productList = (await successResponse.Content.ReadFromJsonAsync<PageResponseDto<ProductDto>>())?.Items ?? [] ;
                 var productOptions = productList?
                     .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.Name} | {x.Description}"));
                 if(productOptions is IEnumerable<KeyValuePair<string, string>> validProductOptions)
@@ -90,14 +99,21 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
 
         public async Task GetInvoicePayments(Guid invoiceId)
         {
-            var invoicePaymentFilter = new InvoicePaymentDto { InvoiceId = Id };
-            var response = await this.AppApi.PostAsJsonAsync($"{this.BaseUrl}/Get", invoicePaymentFilter);
-            if (response.IsSuccessStatusCode)
-            {
-                this.ViewModel.InvoicePaymentsTableViewModel.ViewModelState = (await response.Content.ReadFromJsonAsync<IEnumerable<InvoicePaymentDto>>( )) ??
-                                                                                Enumerable.Empty<InvoicePaymentDto>();
-                StateHasChanged();
-            }
+            var invoicePaymentRequest = new PageRequestDto<InvoicePaymentDto> { Filters = new() { InvoiceId = this.Id }, GetAllPages = true };
+            
+            var response =  (await this.InvoicePaymentTable.GetPageData(invoicePaymentRequest));
+            //if (response is PageResponseDto<InvoicePaymentDto> validResponse)
+            //{
+            //    this.ViewModel.InvoicePaymentsTableViewModel.ViewModelState = validResponse.Items;
+            //    StateHasChanged();
+            //}
+        }
+
+        public async Task GetInvoiceProducts(Guid invoiceId)
+        {
+            var invoicePaymentRequest = new PageRequestDto<InvoiceProductDto> { Filters = new() { InvoiceId = this.Id }, GetAllPages = true };
+
+            var response = (await this.InvoiceProductTable.GetPageData(invoicePaymentRequest));
         }
         public async Task OnPrintInvoice()
         { 
@@ -131,7 +147,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
             if (eventState.Success)
             {
                 this.InvoicePaymentsTableEditIndex = -1;
-                await this.GetData(true);
+                await this.GetInvoice(true);
                 await this.GetInvoicePayments(this.Id);
             }
         }
@@ -148,7 +164,8 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
                 var serviceReponse = await this.AppApi.PostAsJsonAsync("api/InvoiceProducts", invoiceProduct);
                 if(serviceReponse is { IsSuccessStatusCode : true } successServiceResponse && (await successServiceResponse.Content.ReadFromJsonAsync<bool>()))
                 {
-                    await this.GetData(true);
+                    await this.GetInvoice(true);
+                    await this.GetInvoiceProducts(this.Id);
                 }
                 
             }
@@ -180,7 +197,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
                 if (saveResponse.IsSuccessStatusCode)
                 {
                     ViewModel.InvoicePaymentModalViewModel.Show = false;
-                    await this.GetData(true);
+                    await this.GetInvoice(true);
                     await this.GetInvoicePayments(this.Id);
                 }
             }
@@ -206,14 +223,16 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
         {
             if (isDeleted)
             {
-                await this.GetData(true);
+                await this.GetInvoice(true);
+                await this.GetInvoiceProducts(this.Id);
+                StateHasChanged();
             }
         }
 
         public async Task OnDeleteInvoicePayment(EventState<InvoicePaymentDto?> eventStatus)
         {
             if (eventStatus.Success) {
-                await this.GetData(true);
+                await this.GetInvoice(true);
                 await this.GetInvoicePayments(this.Id);
             }
            
@@ -226,7 +245,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
               if(apiResponse.IsSuccessStatusCode && await apiResponse.Content.ReadFromJsonAsync<bool>())
                 {
                     this.InvoiceProductsTableEditIndex = -1;
-                    await this.GetData(true);
+                    await this.GetInvoice(true);
                 }
                 else
                 {

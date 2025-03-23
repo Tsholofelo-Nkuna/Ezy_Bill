@@ -25,7 +25,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Products
 
         public async Task OnSearchClick(IEnumerable<ProductDto> searchState)
         {
-
+            this.ProductsTableComponent.ViewModel.PageRequest.PageIndex = 0;
             await this.GetData(this.SearchFormFilters);
           
         }
