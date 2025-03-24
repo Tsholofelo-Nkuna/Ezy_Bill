@@ -121,7 +121,7 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
         public virtual IQueryable<TEntity> GetQueryable(TDto filter)
         {
             var query = _entitySet.AsNoTracking()
-                .Where(x => x.Archived == filter.Archived && x.ProfileId == this.CurrentProfileId);
+                .Where(x => x.Archived == filter.Archived && (x.ProfileId == this.CurrentProfileId));
             if (filter.Id != Guid.Empty)
             {
                 query = query.Where(x => x.Id == filter.Id);

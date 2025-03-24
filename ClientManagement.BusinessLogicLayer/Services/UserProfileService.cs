@@ -66,5 +66,11 @@ namespace ClientManagement.BusinessLogicLayer.Services
             var results = await query.Include(x => x.User).Include(x => x.Profile).ToListAsync();
             return  _mapper.Map<List<UserProfileDto>>(results);
         }
+
+        public async Task<IEnumerable<UserProfileDto>> GetAllProfiles()
+        {
+             var result = await this._entitySet.Where(x => true).Include(x=> x.User).Include(x => x.Profile).ToListAsync();
+            return this._mapper.Map<List<UserProfileDto>>(result);
+        }
     }
 }
