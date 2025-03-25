@@ -1,9 +1,11 @@
-﻿using ClientManagement.Presentation.Models;
+﻿using BootstrapBlazor.Components;
+using ClientManagement.Presentation.Models;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 using Core.Presentation.Models;
 
 using Core.Presentation.ViewComponents.Components;
 using Core.Presentation.ViewComponents.Components.Base;
+using Microsoft.JSInterop;
 
 
 namespace ClientManagement.Presentation.Web.Components.Pages.Products
@@ -41,10 +43,15 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Products
             if (eventState.Success)
             {
                 this.ProductsTableEditIndex = -1;
-                await this.GetData(SearchFormFilters);
-                StateHasChanged();
+               
             }
-           
+            else
+            {
+                await JS.InvokeVoidAsync("alert", "Edit failed!\nplease ensure that no invoice makes use of this item before you edit it.");
+            }
+            await this.GetData(SearchFormFilters);
+            StateHasChanged();
+
         }
         public Task OnCreateNewProduct()
         {
@@ -84,7 +91,12 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Products
                 await this.GetData(this.SearchFormFilters);
                
             }
-            
+            else
+            {
+                await JS.InvokeVoidAsync("alert", "Delete failed!\nplease ensure that no invoice makes use of this item before you delete it.");
+            }
+            await this.GetData(this.SearchFormFilters);
+
         }
     }
 }
