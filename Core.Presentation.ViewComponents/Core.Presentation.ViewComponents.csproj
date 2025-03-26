@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Configurations>Debug;Release;Dev;Prod</Configurations>
+    <Configurations>Debug;Release;DevOnline</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
