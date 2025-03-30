@@ -20,5 +20,12 @@ namespace Core.Presentation.Models.DataTransferObjects
             get => Profile.Phone;
             set => Profile.Phone = value;
         }
+
+        public string Username
+        {
+            get => User.UserName;
+            set => User.UserName = value;
+        }
+
     }
 }

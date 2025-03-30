@@ -1,0 +1,16 @@
+﻿@page
+@using Core.Presentation.Models.DataTransferObjects
+@using Core.Presentation.ViewComponents.Components
+@using Core.Utils.Constants
+@using Microsoft.AspNetCore.Authorization
+@model ClientManagement.Presentation.Web.Areas.Admin.Pages.IndexModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@* @attribute [Authorize(Roles = RoleConstants.SuperAdmin)] *@
+@{
+    Layout = "_Layout";
+}
+
+<component
+    type="typeof(TableComponent<UserProfileDto>)" 
+        render-mode="ServerPrerendered" param-ViewModel="Model.UserProfilesViewModel.UserProfileTableViewModel">
+ </component>

@@ -8,5 +8,6 @@ namespace ClientManagement.BusinessLogicLayer.Interfaces
     public interface IUserProfileService : IGenericService<UserProfileDto, UserProfileEntity>
     {
         Task<UserProfileDto> CreateProfile(string userId, ProfileDto newProfile);
+        Task<IEnumerable<UserProfileDto>> GetAllProfiles();
     }
 }

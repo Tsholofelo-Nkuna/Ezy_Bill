@@ -35,5 +35,33 @@ namespace ClientManagement.BusinessLogicLayer.Services
 
             return  Task.FromResult<(IEnumerable<ProductDto> Items, int TotalRecords)>((this._mapper.Map<List<ProductDto>>(result), query.Count()));
         }
+
+        public override  async Task<bool> Delete(IEnumerable<Guid> identifiers)
+        {
+            var currentProfileId = this.CurrentProfileId;
+            var productsWithInvoices = from invoiceProduct in  this._dbContext.InvoicesProducts
+                              .Where(x =>  identifiers.Contains(x.Product.Id) && x.ProfileId == currentProfileId)
+                              select invoiceProduct;
+            var toBeDeleted = identifiers.Where(id => !productsWithInvoices.Select(ip => ip.Product.Id).Contains(id));
+            await base.Delete(toBeDeleted ?? []);
+            return (toBeDeleted ?? []).Count() == identifiers.Count();
+        }
+
+        public override async Task<bool> AddOrUpdate(List<ProductDto> payload)
+        {
+            var currentProfileId = this.CurrentProfileId;
+            var identifiers = payload.Select(p => p.Id);
+            var updatedItems = payload.Where(p => p.Id != Guid.Empty);
+            var addedItems = payload.Where(prod => !updatedItems.Any(up => up.Id == prod.Id));
+            var productsWithInvoices = from invoiceProduct in this._dbContext.InvoicesProducts
+                              .Where(x => identifiers.Contains(x.Product.Id) && x.ProfileId == currentProfileId)
+                                       select invoiceProduct;
+            var toBeUpdated = payload.Where(prod => 
+            !productsWithInvoices.Select(ip => ip.Product.Id).Contains(prod.Id)
+            && updatedItems.Any(x => x.Id ==prod.Id) 
+            ).ToList();
+            await base.AddOrUpdate(toBeUpdated.Concat(addedItems).ToList() ?? []);
+            return (toBeUpdated ?? []).Count() == updatedItems.Count();
+        }
     }
 }

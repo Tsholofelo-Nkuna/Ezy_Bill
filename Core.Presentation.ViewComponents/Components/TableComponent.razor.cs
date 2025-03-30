@@ -250,11 +250,11 @@ namespace Core.Presentation.ViewComponents.Components
                 if (requestResponse.IsSuccessStatusCode)
                 {
                     ViewModel.PageResponse = (await requestResponse.Content.ReadFromJsonAsync<PageResponseDto<TRecordType>>());
-
+                    ViewModel.ViewModelState = ViewModel.PageResponse?.Items ?? Enumerable.Empty<TRecordType>();
                 }
 
             }
-            ViewModel.ViewModelState = ViewModel.PageResponse?.Items ?? Enumerable.Empty<TRecordType>();
+          
           
             IsLoading = false;
             await IsLoadingChanged.InvokeAsync(IsLoading);
