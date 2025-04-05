@@ -1,21 +1,28 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="page">
-    <div class="sidebar flex-column border-end">
-        <div class="d-flex justify-content-between border-bottom border-2 border-primary m-0 py-0 px-2 mb-3 pt-2" style="height:3.5rem">
-            <div class="navbar-brand">
-                <span class="badge bg-primary">I</span>zyBill
-            </div>
-            <div>
+    <div class="sidebar border-end border-secondary-subtle">
+        <div class="border-bottom border-2 border-primary align-content-center px-3">
+            <div class="navbar-brand d-flex justify-content-between">
+                <div>
+                    <span class="badge bg-primary">I</span>zyBill
+                </div>
                 <i id="left-menu-button" @onclick="() => {ViewModel.ShowSideMenuItems = !ViewModel.ShowSideMenuItems;}" style="cursor:pointer" class="bi bi-list d-md-none"></i>
             </div>
         </div>
-        <nav id="left-menu-items" class="nav nav-pills flex-column @(!ViewModel.ShowSideMenuItems ? "d-none":"") d-md-flex">
-            <a href="/" class="nav-link mx-3 active"><i class="bi bi-house me-1"></i> Home</a>
-            <a href="/Clients" class="nav-link mx-3"><i class="bi bi-people me-1"></i>Clients</a>
-            <a href="/Products" class="nav-link mx-3"><i class="bi bi-cart4 me-1"></i>Products/Services</a>
-            <a href="/Invoices" class="nav-link mx-3"><i class="bi bi-receipt-cutoff me-1"></i>Invoices</a>
-        </nav>
+        <div class="sidebar-content @(!ViewModel.ShowSideMenuItems ? "d-none":"") d-md-grid py-3">
+            <nav id="left-menu-items" class="nav nav-pills flex-column">
+                <a href="/" class="nav-link mx-3 active"><i class="bi bi-house me-1"></i> Home</a>
+                <a href="/Clients" class="nav-link mx-3"><i class="bi bi-people me-1"></i>Clients</a>
+                <a href="/Products" class="nav-link mx-3"><i class="bi bi-cart4 me-1"></i>Products/Services</a>
+                <a href="/Invoices" class="nav-link mx-3"><i class="bi bi-receipt-cutoff me-1"></i>Invoices</a>
+            </nav>
+
+            <nav class="nav flex-column-reverse">
+               @*  <a href="/Invoices" class="nav-link mx-3"><i class="bi bi-gear me-1"></i>Settings</a> *@
+                <a href="/Invoices" class="nav-link mx-3"><i class="bi bi-chat me-1"></i>Support</a>
+            </nav>
+        </div>
        
     </div>
     <main>
