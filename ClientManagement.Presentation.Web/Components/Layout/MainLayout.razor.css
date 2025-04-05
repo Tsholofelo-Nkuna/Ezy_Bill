@@ -10,7 +10,14 @@ main {
 }
 
 .sidebar {
-   
+   display:grid;
+   grid-template-rows: 3.5rem 1fr;
+  
+}
+
+.siderbar-content{
+     display:grid;
+     grid-template-rows: 1fr 1fr;
 }
 
 .top-row {
@@ -44,6 +51,12 @@ main {
 
     .top-row ::deep a, .top-row ::deep .btn-link {
         margin-left: 0;
+    }
+}
+
+@media (max-width: 640px){
+    .sidebar{
+       height:auto;
     }
 }
 
