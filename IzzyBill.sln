@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Utils", "Core.Utils\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManagement.Presentation.Models", "ClientManagement.Presentation.Models\ClientManagement.Presentation.Models.csproj", "{D8A43588-919B-4453-B341-B62BD5AA5AB0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManagement.Maui", "ClientManagement.Maui\ClientManagement.Maui.csproj", "{9FF5F464-AF2A-48C5-9CA8-C3BD318D8D62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,15 @@ Global
 		{D8A43588-919B-4453-B341-B62BD5AA5AB0}.DevOnline|Any CPU.Build.0 = Debug|Any CPU
 		{D8A43588-919B-4453-B341-B62BD5AA5AB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8A43588-919B-4453-B341-B62BD5AA5AB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FF5F464-AF2A-48C5-9CA8-C3BD318D8D62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FF5F464-AF2A-48C5-9CA8-C3BD318D8D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FF5F464-AF2A-48C5-9CA8-C3BD318D8D62}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9FF5F464-AF2A-48C5-9CA8-C3BD318D8D62}.DevOnline|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FF5F464-AF2A-48C5-9CA8-C3BD318D8D62}.DevOnline|Any CPU.Build.0 = Debug|Any CPU
+		{9FF5F464-AF2A-48C5-9CA8-C3BD318D8D62}.DevOnline|Any CPU.Deploy.0 = Debug|Any CPU
+		{9FF5F464-AF2A-48C5-9CA8-C3BD318D8D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FF5F464-AF2A-48C5-9CA8-C3BD318D8D62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FF5F464-AF2A-48C5-9CA8-C3BD318D8D62}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

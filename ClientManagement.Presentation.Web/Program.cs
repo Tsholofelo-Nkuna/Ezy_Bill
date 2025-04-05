@@ -33,6 +33,7 @@ namespace ClientManagement.Presentation.Web
             builder.Services.AddBootstrapBlazor();
             builder.Services.AddSession();
             builder.Services.AddSwaggerGen();
+            
             builder.Services.AddScoped(typeof(HtmlToPdfConverter));
             builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
                 .AddCookie(IdentityConstants.ApplicationScheme, c =>
