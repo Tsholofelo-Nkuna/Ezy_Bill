@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Components\Features\Chat\" />
     <Folder Include="Data\" />
     <Folder Include="Models\" />
     <Folder Include="wwwroot\images\" />
