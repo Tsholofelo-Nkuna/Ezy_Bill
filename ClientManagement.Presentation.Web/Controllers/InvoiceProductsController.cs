@@ -53,7 +53,7 @@ namespace ClientManagement.Presentation.Web.Controllers
             return await requestHandler.HandleRequest(
                 async () =>
                 {
-                    var invoice =  (await _invoiceService.Get( new InvoiceDto { Id = value.InvoiceId } )).FirstOrDefault();
+                    var invoice =  (await _invoiceService.Get(new PageRequestDto<InvoiceDto> { Filters = new() { Id = value.InvoiceId}, PageSize = 1 })).Items.FirstOrDefault();
                     var product = (await _productService.Get(new ProductDto { Id = value.ProductId })).FirstOrDefault();
                     value.Invoice = invoice ?? new InvoiceDto();
                     value.Product = product ?? new ProductDto();

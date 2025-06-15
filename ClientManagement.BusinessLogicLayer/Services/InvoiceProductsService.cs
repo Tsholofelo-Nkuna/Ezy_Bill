@@ -42,5 +42,10 @@ namespace ClientManagement.BusinessLogicLayer.Services
             var results = _mapper.Map<List<InvoiceProductDto>>(list);
             return (results, query.Count());
         }
+
+        public override Task<IEnumerable<InvoiceProductDto>> Update(List<InvoiceProductDto> updates)
+        {
+            return base.Update(updates);
+        }
     }
 }
