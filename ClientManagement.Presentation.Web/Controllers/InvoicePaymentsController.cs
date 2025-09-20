@@ -33,7 +33,8 @@ namespace ClientManagement.Presentation.Web.Controllers
             return await this.requestHandler.HandleRequest(
                  async () =>
                  {
-                     var targetInvoice =  (await _invoiceService.Get(new InvoiceDto { Id = payment.InvoiceId })).FirstOrDefault();
+                     var invoiceRequest = new PageRequestDto<InvoiceDto> { Filters = new InvoiceDto { Id = payment.InvoiceId } };
+                     var targetInvoice =  (await _invoiceService.Get(invoiceRequest)).Items.FirstOrDefault();
                      if(targetInvoice is InvoiceDto validInvoiceDto)
                      {
                          payment.Invoice = validInvoiceDto;

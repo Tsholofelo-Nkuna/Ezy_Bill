@@ -53,8 +53,10 @@ namespace ClientManagement.Presentation.Web.Controllers
             return await requestHandler.HandleRequest(
                 async () =>
                 {
-                    var invoice =  (await _invoiceService.Get( new InvoiceDto { Id = value.InvoiceId } )).FirstOrDefault();
-                    var product = (await _productService.Get(new ProductDto { Id = value.ProductId })).FirstOrDefault();
+                    var invoiceRequest = new PageRequestDto<InvoiceDto> { Filters = new InvoiceDto { Id = value.InvoiceId } };
+                    var produceRequest = new PageRequestDto<ProductDto> { Filters = new ProductDto { Id = value.ProductId } };
+                    var invoice =  (await _invoiceService.Get(invoiceRequest )).Items.FirstOrDefault();
+                    var product = (await _productService.Get(produceRequest)).Items.FirstOrDefault();
                     value.Invoice = invoice ?? new InvoiceDto();
                     value.Product = product ?? new ProductDto();
                     value.ProductAmount = value.Product.Price;
@@ -79,7 +81,8 @@ namespace ClientManagement.Presentation.Web.Controllers
         {
             return await requestHandler.HandleRequest(
                  async () => {
-                     var updatedInvoiceProduct = (await _invoiceProductService.Get(new InvoiceProductDto { Id = invoiceProductId})).FirstOrDefault();
+                     var pRequest = new PageRequestDto<InvoiceProductDto> { Filters = new InvoiceProductDto { Id = invoiceProductId } };
+                     var updatedInvoiceProduct = (await _invoiceProductService.Get(pRequest)).Items.FirstOrDefault();
                      if(updatedInvoiceProduct is not null)
                      {
                          updatedInvoiceProduct.Quantity = quantity;
