@@ -1,5 +1,4 @@
-﻿using BootstrapBlazor.Components;
-using Core.Presentation.Models;
+﻿using Core.Presentation.Models;
 using Core.Presentation.Models.DataTransferObjects;
 using Core.Presentation.Models.DataTransferObjects.Base;
 using Core.Presentation.ViewComponents.Components.Base;

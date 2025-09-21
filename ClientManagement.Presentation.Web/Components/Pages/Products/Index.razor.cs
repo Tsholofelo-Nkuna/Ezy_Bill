@@ -1,5 +1,4 @@
-﻿using BootstrapBlazor.Components;
-using ClientManagement.Presentation.Models;
+﻿using ClientManagement.Presentation.Models;
 using ClientManagement.Presentation.Models.DataTransferObjects;
 using Core.Presentation.Models;
 

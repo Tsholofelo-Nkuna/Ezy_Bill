@@ -30,7 +30,7 @@ namespace ClientManagement.Presentation.Web
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Logging.AddProvider(new FileLoggerProvider());
-            builder.Services.AddBootstrapBlazor();
+           
             builder.Services.AddSession();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped(typeof(HtmlToPdfConverter));
