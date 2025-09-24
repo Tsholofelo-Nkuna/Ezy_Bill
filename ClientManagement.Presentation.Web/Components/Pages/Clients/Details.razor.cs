@@ -9,6 +9,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Clients
 {
     public partial class Details : GenericComponentBase<ClientDetailsViewModel, ClientDto>
     {
-      
+        [Parameter]
+        public Guid Id { get; set; }
     }
 }
