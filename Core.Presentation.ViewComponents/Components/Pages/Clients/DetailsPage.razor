@@ -1,0 +1,56 @@
+﻿@inherits GenericComponentBase<ClientDetailsViewModel, ClientDto>
+
+@{
+    var firstIndividual = ViewModel.ViewModelState.FirstOrDefault();
+    var primaryContact = firstIndividual?.ContactPerson?.Where(x => x.IsPrimaryContact).FirstOrDefault();
+   
+}
+<PageTitle>Client - Details</PageTitle>
+<PageComponent ShowBackButton="true">
+    <Body>
+        <div class="bg-light py-3 shadow-none row">
+            <div class="col">
+                <h5>@firstIndividual?.CompanyName | @firstIndividual?.LandlineNumber</h5>
+                <div><label class="fw-bold me-2 text-black-50">Trading As:</label>@firstIndividual?.TradingAs</div>
+                <div><label class="fw-bold me-2 text-black-50">Client Id:</label> @firstIndividual?.Id</div>
+            </div>
+            <div class="col">
+                <h5>Address</h5>
+                <div>@firstIndividual?.Province</div>
+                <div>@firstIndividual?.Address</div>
+            </div>
+            <div class="col">
+                <h5>Primary Contact Person</h5>
+                <div><label class="fw-bold me-2 text-black-50">Name:</label> @primaryContact?.Name</div>
+                <div><label class="fw-bold me-2 text-black-50">Email:</label> @primaryContact?.Email</div>
+                <div><label class="fw-bold me-2 text-black-50">Phone:</label> @primaryContact?.Phone</div>
+            </div>
+        </div>
+        <TabsComponent 
+            ViewModel="ViewModel.ClientTabConfig"
+            @bind-Tab="DetailsTabId">
+            <TabItem>
+                @if(context.Name.Equals("details", StringComparison.OrdinalIgnoreCase)){
+                    <FormComponent ViewModel="ViewModel.DetailsFormViewModel"
+                                   OnFormSubmitClick="OnSaveClientDetails">
+
+                    </FormComponent>
+                    <div class="fs-5 my-3">Primary Contact Person</div>
+                    <FormComponent ViewModel="ViewModel.PrimaryContactPersonFormViewModel"
+                                   OnFormSubmitClick="OnSaveClientContacts">
+                    </FormComponent>
+                }
+                else if(context.Name.Equals("invoices", StringComparison.OrdinalIgnoreCase)){
+                  
+                   <TableComponent @ref="ClientInvoiceTable"
+                       ViewModel="ViewModel.ClientInvoiceTableViewModel"
+                       OnViewClick="OnViewClientInvoiceClicked">
+
+                   </TableComponent>
+                }
+            </TabItem>
+        </TabsComponent>
+    </Body>
+</PageComponent>
+
+

@@ -1,0 +1,33 @@
+﻿@inherits GenericComponentBase<InvoicesViewModel, InvoiceDto>
+<PageTitle>Invoices</PageTitle>
+<PageComponent>
+    <Body>
+        <FormComponent 
+            ViewModel="ViewModel.InvoiceSearchFormViewModel"
+            OnFormSubmitClick="OnInvoiceSearchClick"
+        >
+
+        </FormComponent>
+        <TableComponent @ref="InvoiceTableComponent"
+            ViewModel="ViewModel.InvoicesTableViewModel"
+            OnNewClick="() => { ViewModel.NewInvoiceModalModel.Show = true; StateHasChanged(); return Task.CompletedTask; }"
+            OnDeleteClick="OnInvoiceDeleted"
+            OnViewClick="OnViewInvoice"
+            @bind-IsLoading ="InvoiceTableIsLoading"
+            Filter="SearchFormFilters"
+        >
+
+        </TableComponent>
+    </Body>
+</PageComponent>
+<ModalComponent ViewModel="ViewModel.NewInvoiceModalModel">
+    <Body>
+        <FormComponent 
+            ViewModel="ViewModel.NewInvoiceFormModel"
+            OnFormSubmitClick="OnSaveNewInvoice"
+            SubmitBusy="NewInvoiceCreationInProgress"
+        >
+
+        </FormComponent>
+    </Body>
+</ModalComponent>

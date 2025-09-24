@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ClientManagement.BusinessLogicLayer.Interfaces.Base;
 using ClientManagement.DataAccessLayer.Entities;
-using ClientManagement.Presentation.Models.DataTransferObjects;
+using Core.Presentation.Models.DataTransferObjects;
 
 namespace ClientManagement.BusinessLogicLayer.Interfaces
 {

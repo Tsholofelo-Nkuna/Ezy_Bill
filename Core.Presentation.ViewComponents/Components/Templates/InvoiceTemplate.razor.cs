@@ -1,0 +1,24 @@
+﻿using Core.Presentation.Models.DataTransferObjects;
+using Core.Presentation.Models.ViewModels;
+using Core.Presentation.ViewComponents.Components.Base;
+using Microsoft.AspNetCore.Components;
+
+namespace Core.Presentation.ViewComponents.Components.Templates
+{
+    public partial class InvoiceTemplate : GenericComponentBase<InvoiceTemplateViewModel, InvoiceDto>
+    {
+        [Parameter]
+        public InvoiceDto? Invoice {
+            get => this.ViewModel.ViewModelState.FirstOrDefault();
+            set
+            {
+                this.ViewModel.ViewModelState = value is not null ? Enumerable.Empty<InvoiceDto>().Append(value) : Enumerable.Empty<InvoiceDto>();
+
+            }
+        }
+
+        [Parameter]
+        public UserProfileDto UserProfile { get; set; } = new();    
+
+    }
+}

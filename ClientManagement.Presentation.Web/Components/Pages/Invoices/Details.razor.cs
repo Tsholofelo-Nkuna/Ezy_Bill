@@ -1,13 +1,12 @@
 ﻿
-using ClientManagement.Presentation.Models;
-using ClientManagement.Presentation.Models.DataTransferObjects;
+using Core.Presentation.Models.ViewModels;
+using Core.Presentation.Models.DataTransferObjects;
 using ClientManagement.Presentation.Web.Components.Templates;
 using Core.Presentation.Models;
 using Core.Presentation.ViewComponents.Components.Base;
 using Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
-using Core.Presentation.Models.DataTransferObjects;
 using Core.Presentation.ViewComponents.Components;
 
 namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
@@ -62,7 +61,6 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
             await this.GetInvoice();
             await this.GetInvoiceProducts(this.Id);
         }
-
         public async Task GetInvoice(bool invokeStateHasChange = false)
         {
             var apiReaponse = await this.AppApi.PostAsJsonAsync<PageRequestDto<InvoiceDto>>($"api/Invoices/Get", new() { Filters = new() { Id = this.Id }, GetAllPages = true });
@@ -96,7 +94,6 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
                 }
             }
         }
-
         public async Task GetInvoicePayments(Guid invoiceId)
         {
             var invoicePaymentRequest = new PageRequestDto<InvoicePaymentDto> { Filters = new() { InvoiceId = this.Id }, GetAllPages = true };
@@ -108,7 +105,6 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
             //    StateHasChanged();
             //}
         }
-
         public async Task GetInvoiceProducts(Guid invoiceId)
         {
             var invoicePaymentRequest = new PageRequestDto<InvoiceProductDto> { Filters = new() { InvoiceId = this.Id }, GetAllPages = true };
@@ -151,7 +147,6 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
                 await this.GetInvoicePayments(this.Id);
             }
         }
-
         public async Task OnNewInvoiceProductSave (EventState<IEnumerable<InvoiceProductDto?>> eventState)
         {
             this.InvoiceProductCreationInProgress = true;
@@ -173,7 +168,6 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
             this.InvoiceProductCreationInProgress = false;
             this.StateHasChanged();
         }
-
         public Task OnInvoiceProductTableNewClick()
         {
             this.ViewModel.InvoiceProductViewModalModel.Show = true;
@@ -218,7 +212,6 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
             return Task.CompletedTask;
         }
         public InvoiceDto? OverviewModelState  => ViewModel.OverviewModel.ViewModelState.FirstOrDefault();
-        
         public async Task OnDeleteInvoiceProduct(bool isDeleted)
         {
             if (isDeleted)
@@ -228,7 +221,6 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
                 StateHasChanged();
             }
         }
-
         public async Task OnDeleteInvoicePayment(EventState<InvoicePaymentDto?> eventStatus)
         {
             if (eventStatus.Success) {

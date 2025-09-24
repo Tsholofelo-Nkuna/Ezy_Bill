@@ -1,0 +1,40 @@
+﻿@inherits GenericComponentBase<ClientsViewModel, ClientDto>
+
+<PageTitle>Client - Management</PageTitle>
+<PageComponent>
+    <Body>
+        <div>
+            <FormComponent ViewModel="ViewModel.SearchFormComponentViewModel" OnFormSubmitClick="OnSubmitSearchFilters"></FormComponent>
+        </div>
+        <TableComponent @ref="ClientsTableComponent"
+                        ViewModel="ViewModel.TableConfig"
+                        OnViewClick="OnViewTableRecord"
+                        OnDeleteClick="OnDeleteTableRecord"
+                        OnArchiveClick="OnArchiveTableRecord"
+                        OnNewClick="OnCreateNewTableRecord"
+                        @bind-IsLoading="ClientsTableIsLoading"
+                        Filter="SearchFormFilters">
+        </TableComponent>
+
+        <ModalComponent ViewModel="ViewModel.ModalViewModel">
+            <Body>
+                <div id="client-details">
+                    <FormComponent ViewModel="ViewModel.NewClientFormViewModel"></FormComponent>
+                </div>
+                <h5 class="my-3">Primary Contact Details</h5>
+                <div id="primary-contact-person">
+                    <FormComponent ViewModel="ViewModel.PrimaryContactFormViewModel"></FormComponent>
+                </div>
+            </Body>
+            <Footer>
+                <ButtonTemplate
+                    Text="Submit"
+                    OnClick=" async () => {  await this.OnNewClientFormSubmitted(ViewModel.NewClientFormViewModel.ViewModelState.FirstOrDefault(), ViewModel.PrimaryContactFormViewModel.ViewModelState.FirstOrDefault()); }"
+                    IsLoading ="this.NewClientCreationInProgress">
+
+                </ButtonTemplate>
+             
+            </Footer>
+        </ModalComponent>
+    </Body>
+</PageComponent>

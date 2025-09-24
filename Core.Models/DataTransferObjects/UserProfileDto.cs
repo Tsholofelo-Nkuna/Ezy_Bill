@@ -1,5 +1,4 @@
-﻿using Core.Presentation.Models.DataTransferObjects;
-using Core.Presentation.Models.DataTransferObjects.Base;
+﻿using Core.Presentation.Models.DataTransferObjects.Base;
 
 namespace Core.Presentation.Models.DataTransferObjects
 {

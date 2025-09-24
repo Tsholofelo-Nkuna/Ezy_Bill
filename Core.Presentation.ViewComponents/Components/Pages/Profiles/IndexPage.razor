@@ -1,0 +1,19 @@
+﻿@inherits GenericComponentBase<ProfileViewModel, UserProfileDto>
+
+<PageComponent ShowBackButton="true">
+    <Body>
+        <TabsComponent ViewModel="ViewModel.UserProfileTabsViewModel" Context="tabItemContext">
+            <TabItem>
+                <div class="d-flex shadow-sm border-3 border-start border-info bg-info-subtle p-3 mb-2 align-items-center">
+                    <p class="text-info fw-bold"> Data provided here will be displayed in your generated invoices</p>
+                </div>
+                @if(@tabItemContext.Name == "Details"){
+                    <FormComponent
+                        ViewModel="ViewModel.UserProfileFormViewModel"
+                        OnFormSubmitClicked="OnUserProfileDataSubmit"
+                    ></FormComponent>
+                }
+            </TabItem>
+        </TabsComponent>
+    </Body>
+</PageComponent>

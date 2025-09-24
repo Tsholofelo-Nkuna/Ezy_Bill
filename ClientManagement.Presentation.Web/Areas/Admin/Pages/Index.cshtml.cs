@@ -1,11 +1,7 @@
 using ClientManagement.BusinessLogicLayer.Interfaces;
-using ClientManagement.Presentation.Models;
-using Core.Presentation.Models.DataTransferObjects;
-using Core.Utils.Constants;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Core.Presentation.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
+
 
 namespace ClientManagement.Presentation.Web.Areas.Admin.Pages
 {

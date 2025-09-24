@@ -1,4 +1,4 @@
-﻿using ClientManagement.Presentation.Models;
+﻿using Core.Presentation.Models.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using System.Net.NetworkInformation;
