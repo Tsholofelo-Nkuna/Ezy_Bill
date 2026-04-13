@@ -15,6 +15,11 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '**/*.sln'
+    feedsToUse: 'select' # Or 'config' if you have a custom nuget.config
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
