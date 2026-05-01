@@ -23,6 +23,13 @@ steps:
 #     projects: '**/*.sln'          # or '**/*.csproj' if you prefer
 #     feedsToUse: 'select'          
 - task: DotNetCoreCLI@2
+  displayName: 'LibMan Restore'
+  inputs:
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'run libman restore'
+
+- task: DotNetCoreCLI@2
   displayName: 'Build ClientManagment.Web'
   inputs:
     command: 'build'
