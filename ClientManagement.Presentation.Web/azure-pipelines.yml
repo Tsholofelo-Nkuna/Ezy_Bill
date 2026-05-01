@@ -24,12 +24,6 @@ steps:
 #     projects: '**/*.sln'          # or '**/*.csproj' if you prefer
 #     feedsToUse: 'select'          
 # 1. Explicit Restore Step
-- task: DotNetCoreCLI@2
-  displayName: 'Restore NuGet Packages'
-  inputs:
-    command: 'restore'
-    projects: '**/ClientManagement.Presentation.Web.csproj'
-    feedsToUse: 'select' # Adjust if using a custom NuGet.config
 
 - task: Bash@3
   inputs:
@@ -44,7 +38,6 @@ steps:
   inputs:
     command: 'build'
     projects: '**/ClientManagement.Presentation.Web.csproj'
-    # --no-restore prevents conflicts with authenticated feeds
-    arguments: '--configuration Release --no-restore'
+    arguments: '--configuration Release'
 
     
