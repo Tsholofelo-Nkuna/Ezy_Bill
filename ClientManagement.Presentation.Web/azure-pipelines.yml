@@ -37,7 +37,7 @@ steps:
     script: |
       dotnet tool install -g Microsoft.Web.LibraryManager.Cli
       cd ./ClientManagement.Presentation.Web
-      libman restore
+      libman restore --verbosity detailed
 # 2. Build Step (with --no-restore)
 - task: DotNetCoreCLI@2
   displayName: 'Build ClientManagement.Web'
