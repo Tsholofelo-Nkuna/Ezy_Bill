@@ -17,6 +17,12 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: 'Restore NuGet Packages'
+  inputs:
+    command: 'restore'
+    projects: '**/*.sln'          # or '**/*.csproj' if you prefer
+    feedsToUse: 'select'          
+- task: DotNetCoreCLI@2
   inputs:
     command: 'build'
     projects: 'ClientManagement.Presentation.Web'
