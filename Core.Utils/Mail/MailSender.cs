@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 
 using MailKit.Net.Smtp;
 using MimeKit;
@@ -9,20 +8,20 @@ using MailKit.Security;
 
 namespace Core.Utils.Mail
 {
-    public class MailSender : IEmailSender<IdentityUser>
+    public class MailSender 
     {
         private readonly EmailSettings _emailSettings;
-        public MailSender(IOptions<EmailSettings> mailOptions, UserManager<IdentityUser> userManager) {
+        public MailSender(IOptions<EmailSettings> mailOptions) {
             _emailSettings = mailOptions.Value;
         }
-        public async Task SendConfirmationLinkAsync(IdentityUser user, string email, string confirmationLink)
+        public async Task SendConfirmationLinkAsync(string username, string email, string confirmationLink)
         {
             using (var c = new SmtpClient())
             {
                 var message = new MimeMessage();
 
                 message.From.Add(new MailboxAddress("IzyBill", _emailSettings.SendFrom));
-                message.To.Add(new MailboxAddress(user.UserName, email));
+                message.To.Add(new MailboxAddress(username, email));
                 message.Subject = "Verify Email";
                 message.Body = new TextPart("html") { Text = @$"<p>Click <a href='{confirmationLink}'>here</a> to verify email</p>" };
 
@@ -39,19 +38,19 @@ namespace Core.Utils.Mail
                 }
             }
         }
-        public Task SendPasswordResetCodeAsync(IdentityUser user, string email, string resetCode)
+        public Task SendPasswordResetCodeAsync(string username, string email, string resetCode)
         {
             throw new NotImplementedException();
 
         }
-        public async Task SendPasswordResetLinkAsync(IdentityUser user, string email, string resetLink)
+        public async Task SendPasswordResetLinkAsync(string username, string email, string resetLink)
         {
             using (var c = new SmtpClient())
             {
                 var message = new MimeMessage();
 
                 message.From.Add(new MailboxAddress("IzyBill", _emailSettings.SendFrom));
-                message.To.Add(new MailboxAddress(user.UserName, email));
+                message.To.Add(new MailboxAddress(username, email));
                 message.Subject = "Reset Password";
                 message.Body = new TextPart("html") { Text = @$"<p>Click <a href='{resetLink}'>here</a> to reset your password</p>" };
 

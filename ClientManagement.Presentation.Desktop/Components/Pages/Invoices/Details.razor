@@ -1,0 +1,6 @@
+﻿@using Core.Presentation.ViewComponents.Components.Templates
+@using Microsoft.AspNetCore.Authorization
+@page "/Invoices/Details/{id:guid}"
+@attribute [Authorize]
+@inherits GenericComponentBase<InvoiceDetailsViewModel, InvoiceDto>
+<Core.Presentation.ViewComponents.Components.Pages.Invoices.DetailsPage Id="Id"></Core.Presentation.ViewComponents.Components.Pages.Invoices.DetailsPage>

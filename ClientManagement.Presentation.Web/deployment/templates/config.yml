@@ -1,0 +1,32 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{.Values.appConfigName}}
+data:
+  appsettings.json: |
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft.AspNetCore": "Warning"
+        }
+      },
+      "AllowedHosts": "*",
+      "ApiBaseUrl": "https://izybill.growthlytix.co.za",
+      "EmailSettings": {
+        "Smtp": "smtp.gmail.com",
+        "SendFrom": "izybill85@gmail.com",
+        "Port": 587
+      },
+      "AppInfo": {
+        "Version": "0.3.1",
+        "Name": "IzyBill",
+        "PoweredBy": "Growthlytix"
+      },
+      "Pagination": {
+        "PageSize": 10
+      },
+      "AdminAccount": {
+        "Username": "izybill"
+      }
+    }

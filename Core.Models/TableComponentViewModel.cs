@@ -1,7 +1,6 @@
 ﻿using Core.Presentation.Models.DataTransferObjects;
 using Core.Presentation.Models.DataTransferObjects.Base;
 using Core.Presentation.Models.Base;
-using Microsoft.AspNetCore.Http.Extensions;
 using System.Globalization;
 
 namespace Core.Presentation.Models

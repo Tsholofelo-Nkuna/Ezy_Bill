@@ -1,13 +1,9 @@
 ﻿using Core.Utils.Mail;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+
 
 namespace Core.Utils
 {
@@ -15,7 +11,8 @@ namespace Core.Utils
     {
         public static IServiceCollection AddUtilServices(this IServiceCollection services, IConfiguration config) 
         {
-            services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
+            var emailSettings = JsonSerializer.Deserialize < EmailSettings > (config.GetSection("EmailSettings").ToJsonString());
+            services.Configure<EmailSettings>(opt =>opt = emailSettings ?? new());
             services.AddScoped<MailSender>();
             return services;
         }

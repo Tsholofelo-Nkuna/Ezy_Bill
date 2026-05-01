@@ -1,0 +1,5 @@
+﻿@page "/Products"
+@using Microsoft.AspNetCore.Authorization
+@inherits GenericComponentBase<ProductsViewModel, ProductDto>
+@attribute [Authorize]
+<Core.Presentation.ViewComponents.Components.Pages.Products.IndexPage></Core.Presentation.ViewComponents.Components.Pages.Products.IndexPage>

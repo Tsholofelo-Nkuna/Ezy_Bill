@@ -2,8 +2,6 @@ using Core.Utils.Constants;
 using Core.Utils.Mail;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -38,7 +36,7 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
                    { "email", Email },
                    { "code", code }
                });
-                await _emailSender.SendPasswordResetLinkAsync(user, Email, $"{Request.Scheme}://{Request.Host}{LoginPathConstants.ForgotPassword}{queryStr.Value}");
+                await _emailSender.SendPasswordResetLinkAsync(user.UserName!, Email, $"{Request.Scheme}://{Request.Host}{LoginPathConstants.ForgotPassword}{queryStr.Value}");
                 this.Message = "Password reset link sent to your email. Please check your email.";
             }
            

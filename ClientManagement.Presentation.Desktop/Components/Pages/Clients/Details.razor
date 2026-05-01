@@ -1,0 +1,5 @@
+﻿@page "/Clients/Details/{id:guid}"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inherits GenericComponentBase<ClientDetailsViewModel, ClientDto>
+<Core.Presentation.ViewComponents.Components.Pages.Clients.DetailsPage Id="Id"></Core.Presentation.ViewComponents.Components.Pages.Clients.DetailsPage>

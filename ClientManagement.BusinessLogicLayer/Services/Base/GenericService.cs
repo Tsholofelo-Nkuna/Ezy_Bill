@@ -8,8 +8,6 @@ using System.Linq.Expressions;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-using ClientManagement.DataAccessLayer.Entities;
 using Core.Utils.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
 using Core.Utils.Constants;

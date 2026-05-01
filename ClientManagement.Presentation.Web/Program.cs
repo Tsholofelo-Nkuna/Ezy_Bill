@@ -5,20 +5,11 @@ using ClientManagement.DataAccessLayer;
 using Core.Utils.Logging;
 using System.Globalization;
 using Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf;
-using ClientManagement.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
-using Core.Utils.Mail;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Core.Utils;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity;
-using Microsoft.AspNetCore.Components.Server;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.AspNetCore.Authentication.BearerToken;
+
 using Core.Utils.Constants;
-using Microsoft.AspNetCore.Authentication;
-using Core.Utils.ActionFilters;
+
 using Core.Presentation.Models;
 
 

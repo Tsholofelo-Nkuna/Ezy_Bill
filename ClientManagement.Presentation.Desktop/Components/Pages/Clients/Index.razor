@@ -1,0 +1,6 @@
+﻿@using Core.Presentation.ViewComponents.Components.Templates
+@using Microsoft.AspNetCore.Authorization
+@page "/Clients"
+@inherits GenericComponentBase<ClientsViewModel, ClientDto>
+@attribute [Authorize]
+<Core.Presentation.ViewComponents.Components.Pages.Clients.IndexPage></Core.Presentation.ViewComponents.Components.Pages.Clients.IndexPage>

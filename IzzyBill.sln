@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.9.34728.123
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Presentation.ViewComponents", "Core.Presentation.ViewComponents\Core.Presentation.ViewComponents.csproj", "{C87671CC-39EE-4E43-B0DA-F31AF523B5A2}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Utils", "Core.Utils\Core.Utils.csproj", "{A0EFCEAB-E2D5-4060-97DE-0E7E0239E446}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManagement.Presentation.Desktop", "ClientManagement.Presentation.Desktop\ClientManagement.Presentation.Desktop.csproj", "{3D697064-40A8-4572-B08F-69881EFE5750}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManagement.Presentation.WebPages", "ClientManagement.Presentation.WebPages\ClientManagement.Presentation.WebPages.csproj", "{0346D680-CC6D-463A-87EF-CC7294526018}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,10 +72,17 @@ Global
 		{A0EFCEAB-E2D5-4060-97DE-0E7E0239E446}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3D697064-40A8-4572-B08F-69881EFE5750}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3D697064-40A8-4572-B08F-69881EFE5750}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D697064-40A8-4572-B08F-69881EFE5750}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{3D697064-40A8-4572-B08F-69881EFE5750}.DevOnline|Any CPU.ActiveCfg = Release|Any CPU
 		{3D697064-40A8-4572-B08F-69881EFE5750}.DevOnline|Any CPU.Build.0 = Release|Any CPU
 		{3D697064-40A8-4572-B08F-69881EFE5750}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D697064-40A8-4572-B08F-69881EFE5750}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0346D680-CC6D-463A-87EF-CC7294526018}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0346D680-CC6D-463A-87EF-CC7294526018}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0346D680-CC6D-463A-87EF-CC7294526018}.DevOnline|Any CPU.ActiveCfg = Release|Any CPU
+		{0346D680-CC6D-463A-87EF-CC7294526018}.DevOnline|Any CPU.Build.0 = Release|Any CPU
+		{0346D680-CC6D-463A-87EF-CC7294526018}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0346D680-CC6D-463A-87EF-CC7294526018}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
