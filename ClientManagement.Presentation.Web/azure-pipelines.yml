@@ -36,7 +36,7 @@ steps:
     targetType: 'inline'
     script: |
       dotnet tool install -g Microsoft.Web.LibraryManager.Cli
-      libman restore
+      libman restore --libman-json ./ClientManagement.Presentation.Web\libman.json
 # 2. Build Step (with --no-restore)
 - task: DotNetCoreCLI@2
   displayName: 'Build ClientManagement.Web'
