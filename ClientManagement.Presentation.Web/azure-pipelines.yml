@@ -17,7 +17,7 @@ variables:
 stages:
   - stage: Build
     jobs:
-    - job: Build_App
+    - job: Build
       displayName: "Build ClientManagement.Web"
       steps:
       - task: Bash@3
@@ -37,12 +37,12 @@ stages:
   - stage: Test
     displayName: "Run unit tests"
     jobs:
-      - job: Run_ClientManagement_UnitTests
+      - job: Test
         steps:
         - task: DotNetCoreCLI@2
           displayName: "Unit test run"
           inputs:
             command: 'test'
-            projects: '**/ClientManagement.UnitTests'
+            projects: '**/ClientManagement.UnitTests.csproj'
             testRunTitle: 'Run Unit Tests'
             
