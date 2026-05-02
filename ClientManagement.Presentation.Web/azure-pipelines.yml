@@ -52,4 +52,14 @@ stages:
             command: 'test'
             projects: '**/ClientManagement.UnitTests.csproj'
             testRunTitle: 'Run Unit Tests'
+  - stage: Package
+    jobs:
+        - job: Package
+          steps:
+          - task: NuGetCommand@2
+            inputs:
+              command: 'pack'
+              packagesToPack: '**/ClientManagement.Web.csproj'
+              versioningScheme: 'byBuildNumber'
+
             
