@@ -1,4 +1,4 @@
-# ASP.NET Core (.NET Framework)
+# ASP.NET Core (.NET Framework) 
 
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
 # Add steps that publish symbols, save build artifacts, and more:
@@ -60,6 +60,10 @@ stages:
             inputs:
               command: 'pack'
               packagesToPack: '**/ClientManagement.Web.csproj'
-              versioningScheme: 'byBuildNumber'
+             # versioningScheme: 'byBuildNumber'
+              versioningScheme: 'byPrereleaseNumber'
+              majorVersion: '1'
+              minorVersion: '0'
+              patchVersion: '0'
 
             
