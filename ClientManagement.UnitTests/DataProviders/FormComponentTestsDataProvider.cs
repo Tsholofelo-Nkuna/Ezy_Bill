@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Presentation.Models;
-using ClientManagement.Presentation.Models.DataTransferObjects;
+
 
 namespace ClientManagement.UnitTests.DataProviders
 {

@@ -1,7 +1,7 @@
-﻿using ClientManagement.Presentation.Models;
-using ClientManagement.Presentation.Models.DataTransferObjects;
+﻿
 using Core.Presentation.Models;
 using Core.Presentation.Models.DataTransferObjects;
+using Core.Presentation.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,4 @@
-﻿using ClientManagement.Presentation.Models.DataTransferObjects;
-using Core.Presentation.Models.DataTransferObjects;
+﻿using Core.Presentation.Models.DataTransferObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
