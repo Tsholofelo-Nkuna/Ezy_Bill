@@ -39,6 +39,13 @@ stages:
     jobs:
       - job: Test
         steps:
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+              cd ./Core.Presentation.ViewComponents
+              libman restore
         - task: DotNetCoreCLI@2
           displayName: "Unit test run"
           inputs:
