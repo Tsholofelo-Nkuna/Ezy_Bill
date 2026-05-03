@@ -62,7 +62,9 @@ stages:
               targetType: 'inline'
               script: |
                 dotnet tool install -g Microsoft.Web.LibraryManager.Cli
-                libman restore --file ./Core.Presentation.ViewComponents/libman.json
+                cd ./Core.Presentation.ViewComponents
+                libman restore
+                cd ../
                 dotnet pack ./ClientManagement.Presentation.Web/ --output $BUILD_ARTIFACTSTAGINGDIRECTORY
               
           - task: DotNetCoreCLI@2
