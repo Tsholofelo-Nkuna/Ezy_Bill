@@ -72,6 +72,6 @@ stages:
             inputs:
               command: 'push'
               packagesToPush: '$(Build.ArtifactStagingDirectory)/ClientManagement.Presentation.Web.*.nupkg'
-              publishVstsFeed: 'tgnkuna768' # The name of your Azure Artifacts feed
+              publishVstsFeed: 'tsholofelo768' # The name of your Azure Artifacts feed
 
                           
