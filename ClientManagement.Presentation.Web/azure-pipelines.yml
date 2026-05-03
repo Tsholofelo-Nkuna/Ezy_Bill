@@ -61,14 +61,13 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                cd ./ClientManagement.Web
-                dotnet pack --output $BUILD_ARTIFACTSTAGINGDIRECTORY
+                dotnet pack ./ClientManagement.Presentation.Web/ --output $BUILD_ARTIFACTSTAGINGDIRECTORY
               
           - task: DotNetCoreCLI@2
             displayName: 'dotnet push'
             inputs:
               command: 'push'
-              packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+              packagesToPush: '$(Build.ArtifactStagingDirectory)/ClientManagement.Presentation.Web.*.nupkg'
               publishVstsFeed: 'tgnkuna768' # The name of your Azure Artifacts feed
 
                           
