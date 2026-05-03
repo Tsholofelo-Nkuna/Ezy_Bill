@@ -55,18 +55,14 @@ stages:
   - stage: Package
     jobs:
         - job: Package
+          displayName: 'Package ClientManagment.Web'
           steps:
-          - task: NuGetCommand@2
+          - task: Bash@3
             inputs:
-              command: 'pack'
-              packagesToPack: '**/ClientManagement.Web.csproj'
-              packDirectory: '$(Build.ArtifactStagingDirectory)'
-             # versioningScheme: 'byBuildNumber'
-             # outputDir: '$(Build.ArtifactStagingDirectory)'
-              versioningScheme: 'byPrereleaseNumber'
-              majorVersion: '1'
-              minorVersion: '0'
-              patchVersion: '0'
+              targetType: 'inline'
+              script: |
+                cd ./ClientManagement.Web
+                dotnet pack --output $BUILD_ARTIFACTSTAGINGDIRECTORY
               
           - task: DotNetCoreCLI@2
             displayName: 'dotnet push'
