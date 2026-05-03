@@ -60,10 +60,17 @@ stages:
             inputs:
               command: 'pack'
               packagesToPack: '**/ClientManagement.Web.csproj'
+              #packDirectory: '$(Build.ArtifactStagingDirectory)'
              # versioningScheme: 'byBuildNumber'
               versioningScheme: 'byPrereleaseNumber'
               majorVersion: '1'
               minorVersion: '0'
               patchVersion: '0'
+          - task: DotNetCoreCLI@2
+            displayName: 'dotnet push'
+            inputs:
+              command: 'push'
+              packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+              publishVstsFeed: 'tgnkuna768' # The name of your Azure Artifacts feed
 
-            
+                          
