@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
+	
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -7,6 +7,7 @@
     <Configurations>Debug;Release;DevOnline</Configurations>
     <UserSecretsId>e18a12b8-ac49-4418-9a45-ab66597bdc9d</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
