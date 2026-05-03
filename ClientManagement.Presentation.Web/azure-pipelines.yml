@@ -1,5 +1,6 @@
 # ASP.NET Core (.NET Framework) 
 
+
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
@@ -65,7 +66,15 @@ stages:
                 cd ./Core.Presentation.ViewComponents
                 libman restore
                 cd ../
-                dotnet pack ./ClientManagement.Presentation.Web/ --output $BUILD_ARTIFACTSTAGINGDIRECTORY
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'pack'
+              packagesToPack: '**/*.csproj'
+              packDirectory: '$(Build.ArtifactStagingDirectory)'
+              versioningScheme: 'byPrereleaseNumber'
+              majorVersion: '1'
+              minorVersion: '0'
+              patchVersion: '0'
               
           - task: DotNetCoreCLI@2
             displayName: 'dotnet push'
