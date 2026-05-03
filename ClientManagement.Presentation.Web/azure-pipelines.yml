@@ -60,9 +60,9 @@ stages:
             inputs:
               command: 'pack'
               packagesToPack: '**/ClientManagement.Web.csproj'
-              #packDirectory: '$(Build.ArtifactStagingDirectory)'
+              packDirectory: '$(Build.ArtifactStagingDirectory)'
              # versioningScheme: 'byBuildNumber'
-              outputDir: '$(Build.ArtifactStagingDirectory)'
+             # outputDir: '$(Build.ArtifactStagingDirectory)'
               versioningScheme: 'byPrereleaseNumber'
               majorVersion: '1'
               minorVersion: '0'
