@@ -61,7 +61,7 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                libman restore --file ./Core.Presentation.ViewComponents/
+                libman restore --file ./Core.Presentation.ViewComponents/libman.json
                 dotnet pack ./ClientManagement.Presentation.Web/ --output $BUILD_ARTIFACTSTAGINGDIRECTORY
               
           - task: DotNetCoreCLI@2
