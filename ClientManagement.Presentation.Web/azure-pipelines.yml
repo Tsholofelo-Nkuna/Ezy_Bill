@@ -62,10 +62,12 @@ stages:
               packagesToPack: '**/ClientManagement.Web.csproj'
               #packDirectory: '$(Build.ArtifactStagingDirectory)'
              # versioningScheme: 'byBuildNumber'
+              outputDir: '$(Build.ArtifactStagingDirectory)'
               versioningScheme: 'byPrereleaseNumber'
               majorVersion: '1'
               minorVersion: '0'
               patchVersion: '0'
+              
           - task: DotNetCoreCLI@2
             displayName: 'dotnet push'
             inputs:
