@@ -1,4 +1,4 @@
-# ASP.NET Core (.NET Framework)
+# ASP.NET Core (.NET Framework) 
 
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
 # Add steps that publish symbols, save build artifacts, and more:
@@ -52,4 +52,27 @@ stages:
             command: 'test'
             projects: '**/ClientManagement.UnitTests.csproj'
             testRunTitle: 'Run Unit Tests'
-            
+  - stage: Package
+    jobs:
+        - job: Package
+          steps:
+          - task: NuGetCommand@2
+            inputs:
+              command: 'pack'
+              packagesToPack: '**/ClientManagement.Web.csproj'
+              packDirectory: '$(Build.ArtifactStagingDirectory)'
+             # versioningScheme: 'byBuildNumber'
+             # outputDir: '$(Build.ArtifactStagingDirectory)'
+              versioningScheme: 'byPrereleaseNumber'
+              majorVersion: '1'
+              minorVersion: '0'
+              patchVersion: '0'
+              
+          - task: DotNetCoreCLI@2
+            displayName: 'dotnet push'
+            inputs:
+              command: 'push'
+              packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+              publishVstsFeed: 'tgnkuna768' # The name of your Azure Artifacts feed
+
+                          
