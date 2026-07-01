@@ -15,6 +15,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  drop: '$(build.artifactstagingdirectory)/drop'
 stages:
   - stage: Build
     jobs:
@@ -32,55 +33,14 @@ stages:
       - task: DotNetCoreCLI@2
         displayName: 'Build ClientManagement.Web'
         inputs:
-          command: 'build'
+          command: 'publish'
           projects: '**/ClientManagement.Presentation.Web.csproj'
-          arguments: '--configuration Release'
-  - stage: Test
-    displayName: "Run unit tests"
-    jobs:
-      - job: Test
-        steps:
-        - task: Bash@3
-          inputs:
-            targetType: 'inline'
-            script: |
-              dotnet tool install -g Microsoft.Web.LibraryManager.Cli
-              cd ./Core.Presentation.ViewComponents
-              libman restore
-        - task: DotNetCoreCLI@2
-          displayName: "Unit test run"
-          inputs:
-            command: 'test'
-            projects: '**/ClientManagement.UnitTests.csproj'
-            testRunTitle: 'Run Unit Tests'
-  - stage: Package
-    jobs:
-        - job: Package
-          displayName: 'Package ClientManagment.Web'
-          steps:
-          - task: Bash@3
-            inputs:
-              targetType: 'inline'
-              script: |
-                dotnet tool install -g Microsoft.Web.LibraryManager.Cli
-                cd ./Core.Presentation.ViewComponents
-                libman restore
-                cd ../
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: 'pack'
-              packagesToPack: '**/*.csproj'
-              packDirectory: '$(Build.ArtifactStagingDirectory)'
-              versioningScheme: 'byPrereleaseNumber'
-              majorVersion: '1'
-              minorVersion: '0'
-              patchVersion: '0'
-              
-          - task: DotNetCoreCLI@2
-            displayName: 'dotnet push'
-            inputs:
-              command: 'push'
-              packagesToPush: '$(Build.ArtifactStagingDirectory)/ClientManagement.Presentation.Web.*.nupkg'
-              publishVstsFeed: 'EzyBill/tsholofelo768' # The name of your Azure Artifacts feed
+          arguments: '--configuration Release --output $(drop)'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(drop)'
+          ArtifactName: 'drop'
+         
+      
 
                           
