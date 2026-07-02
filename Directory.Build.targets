@@ -1,0 +1,8 @@
+<Project>
+  <ItemGroup>
+	<!-- Automatically excludes libman.json from publishing across the entire solution -->
+	<Content Update="**/libman.json">
+	  <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+	</Content>
+  </ItemGroup>
+</Project>
