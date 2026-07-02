@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://izybill-dev.growthlytix.co.za"
+      "applicationUrl": "https://izybill-dev.bakgatlasolutions.com"
     },
     "https": {
       "commandName": "Project",

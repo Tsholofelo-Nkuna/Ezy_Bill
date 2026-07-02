@@ -33,9 +33,9 @@ stages:
       - task: DotNetCoreCLI@2
         displayName: 'Build ClientManagement.Web'
         inputs:
-          command: 'build'
+          command: 'publish'
           projects: '**/ClientManagement.Presentation.Web.csproj'
-          arguments: '--configuration Release --output $(drop)'
+          arguments: '--configuration DevOnline --output $(drop)'
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(drop)'
