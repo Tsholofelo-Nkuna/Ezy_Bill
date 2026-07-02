@@ -11,7 +11,7 @@ pool:
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  buildConfiguration: 'DevOnline'
   drop: '$(build.artifactstagingdirectory)/drop'
 stages:
   - stage: Build
@@ -28,7 +28,7 @@ stages:
             libman restore
             cd ..
             dotnet workload restore
-            dotnet publish --configuration DevOnline --output $(drop)
+            
       # 2. Build Step (with --no-restore)
       # - task: DotNetCoreCLI@2
       #   displayName: 'Build ClientManagement.Web'
@@ -36,6 +36,11 @@ stages:
       #     command: 'publish'
       #     projects: '**/ClientManagement.Presentation.Web.csproj'
       #     arguments: ''
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'publish'
+          publishWebProjects: false
+          arguments: '--configuration $(buildConfiguration) --output $(drop)'
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(drop)'
