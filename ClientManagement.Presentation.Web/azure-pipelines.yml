@@ -41,7 +41,7 @@ stages:
           command: 'publish'
           publishWebProjects: false
           arguments: '--configuration $(buildConfiguration) --output $(drop)'
-          zipAfterPublish: false
+          zipAfterPublish: true
           modifyOutputPath: false
       - task: PublishBuildArtifacts@1
         inputs:
