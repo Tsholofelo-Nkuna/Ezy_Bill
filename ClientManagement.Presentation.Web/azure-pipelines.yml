@@ -28,13 +28,14 @@ stages:
             libman restore
             cd ..
             dotnet workload restore
+            dotnet publish --configuration DevOnline --output $(drop)
       # 2. Build Step (with --no-restore)
-      - task: DotNetCoreCLI@2
-        displayName: 'Build ClientManagement.Web'
-        inputs:
-          command: 'publish'
-          projects: '**/ClientManagement.Presentation.Web.csproj'
-          arguments: '--configuration DevOnline --output $(drop)'
+      # - task: DotNetCoreCLI@2
+      #   displayName: 'Build ClientManagement.Web'
+      #   inputs:
+      #     command: 'publish'
+      #     projects: '**/ClientManagement.Presentation.Web.csproj'
+      #     arguments: ''
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(drop)'
