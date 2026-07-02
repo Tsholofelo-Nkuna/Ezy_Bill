@@ -26,6 +26,8 @@ stages:
             dotnet tool install -g Microsoft.Web.LibraryManager.Cli
             cd ./Core.Presentation.ViewComponents
             libman restore
+            cd ..
+            dotnet workload restore
       # 2. Build Step (with --no-restore)
       - task: DotNetCoreCLI@2
         displayName: 'Build ClientManagement.Web'
