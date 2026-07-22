@@ -8,6 +8,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Profiles
 {
     public partial class Index : GenericComponentBase<ProfileViewModel, UserProfileDto>
     {
-       
+        [Parameter]
+        public string UserId { get; set; } = string.Empty;
     }
 }
