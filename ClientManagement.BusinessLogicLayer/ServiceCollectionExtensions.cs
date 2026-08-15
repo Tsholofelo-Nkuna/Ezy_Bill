@@ -4,6 +4,8 @@ using ClientManagement.BusinessLogicLayer.Interfaces;
 using Core.Utils.Interfaces;
 using Core.Utils.State;
 using ClientManagement.BusinessLogicLayer.Models;
+using OllamaSharp;
+using ClientManagement.BusinessLogicLayer.Helpers;
 
 
 
@@ -12,7 +14,7 @@ namespace ClientManagement.BusinessLogicLayer
     public static class ServiceCollectionExtensions
     {
        public static IServiceCollection AddBusinessServices(this IServiceCollection services) {
-           return services
+            services
                 .AddAutoMapper(typeof(AutoMapperConfig))
                 .AddScoped<IClientService, ClientService> ()
                 .AddScoped<IInvoiceService, InvoiceService> ()
@@ -21,10 +23,11 @@ namespace ClientManagement.BusinessLogicLayer
                 .AddScoped<IInvoicePaymentService, InvoicePaymentService>()
                 .AddScoped<IProfileService, ProfileService>()
                 .AddScoped<IUserProfileService, UserProfileService>()
-                .AddScoped<IAppStateManager<ApplicationState>, AppStateManager<ApplicationState>>(); ;
-                
-
-          
+                .AddScoped<IAppStateManager<ApplicationState>, AppStateManager<ApplicationState>>()
+                .AddScoped<IOllamaApiClient, AssistantChatApiClient>()
+                .AddScoped<IChatAssistantService, ChatAssistantService>();
+           
+            return services;
         }
     }
 }
