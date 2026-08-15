@@ -16,7 +16,10 @@ namespace ClientManagement.BusinessLogicLayer.Services
 
         public ChatClientAgent AsChatAgent(string? instructions = null, string? agentName = null, IList<AITool>? tools = null)
         {
-            return client.AsAIAgent(instructions, agentName,tools: tools);
+            return client.AsAIAgent(new ChatClientAgentOptions() { 
+                Name = agentName, 
+                ChatOptions = new() { Tools = tools, Instructions = instructions} }
+            );
             
         }
 
