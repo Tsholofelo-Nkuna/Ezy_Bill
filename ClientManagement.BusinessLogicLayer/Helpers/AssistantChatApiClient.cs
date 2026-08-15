@@ -9,7 +9,7 @@ namespace ClientManagement.BusinessLogicLayer.Helpers
     {
         public AssistantChatApiClient(): base("http://localhost:11434", "llama3.2:3b")
         {
-            var models = this.ListLocalModelsAsync();
+            var models = this.ListLocalModelsAsync().Result;
         }
     }
 }
