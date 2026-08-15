@@ -24,7 +24,7 @@ namespace ClientManagement.BusinessLogicLayer
                 .AddScoped<IProfileService, ProfileService>()
                 .AddScoped<IUserProfileService, UserProfileService>()
                 .AddScoped<IAppStateManager<ApplicationState>, AppStateManager<ApplicationState>>()
-                .AddScoped<IOllamaApiClient, AssistantChatApiClient>()
+                .AddScoped<AssistantChatApiClient>()
                 .AddScoped<IChatAssistantService, ChatAssistantService>();
            
             return services;

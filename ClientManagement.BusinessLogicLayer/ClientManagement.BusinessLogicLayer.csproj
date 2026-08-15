@@ -9,7 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="Microsoft.Agents.AI.Abstractions" Version="1.0.0-preview.260108.1" />
+    <PackageReference Include="Microsoft.Agents.AI" Version="1.17.0" />
+    <PackageReference Include="Microsoft.Agents.AI.Abstractions" Version="1.17.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
     <PackageReference Include="OllamaSharp" Version="5.4.30" />
   </ItemGroup>
@@ -18,10 +19,6 @@
     <ProjectReference Include="..\ClientManagement.DataAccessLayer\ClientManagement.DataAccessLayer.csproj" />
     <ProjectReference Include="..\Core.Models\Core.Presentation.Models.csproj" />
     <ProjectReference Include="..\Core.Utils\Core.Utils.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
 	<PropertyGroup>
 		<NoWarn>$(NoWarn);NU1903</NoWarn>

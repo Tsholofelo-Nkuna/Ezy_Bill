@@ -1,4 +1,6 @@
-﻿using ClientManagement.BusinessLogicLayer.Interfaces;
+﻿using ClientManagement.BusinessLogicLayer.Helpers;
+using ClientManagement.BusinessLogicLayer.Interfaces;
+using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using OllamaSharp;
 using OllamaSharp.Models.Chat;
@@ -8,9 +10,15 @@ using System.Text;
 
 namespace ClientManagement.BusinessLogicLayer.Services
 {
-    public class ChatAssistantService(IOllamaApiClient client) : IChatAssistantService
+    public class ChatAssistantService(AssistantChatApiClient client) : IChatAssistantService
     {
         public List<Message> ChatMessages { get; set; } = [];
+
+        public ChatClientAgent AsChatAgent(string? instructions = null, string? agentName = null, IList<AITool>? tools = null)
+        {
+            return client.AsAIAgent(instructions, agentName,tools: tools);
+            
+        }
 
         public IAsyncEnumerable<ChatResponseStream?> AssistUser(string content)
         {
