@@ -23,4 +23,7 @@
 	<PropertyGroup>
 		<NoWarn>$(NoWarn);NU1903</NoWarn>
 	</PropertyGroup>
+	<ItemGroup>
+		<Content Include="Agents/Skills/**/*.md" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
 </Project>

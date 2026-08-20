@@ -6,6 +6,8 @@ using Core.Utils.State;
 using ClientManagement.BusinessLogicLayer.Models;
 using OllamaSharp;
 using ClientManagement.BusinessLogicLayer.Helpers;
+using Microsoft.Extensions.Configuration;
+using ClientManagement.BusinessLogicLayer.Agents;
 
 
 
@@ -13,7 +15,15 @@ namespace ClientManagement.BusinessLogicLayer
 {
     public static class ServiceCollectionExtensions
     {
-       public static IServiceCollection AddBusinessServices(this IServiceCollection services) {
+       public static IServiceCollection AddBusinessServices(this IServiceCollection services, IConfiguration config) {
+            services.Configure<OllamaOptions>(options =>
+            {
+                config.Bind("OllamaOptions", options);
+            });
+            services.Configure<AgentOptions>(options =>
+            {
+                config.Bind("AI", options);
+            });
             services
                 .AddAutoMapper(typeof(AutoMapperConfig))
                 .AddScoped<IClientService, ClientService> ()
@@ -25,7 +35,7 @@ namespace ClientManagement.BusinessLogicLayer
                 .AddScoped<IUserProfileService, UserProfileService>()
                 .AddScoped<IAppStateManager<ApplicationState>, AppStateManager<ApplicationState>>()
                 .AddScoped<AssistantChatApiClient>()
-                .AddScoped<IChatAssistantService, ChatAssistantService>();
+                .AddScoped<BookkeepingAgent>();
            
             return services;
         }

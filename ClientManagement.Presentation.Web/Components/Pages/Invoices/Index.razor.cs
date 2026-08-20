@@ -3,6 +3,10 @@ using Core.Presentation.Models.DataTransferObjects;
 using Core.Presentation.Models;
 using Core.Presentation.ViewComponents.Components;
 using Core.Presentation.ViewComponents.Components.Base;
+using Microsoft.AspNetCore.Components;
+using ClientManagement.BusinessLogicLayer.Agents;
+using Microsoft.Extensions.AI;
+
 
 namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
 {
@@ -10,12 +14,14 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
     {
       
         public bool NewInvoiceCreationInProgress { get; set; }
+        [Inject]
+        public BookkeepingAgent Bookkeeper { get; set; }
+        public string BookkeeperResponse { get; set; } = string.Empty;
         protected override async Task OnInitializedAsync()
         {
              await base.OnInitializedAsync();
             this.BaseUrl = "api/invoices";
             await PopulateDropdowns();
-         
            
         }
         public bool InvoiceTableIsLoading { get; set; } = false;

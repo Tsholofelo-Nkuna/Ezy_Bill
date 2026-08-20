@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.AI;
+﻿using ClientManagement.BusinessLogicLayer.Models;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Options;
 using OllamaSharp;
 using System;
 using System.Collections.Generic;
@@ -8,9 +10,8 @@ namespace ClientManagement.BusinessLogicLayer.Helpers
 {
     public class AssistantChatApiClient : OllamaApiClient, IChatClient
     {
-        public AssistantChatApiClient(): base("http://localhost:11434", "llama3.2:3b")
+        public AssistantChatApiClient(IOptions<OllamaOptions> apiOptions): base(apiOptions.Value.Url, apiOptions.Value.Model)
         {
-            var models = this.ListLocalModelsAsync().Result;
         }
     }
 }

@@ -19,12 +19,12 @@ namespace Core.Presentation.ViewComponents.Components
             get => this.ViewModel.Show;
             set
             {
-                this.ViewModel.Show = value;
+                this.ViewModel.Show = value; 
             }
         }
 
         [Parameter]
-        public override IEnumerable<string> CssClassList { get; set; } = ["col-lg-4", "position-absolute", "top-0"];
+        public override IEnumerable<string> CssClassList { get; set; } = ["col-lg-4", "position-absolute", "top-0"]; 
 
         [Parameter]
         public string Width { get; set; } = "auto";

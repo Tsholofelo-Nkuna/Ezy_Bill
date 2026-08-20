@@ -10,11 +10,12 @@ using System.Text;
 
 namespace ClientManagement.BusinessLogicLayer.Services
 {
+    [Obsolete]
     public class ChatAssistantService(AssistantChatApiClient client) : IChatAssistantService
     {
         public List<Message> ChatMessages { get; set; } = [];
 
-        public ChatClientAgent AsChatAgent(string? instructions = null, string? agentName = null, IList<AITool>? tools = null)
+        public ChatClientAgent AsChatAgent(string? instructions = null, string? agentName = null, IList<AITool>? tools = null, IEnumerable<AIContextProvider>? contextProviders = null)
         {
             return client.AsAIAgent(new ChatClientAgentOptions() { 
                 Name = agentName, 

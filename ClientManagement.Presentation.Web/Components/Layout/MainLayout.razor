@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using Core.Presentation.ViewComponents.Components.Templates
+@inherits LayoutComponentBase
 
 <div class="page">
     <div class="sidebar flex-column border-end">
@@ -20,8 +21,56 @@
     </div>
     <main>
         <div class="top-row px-4 bg-primary-subtle">
+            <ButtonTemplate 
+                CssClass="btn btn-outline-primary"
+                ToolTip="Help"
+                OnClick="() => { AssistantLaunced = true;}">
+                <Icon>
+                    <i class="bi bi-robot"></i>
+                </Icon>
+            </ButtonTemplate>
+            <ModalComponent TRecordType="BaseDto"
+                            @bind-Show="AssistantLaunced"
+                            Width="512px">
+                <Body>
+                    @if (ChatHistory.Any())
+                    {
+                        <div id="chatPanel" class="border border-1 border-primary my-2 p-3" style="border-radius:8px;height:auto;overflow-y:auto;max-height:256px;">
+                            @foreach (var message in ChatHistory)
+                            {
+                                <div class="my-2">
+                                    <span>@(message.Role == Microsoft.Extensions.AI.ChatRole.User ? "You:" : "Assistant:")</span>
+                                    <div class="rounded-2 p-3 border border-2 @(message.Role == Microsoft.Extensions.AI.ChatRole.Assistant ? "border-primary" : "border-primary-subtle")">
+                                        @message.Text
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    }
+                    <div style="display:grid; grid-template-columns: 1fr auto;">
+                        <input class="form-control mx-2" @bind-value="AgentInstructions" placeholder="Enter instructions" />
+                        <ButtonTemplate 
+                            CssClass="btn btn-outline-primary"
+                            IsLoading="AgentIsBusy"
+                            OnClick="OnSendAgentInstructions">
+                            <Icon>
+                                <em class="bi bi-send"></em>
+                            </Icon>
+                        </ButtonTemplate>
+                    </div> 
+                </Body>
+                <Footer>
+                    <div class="container">
+                        <ButtonTemplate CssClass="btn btn-primary" Text="Clear"
+                        OnClick="OnClearAgentConversation">
+                        </ButtonTemplate>
+                    </div>
+                </Footer>
+            </ModalComponent>
             <div class="d-flex flex-row-reverse">
                 <span class="position-relative" @onclick="() =>{ShowUserProfileModal = true;}" style="cursor:pointer">
+
                     <a class="bg-body-tertiary rounded-circle d-inline-flex justify-content-center align-items-center position-relative"
                     style="width:1.5rem;height:1.5rem;"
                     >
@@ -55,8 +104,9 @@
                         </Footer>
                     </ModalComponent>
                 </span>
+               
             </div>
-
+          
         </div>
         <article class="content px-4">
             @Body

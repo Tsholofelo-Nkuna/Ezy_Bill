@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Core.Presentation.Models.DataTransferObjects;
 using ClientManagement.Presentation.Web.Controllers.Base;
+using Microsoft.Extensions.AI;
+using ClientManagement.BusinessLogicLayer.Agents;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,11 +20,9 @@ namespace ClientManagement.Presentation.Web.Controllers
     public class ClientsController : ApiBaseController<ClientsController>
     {
         private readonly IClientService _clientService;
-      
-        public ClientsController(IClientService clientService, ILogger<ClientsController> logger): base(logger)
+        public ClientsController(IClientService clientService, ILogger<ClientsController> logger, BookkeepingAgent bookkeepingAgent): base(logger)
         {
             _clientService = clientService;
-           
         }
 
 
@@ -30,6 +30,7 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpPost("[action]")]
         public async Task<PageResponseDto<ClientDto>> Get(PageRequestDto<ClientDto> pageRequest)
         {
+           
             var response = (await this.requestHandler.HandleRequest(async () =>
             {
                 return await this.Get(pageRequest, _clientService);

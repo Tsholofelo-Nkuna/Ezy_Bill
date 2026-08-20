@@ -7,10 +7,10 @@ using System.Text;
 
 namespace ClientManagement.BusinessLogicLayer.Interfaces
 {
-    public interface IChatAssistantService
+    public interface IChatAssistantService : IAgentProviderService
     {
         public IAsyncEnumerable<ChatResponseStream?> AssistUser(string content);
         public List<Message> ChatMessages { get; set; }
-        public ChatClientAgent AsChatAgent(string? instructions = null, string? agentName = null, IList<AITool>? tools = null);
+        
     }
 }
