@@ -14,8 +14,9 @@ namespace ClientManagement.BusinessLogicLayer.Agents
 {
     public class BookkeepingAgent : AgentBase
     {
-        public BookkeepingAgent(IOptions<AgentOptions> agentOptions, IOptions<OllamaOptions> ollamaOptions) : base(agentOptions, ollamaOptions)
+        public BookkeepingAgent(IOptions<AgentOptions> agentOptions) : base(agentOptions)
         {
+            Name = "Jimmy";
         }
     }
 }

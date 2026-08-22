@@ -1,7 +1,10 @@
 ﻿using ClientManagement.BusinessLogicLayer.Agents;
+using ClientManagement.BusinessLogicLayer.Agents.Workflows;
 using Core.Presentation.Models.ViewModels;
 using Microsoft.Agents.AI;
+using Microsoft.Agents.AI.Workflows;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.AI;
 using System.Net.NetworkInformation;
@@ -12,7 +15,6 @@ namespace ClientManagement.Presentation.Web.Components.Layout
     {
         public MainLayoutViewModel ViewModel { get; set; } = new MainLayoutViewModel();
         public bool ShowUserProfileModal { get; set; }
-
         public string Username { get => this._httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? string.Empty;  }
         public string UserId { get; set; } = string.Empty;
         [Inject]
@@ -22,18 +24,15 @@ namespace ClientManagement.Presentation.Web.Components.Layout
         public IEnumerable<UserProfileModalListItem>UserProfileModalListItems { get; set; } = [ ];
         public bool AssistantLaunced { get; set; } = false;
         public string AgentInstructions { get; set; } = string.Empty;
+        public (string contentType, byte[] contents, string dataUrl) ImagePresentedToAgent;
         public bool AgentIsBusy { get; set;  } = false;
         public string AgentResponse { get; set; } = string.Empty;
         [Inject]
-        public BookkeepingAgent? Bookkeeper { get; set; }
-        public ChatClientAgent? BookkeeperAgent 
-        { 
-            get
-            {
-                Bookkeeper?.Name = "CEO_Judie";
-                return Bookkeeper?.AgentInstance;
-            } 
-        }
+        public BookkeepingAgent? BookkeeperAgent { get; set; }
+
+        [Inject] AppAssistantWorkflowProvider? AppAssitantWorkFlowProviderInstance { get; set; }
+
+        public AIAgent? AppAssistantAgent { get; set; }
 
         public List<ChatMessage> ChatHistory 
         {
@@ -44,7 +43,9 @@ namespace ClientManagement.Presentation.Web.Components.Layout
         protected override async Task OnInitializedAsync()
         {
             //this.Username = this._httpContextAccessor.HttpContext?.User?.Identity?.Name ?? string.Empty;
-            await base.OnInitializedAsync();
+           // AgentWorkflowBuilder.
+           AppAssistantAgent  =  AppAssitantWorkFlowProviderInstance?.Create()?.AsAIAgent(name:"Application assistant", description:"routes all user requests to the appropriate specialist", includeWorkflowOutputsInResponse:true);
+        await base.OnInitializedAsync();
             if(UserManager.Users.FirstOrDefault(x => x.UserName == this.Username) is IdentityUser currentUser)
             {
                 this.UserId = currentUser.Id;
@@ -59,6 +60,29 @@ namespace ClientManagement.Presentation.Web.Components.Layout
             
         }
 
+        public async Task OnFilePresentedToAgent(InputFileChangeEventArgs e)
+        {
+            using var fileStream = e.File.OpenReadStream();
+            if(fileStream is not null)
+            {
+                var bytes = new byte[fileStream.Length];
+                var memory = bytes.AsMemory(0, (int)fileStream.Length);
+                await fileStream.ReadExactlyAsync(memory);
+                var contentType = e.File.ContentType;
+                //if (contentType.Equals("image/jpeg", StringComparison.OrdinalIgnoreCase)) 
+                //{
+                //    contentType = "image/jpg";
+                //}
+                var dataUrl = $"data:{contentType};base64,{Convert.ToBase64String(bytes)}";
+                ImagePresentedToAgent = (e.File.ContentType, bytes, dataUrl);
+            }
+            else
+            {
+                //ImagePresentedToAgent = string.Empty;
+            }
+           
+        }
+
         public void OnUserProfileModalItemClicked(UserProfileModalListItem item)
         {
             this.ShowUserProfileModal = false;
@@ -70,6 +94,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
            
             AgentInstructions = string.Empty;
             this.ChatHistory.Clear();
+            ImagePresentedToAgent = default;
             return Task.CompletedTask;
         }
 
@@ -84,35 +109,18 @@ namespace ClientManagement.Presentation.Web.Components.Layout
             AgentIsBusy = true;
             AgentResponse = string.Empty;
             await Task.Yield();
+            IList<AIContent> messageContents = [new TextContent(AgentInstructions)];
             
-            var session = await BookkeeperAgent.CreateSessionAsync();
-            var userMessage = new ChatMessage(ChatRole.User, [new TextContent(AgentInstructions)]);
-            IList<AIContent> chatContext = [.. this.ChatHistory.Select(x => new TextContent(x.Text)), new TextContent(userMessage.Text)];
-            this.ChatHistory.Add(userMessage);
-            var response = BookkeeperAgent.RunStreamingAsync(new ChatMessage(ChatRole.User, chatContext), session);
-            await foreach (var item in response)
+            if (!string.IsNullOrWhiteSpace(ImagePresentedToAgent.contentType))
             {
-
-                var toolApprovalRequestContent = item.Contents
-                    .OfType<ToolApprovalRequestContent>().FirstOrDefault();
-                if (toolApprovalRequestContent is not null)
-                {
-                    var toolResponse = toolApprovalRequestContent.CreateResponse(true);
-                    var wrapped = new ChatMessage(ChatRole.User, [toolResponse]);
-                    await foreach (var approvedItem in BookkeeperAgent.RunStreamingAsync(wrapped, session))
-                    {
-                        AgentResponse += approvedItem.Text;
-                    }
-                }
-                else
-                {
-                    AgentResponse += item.Text;
-                }
-
+                messageContents.Add(new DataContent(ImagePresentedToAgent.dataUrl));
             }
-            this.ChatHistory.Add(new ChatMessage(ChatRole.Assistant, [new TextContent(AgentResponse)]));
+
+            AgentResponse = await AgentBase.HandleUserRequest(AppAssistantAgent,messageContents, BookkeeperAgent.ChatHistory) ?? string.Empty;
+            
             AgentIsBusy = false;
             AgentInstructions = string.Empty;
+            ImagePresentedToAgent = default;
         }
     }
      

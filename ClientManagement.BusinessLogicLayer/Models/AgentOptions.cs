@@ -9,5 +9,6 @@ namespace ClientManagement.BusinessLogicLayer.Models
     {
         public string SkillPath { get; set; } = string.Empty;
         public IEnumerable<AgentMetaData> AiAgentMetaData { get; set; } = [];
+        public string OllamaUrl { get; set; } = string.Empty;
     }
 }

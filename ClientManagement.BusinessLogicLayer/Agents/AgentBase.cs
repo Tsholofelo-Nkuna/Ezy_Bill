@@ -2,6 +2,7 @@
 using ClientManagement.BusinessLogicLayer.Helpers;
 using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
@@ -16,60 +17,55 @@ namespace ClientManagement.BusinessLogicLayer.Agents
     {
         public List<ChatMessage> ChatHistory = [];
         protected readonly IOptions<AgentOptions> agentOptions;
-        protected readonly IOptions<OllamaOptions> options;
-        public AgentBase(IOptions<AgentOptions> agentOptions, IOptions<OllamaOptions> options) : base(options)
+        
+        public AgentBase(IOptions<AgentOptions> agentOptions) : base(agentOptions)
         {
             this.agentOptions = agentOptions;
-            this.options = options;
         }
         public AgentSkillsProvider BaseSkill => new AgentSkillsProvider(Path.Combine(AppContext.BaseDirectory, agentOptions.Value.SkillPath));
 
         public ChatClientAgent? AgentInstance
         { 
-            get ; 
-            set => field ??= Instance(Name);
-            
+            get
+            {
+                field ??= Instance(Name);
+                return field;
+            }
         }
         public string Name { get ; set ; } = string.Empty;
 
-        public virtual ChatClientAgent Instance(string agentName)
+        public virtual ChatClientAgent? Instance(string agentName)
         {
-           var agentMetaData = this.agentOptions.Value.AiAgentMetaData.FirstOrDefault(x => x.Type == AgentType.Master);
-           var wokerAgents = this.agentOptions.Value.AiAgentMetaData
-                .Where(x => x.Type == AgentType.Worker)
-                .Select(aMetaData =>
-                {
-                    var options = new ChatClientAgentOptions()
-                    {
-                        AIContextProviders = [BaseSkill],
-                        ChatOptions = new()
-                        {
-                            Instructions = aMetaData.Instructions
-                        },
-                        Name = aMetaData.Name
-                    };
-                    return new ChatClientAgent(new OllamaApiClient(this.options.Value.Url, aMetaData.Model));
-                });
-            var agentOptions = new ChatClientAgentOptions()
-            {
-                AIContextProviders = [BaseSkill],
-                ChatOptions = new()
-                {
-                    Instructions = agentMetaData?.Instructions,
-                    Tools = [..wokerAgents.Select(x => x.AsAIFunction())]
-                },
-            };
-            return this.AsAIAgent(agentOptions);
+          
+            var agent = this.agentOptions.Value.AiAgentMetaData
+                 .Where(x => x.Name.Equals(agentName, StringComparison.OrdinalIgnoreCase))
+                 .Select(aMetaData =>
+                 {
+                     var options = new ChatClientAgentOptions()
+                     {
+                         //AIContextProviders = [BaseSkill],
+                         ChatOptions = new()
+                         {
+                             Instructions = aMetaData.Instructions
+                         },
+                         Name = aMetaData.Name,
+                         Description = aMetaData.Description,
+
+                     };
+                     return new ChatClientAgent(new OllamaApiClient(this.agentOptions.Value.OllamaUrl, aMetaData.Model), options);
+                 }).FirstOrDefault();
+           
+            return agent;
         }
-        public async Task<string> HandleUserRequest(string agentName, IList<AIContent> messageContents)
+        public static async Task<string> HandleUserRequest(AIAgent? agent,IList<AIContent> messageContents, IList<ChatMessage> ChatHistory)
         {
-            var agent = Instance(agentName);
+            //var agent = AgentInstance;
             await Task.Yield();
 
             var session = await agent.CreateSessionAsync();
             var userMessage = new ChatMessage(ChatRole.User, messageContents);
-            IList<AIContent> chatContext = [.. this.ChatHistory.Select(x => new TextContent(x.Text)), new TextContent(userMessage.Text)];
-            this.ChatHistory.Add(userMessage);
+            IList<AIContent> chatContext = [..ChatHistory.SelectMany(x => x.Contents), ..messageContents];
+            ChatHistory.Add(userMessage);
             var response = agent.RunStreamingAsync(new ChatMessage(ChatRole.User, chatContext), session);
             var agentResponse = string.Empty;
             await foreach (var item in response)
@@ -90,10 +86,15 @@ namespace ClientManagement.BusinessLogicLayer.Agents
                 {
                     agentResponse += item.Text;
                 }
-
+                await Task.Yield();
             }
-            this.ChatHistory.Add(new ChatMessage(ChatRole.Assistant, [new TextContent(agentResponse)]));
+            ChatHistory.Add(new ChatMessage(ChatRole.Assistant, [new TextContent(agentResponse)]));
             return agentResponse;
+        }
+
+        public ValueTask<AgentSession> CreateSessionAsync()
+        {
+            return AgentInstance!.CreateSessionAsync();
         }
     }
 }

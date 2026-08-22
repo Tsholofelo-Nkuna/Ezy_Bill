@@ -1,4 +1,5 @@
 ﻿@using Core.Presentation.ViewComponents.Components.Templates
+@using Microsoft.Extensions.AI
 @inherits LayoutComponentBase
 
 <div class="page">
@@ -33,22 +34,39 @@
                             @bind-Show="AssistantLaunced"
                             Width="512px">
                 <Body>
-                    @if (ChatHistory.Any())
+                    @if (BookkeeperAgent?.ChatHistory?.Any()??false)
                     {
                         <div id="chatPanel" class="border border-1 border-primary my-2 p-3" style="border-radius:8px;height:auto;overflow-y:auto;max-height:256px;">
-                            @foreach (var message in ChatHistory)
+                            @foreach (var message in BookkeeperAgent.ChatHistory)
                             {
                                 <div class="my-2">
                                     <span>@(message.Role == Microsoft.Extensions.AI.ChatRole.User ? "You:" : "Assistant:")</span>
                                     <div class="rounded-2 p-3 border border-2 @(message.Role == Microsoft.Extensions.AI.ChatRole.Assistant ? "border-primary" : "border-primary-subtle")">
-                                        @message.Text
+                                       @foreach(var x in message.Contents.OfType<TextContent>()){
+                                           if(x is TextContent textData)
+                                            {
+                                                <span>@textData</span>
+                                            }
+                                        }
                                     </div>
                                 </div>
                             }
-
                         </div>
                     }
-                    <div style="display:grid; grid-template-columns: 1fr auto;">
+                    @foreach(var chatMessage in BookkeeperAgent?.ChatHistory ?? [])
+                    {
+                        @foreach(var imageItem in chatMessage.Contents.OfType<DataContent>())
+                        {
+                            <div style="background-image:url('@imageItem.Uri'); background-size:cover;width:64px; height:64px;" class="d-inline-block rounded-circle border border-2 border-primary-subtle m-2"></div>
+
+                        }
+                       
+                    }
+                    @if (!string.IsNullOrWhiteSpace(ImagePresentedToAgent.dataUrl))
+                    {
+                       <div style="background-image:url('@ImagePresentedToAgent.dataUrl'); background-size:cover;width:128px; height:128px;" class="rounded-2 border border-2 border-primary-subtle m-2"></div>
+                    }
+                    <div style="display:grid; grid-template-columns: 1fr auto;" class="mb-2">
                         <input class="form-control mx-2" @bind-value="AgentInstructions" placeholder="Enter instructions" />
                         <ButtonTemplate 
                             CssClass="btn btn-outline-primary"
@@ -59,6 +77,9 @@
                             </Icon>
                         </ButtonTemplate>
                     </div> 
+                    <div class="container">
+                       <InputFile OnChange="OnFilePresentedToAgent" class="form-control"></InputFile>
+                    </div>
                 </Body>
                 <Footer>
                     <div class="container">

@@ -8,6 +8,7 @@ using OllamaSharp;
 using ClientManagement.BusinessLogicLayer.Helpers;
 using Microsoft.Extensions.Configuration;
 using ClientManagement.BusinessLogicLayer.Agents;
+using ClientManagement.BusinessLogicLayer.Agents.Workflows;
 
 
 
@@ -16,10 +17,7 @@ namespace ClientManagement.BusinessLogicLayer
     public static class ServiceCollectionExtensions
     {
        public static IServiceCollection AddBusinessServices(this IServiceCollection services, IConfiguration config) {
-            services.Configure<OllamaOptions>(options =>
-            {
-                config.Bind("OllamaOptions", options);
-            });
+           
             services.Configure<AgentOptions>(options =>
             {
                 config.Bind("AI", options);
@@ -35,7 +33,9 @@ namespace ClientManagement.BusinessLogicLayer
                 .AddScoped<IUserProfileService, UserProfileService>()
                 .AddScoped<IAppStateManager<ApplicationState>, AppStateManager<ApplicationState>>()
                 .AddScoped<AssistantChatApiClient>()
-                .AddScoped<BookkeepingAgent>();
+                .AddScoped<BookkeepingAgent>()
+                .AddScoped<ImageAnalystAgent>()
+                .AddScoped<AppAssistantWorkflowProvider>();
            
             return services;
         }
