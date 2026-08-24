@@ -31,6 +31,7 @@ namespace ClientManagement.BusinessLogicLayer
                 .AddScoped<IInvoicePaymentService, InvoicePaymentService>()
                 .AddScoped<IProfileService, ProfileService>()
                 .AddScoped<IUserProfileService, UserProfileService>()
+                .AddScoped<IAppFileService, AppFileService>()
                 .AddScoped<IAppStateManager<ApplicationState>, AppStateManager<ApplicationState>>()
                 .AddScoped<AssistantChatApiClient>()
                 .AddScoped<BookkeepingAgent>()

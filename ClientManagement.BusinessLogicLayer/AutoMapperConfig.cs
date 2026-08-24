@@ -28,6 +28,8 @@ namespace ClientManagement.BusinessLogicLayer
                 .ReverseMap();
             this.CreateMap<UserProfileDto, UserProfileEntity>()
                 .ReverseMap();
+            this.CreateMap<AppFileDto, AppFileEntity>()
+                .ReverseMap();
             this.CreateMap<IdentityUser, UserDto>()
                 .ReverseMap();
         }
