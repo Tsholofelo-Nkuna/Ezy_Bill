@@ -36,7 +36,7 @@ namespace ClientManagement.BusinessLogicLayer.Agents
 
         public virtual ChatClientAgent? Instance(string agentName)
         {
-          
+             
             var agent = this.agentOptions.Value.AiAgentMetaData
                  .Where(x => x.Name.Equals(agentName, StringComparison.OrdinalIgnoreCase))
                  .Select(aMetaData =>

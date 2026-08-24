@@ -17,6 +17,7 @@
             <a href="/Clients" class="nav-link mx-3"><i class="bi bi-people me-1"></i>Clients</a>
             <a href="/Products" class="nav-link mx-3"><i class="bi bi-cart4 me-1"></i>Products/Services</a>
             <a href="/Invoices" class="nav-link mx-3"><i class="bi bi-receipt-cutoff me-1"></i>Invoices</a>
+            <a href="/Knowledge-base" class="nav-link mx-3"><i class="bi bi-database me-1"></i>Knowledge base</a>
         </nav>
        
     </div>
@@ -78,7 +79,7 @@
                         </ButtonTemplate>
                     </div> 
                     <div class="container">
-                       <InputFile OnChange="OnFilePresentedToAgent" class="form-control"></InputFile>
+                       <InputFile @key="KeyForImagePresentedToAgent" OnChange="OnFilePresentedToAgent" class="form-control"></InputFile>
                     </div>
                 </Body>
                 <Footer>

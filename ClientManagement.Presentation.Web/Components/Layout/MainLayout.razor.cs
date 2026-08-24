@@ -29,23 +29,21 @@ namespace ClientManagement.Presentation.Web.Components.Layout
         public string AgentResponse { get; set; } = string.Empty;
         [Inject]
         public BookkeepingAgent? BookkeeperAgent { get; set; }
-
         [Inject] AppAssistantWorkflowProvider? AppAssitantWorkFlowProviderInstance { get; set; }
-
         public AIAgent? AppAssistantAgent { get; set; }
-
         public List<ChatMessage> ChatHistory 
         {
             get;
             set;
         } = [];
         public Guid AgentConversationId { get; set; }
+        public Guid KeyForImagePresentedToAgent = Guid.NewGuid();
         protected override async Task OnInitializedAsync()
         {
             //this.Username = this._httpContextAccessor.HttpContext?.User?.Identity?.Name ?? string.Empty;
            // AgentWorkflowBuilder.
-           AppAssistantAgent  =  AppAssitantWorkFlowProviderInstance?.Create()?.AsAIAgent(name:"Application assistant", description:"routes all user requests to the appropriate specialist", includeWorkflowOutputsInResponse:true);
-        await base.OnInitializedAsync();
+            AppAssistantAgent  =  AppAssitantWorkFlowProviderInstance?.Create()?.AsAIAgent(name:"Application assistant", description:"routes all user requests to the appropriate specialist");
+            await base.OnInitializedAsync();
             if(UserManager.Users.FirstOrDefault(x => x.UserName == this.Username) is IdentityUser currentUser)
             {
                 this.UserId = currentUser.Id;
@@ -121,6 +119,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
             AgentIsBusy = false;
             AgentInstructions = string.Empty;
             ImagePresentedToAgent = default;
+            KeyForImagePresentedToAgent = Guid.NewGuid();
         }
     }
      

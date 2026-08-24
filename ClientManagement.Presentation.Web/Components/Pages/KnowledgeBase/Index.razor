@@ -1,0 +1,70 @@
+@page "/Knowledge-base"
+@using Microsoft.AspNetCore.Authorization
+@namespace ClientManagement.Presentation.Web.Components.Pages.Files
+@attribute [Authorize]
+
+<PageComponent>
+      <Body>
+        <FileUploadComponent Label="Upload Your Files"
+                             AcceptedFileTypes=".pdf,.doc,.docx,.xlsx,.xls,.jpg,.jpeg,.png"
+                             MaxFileSize="10485760"
+                             AllowMultiple="true"
+                             OnMultipleFilesSelected="HandleFilesSelected"
+                             UploadedFiles="UploadedFiles"
+                             CssClass="mt-4" />
+        @if (UploadedFiles.Any())
+        {
+            <div class="mt-5">
+                <h5>Uploaded Files Summary:</h5>
+                <div class="alert alert-info">
+                    <p>Total files uploaded: <strong>@UploadedFiles.Count</strong></p>
+                    <p>Total size: <strong>@FormatTotalSize()</strong></p>
+                </div>
+            </div>
+        }
+      </Body>
+</PageComponent>
+
+@code {
+   
+
+    // private async Task HandleFilesSelected(List<IBrowserFile> files)
+    // {
+    //     try
+    //     {
+    //         UploadedFiles.Clear();
+
+    //         foreach (var file in files)
+    //         {
+    //             UploadedFiles.Add((file.Name, file.Size));
+
+    //             // Example: You can process file here
+    //             // var fileStream = file.OpenReadStream(maxAllowedSize: 10485760);
+    //             // await ProcessFileAsync(fileStream, file.Name);
+    //         }
+
+    //         await InvokeAsync(StateHasChanged);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         // Handle error
+    //         Console.WriteLine($"Error handling files: {ex.Message}");
+    //     }
+    // }
+
+    // private string FormatTotalSize()
+    // {
+    //     long totalBytes = UploadedFiles.Sum(f => f.Size);
+    //     string[] sizes = { "B", "KB", "MB", "GB" };
+    //     double len = totalBytes;
+    //     int order = 0;
+
+    //     while (len >= 1024 && order < sizes.Length - 1)
+    //     {
+    //         order++;
+    //         len = len / 1024;
+    //     }
+
+    //     return $"{len:0.##} {sizes[order]}";
+    // }
+}

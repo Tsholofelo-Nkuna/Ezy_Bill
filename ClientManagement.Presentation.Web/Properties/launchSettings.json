@@ -41,7 +41,7 @@
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "8081",
         "ASPNETCORE_HTTP_PORTS": "8080",
-        "ApiBaseUrl": "https://localhost:32771/"
+        "ApiBaseUrl": "https://localhost:32773/"
       },
       "publishAllPorts": true,
       "useSSL": true

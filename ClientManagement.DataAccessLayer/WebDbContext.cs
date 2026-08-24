@@ -16,5 +16,6 @@ namespace ClientManagement.DataAccessLayer
         public virtual DbSet<InvoicePaymentEntity> InvoicesPayments { get; set; }
         public virtual DbSet<ProfileEntity> Profiles { get; set; }
         public virtual DbSet<UserProfileEntity> UserProfiles { get; set; }
+        public virtual DbSet<AppFileEntity> AppFiles { get; set; }
     }
 }
