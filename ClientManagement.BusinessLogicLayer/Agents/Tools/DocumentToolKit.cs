@@ -1,10 +1,11 @@
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.Agents.AI;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Text.RegularExpressions;
 using UglyToad.PdfPig;
+using UglyToad.PdfPig.Content;
 
 namespace ClientManagement.BusinessLogicLayer.Agents.Tools;
 
@@ -56,6 +57,20 @@ public static class DocumentToolKit
                 yield return chunk;
                 await Task.Yield();
             }
+        }
+    }
+
+    public static IEnumerable<(IEnumerable<IPdfImage> images, string contexts)> ExtractPdfImage(byte[] pdfContents)
+    {
+        using var document = PdfDocument.Open(pdfContents);
+        foreach (var page in document.GetPages())
+        {
+            var pageImages = page.GetImages();
+            if (!pageImages.Any())
+            {
+                continue;
+            }
+            yield return (pageImages, page.Text);
         }
     }
 

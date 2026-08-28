@@ -1,4 +1,5 @@
 ﻿using ClientManagement.BusinessLogicLayer.Agents.Workflows.Interfaces;
+using Microsoft.Agents.AI;
 using Microsoft.Agents.AI.Workflows;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,7 @@ namespace ClientManagement.BusinessLogicLayer.Agents.Workflows
                 .WithHandoff(imageAnalystAgent.AgentInstance, bookkeepingAgent.AgentInstance)
                 .Build();
         }
+
+ 
     }
 }

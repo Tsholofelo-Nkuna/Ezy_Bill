@@ -112,7 +112,7 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
         {
             var query = this.GetQueryable(pageRequest.Filters);
             var totalRecords = query.Count();
-            var items = pageRequest.GetAllPages ? await query.Skip(pageRequest.PageIndex*pageRequest.PageSize).Take(pageRequest.PageSize).ToListAsync() : await query.ToListAsync();
+            var items = !pageRequest.GetAllPages ? await query.Skip(pageRequest.PageIndex*pageRequest.PageSize).Take(pageRequest.PageSize).ToListAsync() : await query.ToListAsync();
             return (_mapper.Map<List<TDto>>(items), totalRecords);
         }
 

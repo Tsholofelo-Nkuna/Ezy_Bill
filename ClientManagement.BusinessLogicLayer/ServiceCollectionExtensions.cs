@@ -9,6 +9,7 @@ using ClientManagement.BusinessLogicLayer.Helpers;
 using Microsoft.Extensions.Configuration;
 using ClientManagement.BusinessLogicLayer.Agents;
 using ClientManagement.BusinessLogicLayer.Agents.Workflows;
+using ClientManagement.BusinessLogicLayer.Agents.Tools;
 
 
 
@@ -36,7 +37,8 @@ namespace ClientManagement.BusinessLogicLayer
                 .AddScoped<AssistantChatApiClient>()
                 .AddScoped<BookkeepingAgent>()
                 .AddScoped<ImageAnalystAgent>()
-                .AddScoped<AppAssistantWorkflowProvider>();
+                .AddScoped<AppAssistantWorkflowProvider>()
+                .AddScoped<RagToolKit>();
            
             return services;
         }

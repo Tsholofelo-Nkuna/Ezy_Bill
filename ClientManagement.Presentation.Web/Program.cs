@@ -53,7 +53,8 @@ namespace ClientManagement.Presentation.Web
 
             builder.Services.AddHttpClient("AppApi",config =>
             {
-                config.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]); 
+                config.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]);
+                config.Timeout = TimeSpan.FromMinutes(3);
             });
           
 

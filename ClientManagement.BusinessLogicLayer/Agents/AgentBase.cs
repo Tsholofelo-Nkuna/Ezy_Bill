@@ -1,4 +1,5 @@
 ﻿using ClientManagement.BusinessLogicLayer.Agents.Interfaces;
+using ClientManagement.BusinessLogicLayer.Agents.Tools;
 using ClientManagement.BusinessLogicLayer.Helpers;
 using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
@@ -17,10 +18,12 @@ namespace ClientManagement.BusinessLogicLayer.Agents
     {
         public List<ChatMessage> ChatHistory = [];
         protected readonly IOptions<AgentOptions> agentOptions;
-        
-        public AgentBase(IOptions<AgentOptions> agentOptions) : base(agentOptions)
+        protected readonly RagToolKit ragToolKit;
+
+        public AgentBase(IOptions<AgentOptions> agentOptions, RagToolKit ragToolKit) : base(agentOptions)
         {
             this.agentOptions = agentOptions;
+            this.ragToolKit = ragToolKit;
         }
         public AgentSkillsProvider BaseSkill => new AgentSkillsProvider(Path.Combine(AppContext.BaseDirectory, agentOptions.Value.SkillPath));
 
@@ -43,14 +46,16 @@ namespace ClientManagement.BusinessLogicLayer.Agents
                  {
                      var options = new ChatClientAgentOptions()
                      {
-                         //AIContextProviders = [BaseSkill],
+                        // AIContextProviders = [BaseSkill],
                          ChatOptions = new()
                          {
-                             Instructions = aMetaData.Instructions
+                             Instructions = $"{aMetaData.Instructions}. If you are unsure or need more details, never respond with out first using the `AddInsightToPrompt` tool to gain more insight regarding a particular subject matter that the user is enquiring about. Whenever the `AddInsightToPrompt` tool returns insufficient context, ask the user for specifics. \r\n",
+                             Tools = [AIFunctionFactory.Create(this.ragToolKit.AddInsightToPrompt)]
                          },
                          Name = aMetaData.Name,
                          Description = aMetaData.Description,
-
+                        
+                         
                      };
                      return new ChatClientAgent(new OllamaApiClient(this.agentOptions.Value.OllamaUrl, aMetaData.Model), options);
                  }).FirstOrDefault();

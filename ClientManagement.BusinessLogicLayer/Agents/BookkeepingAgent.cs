@@ -1,4 +1,5 @@
 ﻿using ClientManagement.BusinessLogicLayer.Agents.Interfaces;
+using ClientManagement.BusinessLogicLayer.Agents.Tools;
 using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
 using Microsoft.Agents.AI;
@@ -14,7 +15,7 @@ namespace ClientManagement.BusinessLogicLayer.Agents
 {
     public class BookkeepingAgent : AgentBase
     {
-        public BookkeepingAgent(IOptions<AgentOptions> agentOptions) : base(agentOptions)
+        public BookkeepingAgent(IOptions<AgentOptions> agentOptions, RagToolKit ragToolKit) : base(agentOptions, ragToolKit)
         {
             Name = "Jimmy";
         }
