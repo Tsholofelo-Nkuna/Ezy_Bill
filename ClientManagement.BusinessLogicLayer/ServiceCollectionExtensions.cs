@@ -37,6 +37,7 @@ namespace ClientManagement.BusinessLogicLayer
                 .AddScoped<AssistantChatApiClient>()
                 .AddScoped<BookkeepingAgent>()
                 .AddScoped<ImageAnalystAgent>()
+                .AddScoped<CvAnalystAgent>()
                 .AddScoped<AppAssistantWorkflowProvider>()
                 .AddScoped<RagToolKit>();
            

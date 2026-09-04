@@ -6,7 +6,7 @@ namespace ClientManagement.BusinessLogicLayer.Interfaces
 {
     public interface IAppFileService : IGenericService<AppFileDto, AppFileEntity>
     {
-        public Task<IEnumerable<string>> SearchAsync(string text);
+        public Task<IEnumerable<string>> SearchAsync(string vectorStoreCollectionName, string text);
         public Task<bool> UpSert(string vectorStoreCollectionName, List<AppFileDto> payload);
         public IEnumerable<(string name, string displayName)> GetVectoreStoreNames();
     }

@@ -1,6 +1,6 @@
 ---
-name: "south-african-citizen"
-description: "Frame all advice and answers as those of a South African citizen"
+name: "knowledge-aquisition"
+description: "Aquire more info regarding a particular subject matter; Always use this skill before responding to a user's request or whenever a handoff from one agent to another occurs."
 status: applied
 version: "v1"
 date: "2026-08-16T09:23:46.994Z"

@@ -8,11 +8,11 @@ using System.Text;
 
 namespace ClientManagement.BusinessLogicLayer.Agents
 {
-    public class ImageAnalystAgent : AgentBase
+    public class CvAnalystAgent : AgentBase
     {
-        public ImageAnalystAgent(IOptions<AgentOptions> agentOptions, RagToolKit ragToolKit, AssistantChatApiClient chatClient) : base(agentOptions, ragToolKit, chatClient)
+        public CvAnalystAgent(IOptions<AgentOptions> agentOptions, RagToolKit ragToolKit, AssistantChatApiClient chatClient) : base(agentOptions, ragToolKit, chatClient)
         {
-            Name = "Paul";
+            Name = "Linda";
         }
     }
 }

@@ -37,6 +37,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
             get;
             set;
         } = [];
+        //public AgentSession ASession { get; set; }
         public Guid AgentConversationId { get; set; }
         public Guid KeyForImagePresentedToAgent = Guid.NewGuid();
         protected override async Task OnInitializedAsync()
@@ -56,7 +57,6 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                      IconClass = "bi bi-person-lines-fill me-1" 
                  },
             ];
-            
         }
 
         public async Task OnFilePresentedToAgent(InputFileChangeEventArgs e)
@@ -92,16 +92,17 @@ namespace ClientManagement.Presentation.Web.Components.Layout
         {
            
             AgentInstructions = string.Empty;
-            this.ChatHistory.Clear();
+            BookkeeperAgent?.ChatHistory?.Clear();
             ImagePresentedToAgent = default;
             return Task.CompletedTask;
         }
 
-        public Task OnAgentIconClicked()
+        public async Task OnAgentIconClicked()
         {
             AssistantLaunced = true;
             AgentConversationId = Guid.NewGuid();
-            return Task.CompletedTask;
+            //ASession = await AppAssistantAgent.CreateSessionAsync();
+           // return Task.CompletedTask;
         }
         public async Task OnSendAgentInstructions()
         {
@@ -114,7 +115,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
             {
                 messageContents.Add(new DataContent(ImagePresentedToAgent.dataUrl));
             }
-
+            
             AgentResponse = await AgentBase.HandleUserRequest(AppAssistantAgent,messageContents, BookkeeperAgent.ChatHistory) ?? string.Empty;
             
             AgentIsBusy = false;

@@ -4,6 +4,7 @@ using ClientManagement.BusinessLogicLayer.Helpers;
 using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
 using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
@@ -19,15 +20,15 @@ namespace ClientManagement.BusinessLogicLayer.Agents
         public List<ChatMessage> ChatHistory = [];
         protected readonly IOptions<AgentOptions> agentOptions;
         protected readonly RagToolKit ragToolKit;
-
-        public AgentBase(IOptions<AgentOptions> agentOptions, RagToolKit ragToolKit) : base(agentOptions)
+        protected readonly AssistantChatApiClient chatClient;
+        public AgentBase(IOptions<AgentOptions> agentOptions, RagToolKit ragToolKit, AssistantChatApiClient chatClient) : base(agentOptions)
         {
             this.agentOptions = agentOptions;
             this.ragToolKit = ragToolKit;
+            this.chatClient = chatClient;
         }
         public AgentSkillsProvider BaseSkill => new AgentSkillsProvider(Path.Combine(AppContext.BaseDirectory, agentOptions.Value.SkillPath));
-
-        public ChatClientAgent? AgentInstance
+        public AIAgent? AgentInstance
         { 
             get
             {
@@ -37,7 +38,7 @@ namespace ClientManagement.BusinessLogicLayer.Agents
         }
         public string Name { get ; set ; } = string.Empty;
 
-        public virtual ChatClientAgent? Instance(string agentName)
+        public virtual AIAgent? Instance(string agentName)
         {
              
             var agent = this.agentOptions.Value.AiAgentMetaData
@@ -49,29 +50,43 @@ namespace ClientManagement.BusinessLogicLayer.Agents
                         // AIContextProviders = [BaseSkill],
                          ChatOptions = new()
                          {
-                             Instructions = $"{aMetaData.Instructions}. If you are unsure or need more details, never respond with out first using the `AddInsightToPrompt` tool to gain more insight regarding a particular subject matter that the user is enquiring about. Whenever the `AddInsightToPrompt` tool returns insufficient context, ask the user for specifics. \r\n",
-                             Tools = [AIFunctionFactory.Create(this.ragToolKit.AddInsightToPrompt)]
+                             Instructions = $"Your name is {agentName}. {aMetaData.Instructions}. Always refer to yourself by your name in the case you have to. All your responses should be in plain text. Never mention your internal tools. Always use the `AddInsightToPrompt` tool to add more context to the user's reque, never respond without consulting/making use of the `AddInsightToPrompt` tool. Always be kind, helpful and use a professional tone.",
+                             Tools = [AIFunctionFactory.Create(this.ragToolKit.AddInsightToPrompt)],
+                             ModelId = aMetaData.Model
                          },
                          Name = aMetaData.Name,
                          Description = aMetaData.Description,
-                        
                          
                      };
-                     return new ChatClientAgent(new OllamaApiClient(this.agentOptions.Value.OllamaUrl, aMetaData.Model), options);
+                     return chatClient.AsAIAgent(options: options);// new ChatClientAgent(chatClient, options);
                  }).FirstOrDefault();
-           
+            
             return agent;
         }
-        public static async Task<string> HandleUserRequest(AIAgent? agent,IList<AIContent> messageContents, IList<ChatMessage> ChatHistory)
+
+       public async Task InspectInputMiddleware(IEnumerable<ChatMessage> messages, AgentSession? session, AgentRunOptions?options, Func<IEnumerable<ChatMessage>, AgentSession?, AgentRunOptions?, CancellationToken, Task> callback, CancellationToken cancellationToken)
+    {
+        // Example: Log incoming traffic or modify a shared state metric counter
+        Console.WriteLine($"Inspecting payload. Total user prompts: {messages.Count()}");
+            var userPrompt = messages.LastOrDefault();
+            var augmentedTextPrompt = await ragToolKit.AddInsightToPrompt(userPrompt?.Text, Name);
+            await callback(messages.Append(new ChatMessage(ChatRole.System, augmentedTextPrompt)), session, options, cancellationToken);
+         
+       
+    }
+        public static async Task<string> HandleUserRequest(AIAgent? agent,IList<AIContent> messageContents, IList<ChatMessage> ChatHistory, AgentSession? session = null )
         {
             //var agent = AgentInstance;
             await Task.Yield();
-
-            var session = await agent.CreateSessionAsync();
+            if(session is null)
+            {
+                session = await agent.CreateSessionAsync();
+            }
+           
             var userMessage = new ChatMessage(ChatRole.User, messageContents);
             IList<AIContent> chatContext = [..ChatHistory.SelectMany(x => x.Contents), ..messageContents];
             ChatHistory.Add(userMessage);
-            var response = agent.RunStreamingAsync(new ChatMessage(ChatRole.User, chatContext), session);
+            var response = agent.RunStreamingAsync(new ChatMessage(ChatRole.User, chatContext) { }, session);
             var agentResponse = string.Empty;
             await foreach (var item in response)
             {

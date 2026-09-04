@@ -6,11 +6,11 @@ using System.Text;
 
 namespace ClientManagement.BusinessLogicLayer.Agents.Interfaces
 {
-    public interface IAgentBase
+    public interface IAgentBase 
     {
-        ChatClientAgent? AgentInstance { get; }
+        AIAgent? AgentInstance { get; }
         string Name { get; set; }
-        ChatClientAgent? Instance(string agentName);
+        AIAgent? Instance(string agentName);
         ValueTask<AgentSession> CreateSessionAsync();
 
     }

@@ -6,19 +6,21 @@
 
 <PageComponent>
       <Body>
+        <InputSelect TValue="string" class="form-select mb-2" @bind-Value="this.SelectedVectoreStoreName">
+            <option>Please select</option>
+            @foreach (var item in this.VectoreStoreNames)
+            {
+                <option value="@item.name">@item.displayName</option>
+            }
+        </InputSelect>
         <FileUploadComponent Label="Upload Your Files"
                              AcceptedFileTypes=".pdf,.doc,.docx,.xlsx,.xls,.jpg,.jpeg,.png"
                              MaxFileSize="10485760"
                              AllowMultiple="true"
                              OnMultipleFilesSelected="HandleFilesSelected"
+                             UploadedFiles = "UploadedFiles"
                              CssClass="mt-4" />
-       <InputSelect TValue="string" class="form-select mt-2" @bind-Value="this.SelectedVectoreStoreName"> 
-            <option>Please select</option>
-            @foreach(var item in this.VectoreStoreNames)
-            {
-                <option value="@item.name">@item.displayName</option>
-            }
-        </InputSelect>
+     
        <div class="container my-2">
             <ButtonTemplate 
                 OnClick="OnSubmitFiles"

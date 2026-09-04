@@ -22,7 +22,16 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpPost("{vectorStoreName}")]
         public async Task<bool> Post([FromBody] List<AppFileDto> value, string vectorStoreName)
         {
-            return await this._appFileService.UpSert(vectorStoreName, value);
+            var serviceReponse = await this._appFileService.AddOrUpdate(value);
+            if (serviceReponse)
+            {
+                return await this._appFileService.UpSert(vectorStoreName, value);
+            }
+            else
+            {
+                return false;
+            }
+           
         }
 
         [HttpPost("[action]")]

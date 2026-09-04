@@ -34,7 +34,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
 
         public IEnumerable<(string name, string displayName)> GetVectoreStoreNames() => this.agentOptions.Value.AiAgentMetaData.Where(x => x is { VecStoreMetaData: VectoreStoreMetaData }).Select(x => (x.VecStoreMetaData!.Name, x.VecStoreMetaData!.DisplayName));
 
-        public async Task<IEnumerable<string>> SearchAsync(string text)
+        public async Task<IEnumerable<string>> SearchAsync(string vectorStoreCollectionName, string text)
         {
             var input = (await this.embeddingGenerator.GenerateVectorAsync(text)).ToArray();
             var search = new SearchPoints() { 
@@ -43,7 +43,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
                 Vector = { input.ToArray() },
                 
             };
-            var response = await this.qdrantClient.QueryAsync(this.agentOptions.Value.VectorStoreCollectionName, query: input, payloadSelector: true, limit:5);
+            var response = await this.qdrantClient.QueryAsync(vectorStoreCollectionName, query: input, payloadSelector: true, limit:5);
             
             return response.Select(x =>
             {
