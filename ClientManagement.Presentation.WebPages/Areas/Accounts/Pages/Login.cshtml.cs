@@ -1,5 +1,5 @@
-using Core.Presentation.Models;
-using Core.Presentation.Models.DataTransferObjects.login;
+using ClientManagement.Models;
+using ClientManagement.Models.DataTransferObjects.login;
 using Core.Utils;
 using Core.Utils.Constants;
 using Microsoft.AspNetCore.Authentication;

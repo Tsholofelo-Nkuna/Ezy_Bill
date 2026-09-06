@@ -1,4 +1,4 @@
-﻿using Core.Presentation.Models.DataTransferObjects.Base;
+﻿using ClientManagement.Models.DataTransferObjects.Base;
 using Core.Presentation.ViewComponents.Interfaces.Base;
 using System;
 using System.Collections.Generic;

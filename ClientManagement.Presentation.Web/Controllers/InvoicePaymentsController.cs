@@ -1,7 +1,7 @@
 ﻿using ClientManagement.BusinessLogicLayer.Interfaces;
 
 using ClientManagement.Presentation.Web.Controllers.Base;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

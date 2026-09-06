@@ -1,12 +1,12 @@
-﻿using Core.Presentation.Models.Base;
-using Core.Presentation.Models.DataTransferObjects.Base;
+﻿using ClientManagement.Models.Base;
+using ClientManagement.Models.DataTransferObjects.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Presentation.Models
+namespace ClientManagement.Models
 {
     public class HomeViewModel : GenericListViewModel<BaseDto>
     {

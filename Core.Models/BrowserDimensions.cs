@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Presentation.Models
+namespace ClientManagement.Models
 {
     public class BrowserDimensions
     {

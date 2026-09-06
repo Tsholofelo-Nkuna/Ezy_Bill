@@ -1,7 +1,7 @@
 ﻿using ClientManagement.Ai.Agents.Interfaces;
 using ClientManagement.Ai.Agents.Tools;
 using ClientManagement.Ai.Helpers;
-using ClientManagement.Ai.Models;
+using ClientManagement.Models.AI;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.Agents.AI;
@@ -17,9 +17,9 @@ namespace ClientManagement.Ai.Agents
         protected readonly IOptions<AgentOptions> agentOptions;
         protected readonly RagToolKit ragToolKit;
         protected readonly AssistantChatApiClient chatClient;
-        private readonly AppStdIoTransportClient stdIoTransportClient;
+        private readonly AppHttpTransportClient stdIoTransportClient;
 
-        public AgentBase(IOptions<AgentOptions> agentOptions, RagToolKit ragToolKit, AssistantChatApiClient chatClient, AppStdIoTransportClient stdIoTransportClient) : base(agentOptions)
+        public AgentBase(IOptions<AgentOptions> agentOptions, RagToolKit ragToolKit, AssistantChatApiClient chatClient, AppHttpTransportClient stdIoTransportClient) : base(agentOptions)
         {
             this.agentOptions = agentOptions;
             this.ragToolKit = ragToolKit;

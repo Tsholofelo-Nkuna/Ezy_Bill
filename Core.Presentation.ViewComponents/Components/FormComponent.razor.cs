@@ -1,6 +1,6 @@
-﻿using Core.Presentation.Models;
-using Core.Presentation.Models.DataTransferObjects.Base;
-using Core.Presentation.Models.Interfaces;
+﻿using ClientManagement.Models;
+using ClientManagement.Models.DataTransferObjects.Base;
+using ClientManagement.Models.Interfaces;
 using Core.Presentation.ViewComponents.Components.Base;
 using Core.Presentation.ViewComponents.Interfaces;
 using Core.Presentation.ViewComponents.Interfaces.Base;

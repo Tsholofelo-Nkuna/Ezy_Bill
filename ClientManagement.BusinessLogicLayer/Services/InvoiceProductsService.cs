@@ -5,7 +5,7 @@ using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Entities;
 
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 using Core.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Question3.BusinessLogicLayer.Interfaces;
-using Core.Presentation.Models.DataTransferObjects;
-using Core.Presentation.Models;
+using ClientManagement.Models.DataTransferObjects;
+using ClientManagement.Models;
 using System.Diagnostics;
 
 

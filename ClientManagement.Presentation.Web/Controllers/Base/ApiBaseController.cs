@@ -1,5 +1,5 @@
 ﻿using ClientManagement.BusinessLogicLayer.Interfaces.Base;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 using Core.Utils;
 using Microsoft.AspNetCore.Mvc;
 

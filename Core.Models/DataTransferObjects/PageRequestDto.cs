@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Presentation.Models.DataTransferObjects
+namespace ClientManagement.Models.DataTransferObjects
 {
     public class PageRequestDto<TFilter> where TFilter : new()
     {

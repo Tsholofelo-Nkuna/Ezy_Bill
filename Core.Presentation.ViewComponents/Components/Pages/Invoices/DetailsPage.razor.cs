@@ -1,11 +1,11 @@
 ﻿
-using Core.Presentation.Models.ViewModels;
-using Core.Presentation.Models;
+using ClientManagement.Models.ViewModels;
+using ClientManagement.Models;
 using Core.Presentation.ViewComponents.Components.Base;
 using Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 using Core.Presentation.ViewComponents.Components;
 using System.Net.Http.Json;
 using Core.Presentation.ViewComponents.Components.Templates;

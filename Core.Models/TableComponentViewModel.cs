@@ -1,9 +1,9 @@
-﻿using Core.Presentation.Models.DataTransferObjects;
-using Core.Presentation.Models.DataTransferObjects.Base;
-using Core.Presentation.Models.Base;
+﻿using ClientManagement.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects.Base;
+using ClientManagement.Models.Base;
 using System.Globalization;
 
-namespace Core.Presentation.Models
+namespace ClientManagement.Models
 {
     public class TableComponentViewModel<TRecordType> : GenericListViewModel<TRecordType>
         where TRecordType : BaseDto, new()

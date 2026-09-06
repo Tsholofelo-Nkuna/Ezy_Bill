@@ -5,7 +5,7 @@ using Core.Utils.Interfaces;
 using Core.Utils.State;
 using ClientManagement.BusinessLogicLayer.Models;
 using Microsoft.Extensions.Configuration;
-using ClientManagement.Ai.Models;
+using ClientManagement.Models.AI;
 using ClientManagement.Ai.Helpers;
 using ClientManagement.Ai.Agents;
 using ClientManagement.Ai.Agents.Workflows;
@@ -32,7 +32,7 @@ namespace ClientManagement.Ai
                 .AddScoped<IInvoicePaymentService, InvoicePaymentService>()
                 .AddScoped<IProfileService, ProfileService>()
                 .AddScoped<IUserProfileService, UserProfileService>()
-                .AddScoped<IVectorStore, AppFileService>()
+                .AddScoped<IVectorStore, AppVectorStoreClient>()
                 .AddScoped<IAppStateManager<ApplicationState>, AppStateManager<ApplicationState>>()
                 .AddScoped<AssistantChatApiClient>()
                 .AddScoped<BookkeepingAgent>()
@@ -40,7 +40,7 @@ namespace ClientManagement.Ai
                 .AddScoped<CvAnalystAgent>()
                 .AddScoped<AppAssistantWorkflowProvider>()
                 .AddScoped<RagToolKit>()
-                .AddScoped<AppStdIoTransportClient>();
+                .AddScoped<AppHttpTransportClient>();
            
             return services;
         }

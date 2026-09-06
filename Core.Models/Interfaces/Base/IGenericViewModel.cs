@@ -1,4 +1,4 @@
-﻿using Core.Presentation.Models.DataTransferObjects.Base;
+﻿using ClientManagement.Models.DataTransferObjects.Base;
 using Core.Presentation.ViewComponents.Interfaces.Base;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Presentation.Models.Interfaces.Base
+namespace ClientManagement.Models.Interfaces.Base
 {
     public interface IGenericViewModel<TState> : IBindToSetterDelegateBase<string, object?, TState> where TState : BaseDto, new()
     {

@@ -1,7 +1,7 @@
 ﻿using ClientManagement.Ai.Interfaces;
 using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.Presentation.Web.Controllers.Base;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;

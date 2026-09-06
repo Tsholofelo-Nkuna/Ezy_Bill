@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ClientManagement.BusinessLogicLayer.Interfaces.Base;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Entities.Base;
-using Core.Presentation.Models.DataTransferObjects.Base;
+using ClientManagement.Models.DataTransferObjects.Base;
 using System.Linq.Expressions;
 
 using Microsoft.AspNetCore.Http;
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Core.Utils.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
 using Core.Utils.Constants;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 
 namespace ClientManagement.BusinessLogicLayer.Services.Base
 {

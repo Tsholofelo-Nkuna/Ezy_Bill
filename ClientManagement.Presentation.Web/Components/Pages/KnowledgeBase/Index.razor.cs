@@ -1,6 +1,6 @@
 using ClientManagement.Presentation.Web.Controllers;
-using Core.Presentation.Models;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models;
+using ClientManagement.Models.DataTransferObjects;
 using Core.Utils.Constants;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;

@@ -1,8 +1,8 @@
-﻿using Core.Presentation.Models.Base;
-using Core.Presentation.Models.DataTransferObjects;
+﻿using ClientManagement.Models.Base;
+using ClientManagement.Models.DataTransferObjects;
 
 
-namespace Core.Presentation.Models.ViewModels
+namespace ClientManagement.Models.ViewModels
 {
     public class UserProfilesViewModel : GenericListViewModel<UserProfileDto>
     {

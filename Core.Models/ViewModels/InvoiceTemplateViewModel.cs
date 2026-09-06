@@ -1,7 +1,7 @@
-﻿using Core.Presentation.Models.DataTransferObjects;
-using Core.Presentation.Models.Base;
+﻿using ClientManagement.Models.DataTransferObjects;
+using ClientManagement.Models.Base;
 
-namespace Core.Presentation.Models.ViewModels
+namespace ClientManagement.Models.ViewModels
 {
     public class InvoiceTemplateViewModel : GenericListViewModel<InvoiceDto>
     {

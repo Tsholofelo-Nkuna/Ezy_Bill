@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Presentation.Models.DataTransferObjects.Identity.Interfaces
+namespace ClientManagement.Models.DataTransferObjects.Identity.Interfaces
 {
     public interface IErrorResponse
     {

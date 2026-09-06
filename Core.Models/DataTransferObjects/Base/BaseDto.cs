@@ -1,6 +1,6 @@
 ﻿
 
-namespace Core.Presentation.Models.DataTransferObjects.Base
+namespace ClientManagement.Models.DataTransferObjects.Base
 {
     public class BaseDto
     {

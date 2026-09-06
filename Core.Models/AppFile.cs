@@ -1,6 +1,6 @@
 using System;
 
-namespace Core.Presentation.Models
+namespace ClientManagement.Models
 {
     /// <summary>
     /// Represents a file that has been uploaded or is being processed in the application

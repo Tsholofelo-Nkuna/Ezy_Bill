@@ -1,11 +1,11 @@
-﻿using Core.Presentation.Models.DataTransferObjects;
-using Core.Presentation.Models.DataTransferObjects.Base;
-using Core.Presentation.Models.Base;
-using Core.Presentation.Models.Validation;
-using Core.Presentation.Models.Validation.Base;
+﻿using ClientManagement.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects.Base;
+using ClientManagement.Models.Base;
+using ClientManagement.Models.Validation;
+using ClientManagement.Models.Validation.Base;
 
 
-namespace Core.Presentation.Models.ViewModels
+namespace ClientManagement.Models.ViewModels
 {
     public class ProductsViewModel : GenericListViewModel<ProductDto>
     {

@@ -1,7 +1,4 @@
-﻿using Core.Presentation.Models.DataTransferObjects.Base;
-using Core.Presentation.Models.Interfaces.Base;
-using  Core.Presentation.Models.Base;
-using Core.Presentation.ViewComponents.Interfaces;
+﻿
 using Core.Presentation.ViewComponents.Interfaces.Base;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -18,6 +15,9 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using System.Security.Principal;
 using Core.Utils.Constants;
+using ClientManagement.Models.Interfaces.Base;
+using ClientManagement.Models.DataTransferObjects.Base;
+
 
 namespace Core.Presentation.ViewComponents.Components.Base
 {

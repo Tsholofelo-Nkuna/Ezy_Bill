@@ -1,6 +1,6 @@
 ﻿using ClientManagement.BusinessLogicLayer.Interfaces.Base;
 using ClientManagement.DataAccessLayer.Entities;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 using System;
 using System.Collections.Generic;
 using System.Text;

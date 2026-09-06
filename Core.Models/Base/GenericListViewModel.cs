@@ -1,9 +1,9 @@
-﻿using Core.Presentation.Models.DataTransferObjects.Base;
-using Core.Presentation.Models.Interfaces.Base;
+﻿using ClientManagement.Models.DataTransferObjects.Base;
+using ClientManagement.Models.Interfaces.Base;
 using System.Diagnostics;
 
 
-namespace Core.Presentation.Models.Base
+namespace ClientManagement.Models.Base
 {
     public class GenericListViewModel<TRecordType> : IGenericListViewModel<TRecordType> where TRecordType: BaseDto, new()
     {

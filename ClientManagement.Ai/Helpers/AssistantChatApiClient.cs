@@ -1,4 +1,4 @@
-﻿using ClientManagement.Ai.Models;
+﻿using ClientManagement.Models.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
 using OllamaSharp;

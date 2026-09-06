@@ -1,4 +1,4 @@
-﻿using Core.Presentation.Models;
+﻿using ClientManagement.Models;
 using Core.Presentation.Models.DataTransferObjects;
 using Core.Presentation.ViewComponents;
 using Microsoft.AspNetCore.Mvc;

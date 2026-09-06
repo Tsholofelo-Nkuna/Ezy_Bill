@@ -7,9 +7,10 @@
     <Configurations>Debug;Release;DevOnline</Configurations>
   </PropertyGroup>
 
-  <!--<ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
-  </ItemGroup>-->
+  <ItemGroup>
+    <!--<PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />-->
+   <PackageReference Include="Microsoft.Agents.AI" Version="1.20.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Utils\Core.Utils.csproj" />

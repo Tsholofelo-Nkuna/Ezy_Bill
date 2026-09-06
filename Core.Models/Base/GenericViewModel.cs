@@ -1,5 +1,5 @@
-﻿using Core.Presentation.Models.DataTransferObjects.Base;
-using Core.Presentation.Models.Interfaces.Base;
+﻿using ClientManagement.Models.DataTransferObjects.Base;
+using ClientManagement.Models.Interfaces.Base;
 using Core.Presentation.ViewComponents.Interfaces.Base;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
-namespace Core.Presentation.Models.Base
+namespace ClientManagement.Models.Base
 {
     public class GenericViewModel<TState> : IGenericViewModel<TState> where TState : BaseDto, new()
     {

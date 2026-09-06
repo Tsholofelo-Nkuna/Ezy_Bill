@@ -1,8 +1,8 @@
-﻿using Core.Presentation.Models.Base;
-using Core.Presentation.Models.DataTransferObjects.login;
+﻿using ClientManagement.Models.Base;
+using ClientManagement.Models.DataTransferObjects.login;
 
 
-namespace Core.Presentation.Models.ViewModels
+namespace ClientManagement.Models.ViewModels
 {
     public class MainLayoutViewModel : GenericListViewModel<UserCredentialsDto>
     {

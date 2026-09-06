@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace Core.Presentation.Models.Validation
+namespace ClientManagement.Models.Validation
 {
     public static class Validators
     {

@@ -1,6 +1,6 @@
-﻿using Core.Presentation.Models.DataTransferObjects.Base;
-using Core.Presentation.Models.Interfaces.Base;
-using  Core.Presentation.Models.Base;
+﻿using ClientManagement.Models.DataTransferObjects.Base;
+using ClientManagement.Models.Interfaces.Base;
+using  ClientManagement.Models.Base;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;

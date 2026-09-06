@@ -1,4 +1,4 @@
-using Core.Presentation.Models;
+using ClientManagement.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System;

@@ -1,5 +1,5 @@
 using ClientManagement.BusinessLogicLayer.Interfaces;
-using Core.Presentation.Models.ViewModels;
+using ClientManagement.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 

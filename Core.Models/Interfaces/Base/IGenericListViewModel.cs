@@ -1,9 +1,9 @@
 ﻿
 
-using Core.Presentation.Models.DataTransferObjects.Base;
+using ClientManagement.Models.DataTransferObjects.Base;
 using System.Dynamic;
 
-namespace Core.Presentation.Models.Interfaces.Base
+namespace ClientManagement.Models.Interfaces.Base
 {
     
     public interface IGenericListViewModel<TRecordType> where TRecordType: BaseDto

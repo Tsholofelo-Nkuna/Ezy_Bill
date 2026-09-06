@@ -1,6 +1,6 @@
-﻿using Core.Presentation.Models;
-using Core.Presentation.Models.DataTransferObjects;
-using Core.Presentation.Models.DataTransferObjects.Base;
+﻿using ClientManagement.Models;
+using ClientManagement.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects.Base;
 using Core.Presentation.ViewComponents.Components.Base;
 using Core.Utils;
 using Microsoft.AspNetCore.Components;

@@ -1,5 +1,5 @@
-﻿using Core.Presentation.Models.Base;
-using Core.Presentation.Models.DataTransferObjects.login;
+﻿using ClientManagement.Models.Base;
+using ClientManagement.Models.DataTransferObjects.login;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Presentation.Models
+namespace ClientManagement.Models
 {
     public class RegisterViewModel : LoginViewModel
     {

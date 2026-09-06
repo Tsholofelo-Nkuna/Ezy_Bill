@@ -1,8 +1,8 @@
-﻿using Core.Presentation.Models.DataTransferObjects.Base;
+﻿using ClientManagement.Models.DataTransferObjects.Base;
 using System.ComponentModel.DataAnnotations;
 
 
-namespace Core.Presentation.Models.DataTransferObjects
+namespace ClientManagement.Models.DataTransferObjects
 {
     public class ProductDto : BaseDto
     {

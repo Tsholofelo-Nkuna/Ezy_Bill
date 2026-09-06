@@ -1,5 +1,5 @@
-using Core.Presentation.Models;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models;
+using ClientManagement.Models.DataTransferObjects;
 using Core.Presentation.ViewComponents.Areas.Accounts.Pages.Base;
 using Core.Utils.Constants;
 using Core.Utils.Mail;

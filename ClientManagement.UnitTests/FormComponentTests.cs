@@ -1,13 +1,13 @@
 ﻿using ClientManagement.UnitTests.DataProviders;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 
-using Core.Presentation.Models.Base;
+using ClientManagement.Models.Base;
 
 using System.Text;
 
 using Core.Presentation.ViewComponents.Components;
-using Core.Presentation.Models.Validation;
-using Core.Presentation.Models.ViewModels;
+using ClientManagement.Models.Validation;
+using ClientManagement.Models.ViewModels;
 
 namespace ClientManagement.UnitTests
 {

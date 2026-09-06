@@ -3,13 +3,12 @@ using ClientManagement.DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using ClientManagement.BusinessLogicLayer.Models;
 using Core.Utils.Interfaces;
 using ClientManagement.BusinessLogicLayer.Interfaces;
-using Core.Presentation.Models.DataTransferObjects;
 
 namespace ClientManagement.BusinessLogicLayer.Services
 {

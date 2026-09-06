@@ -1,14 +1,14 @@
-﻿using Core.Presentation.Models.DataTransferObjects.Base;
-using Core.Presentation.Models.Interfaces;
-using Core.Presentation.Models.Interfaces.Base;
+﻿using ClientManagement.Models.DataTransferObjects.Base;
+using ClientManagement.Models.Interfaces;
+using ClientManagement.Models.Interfaces.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DefaultValidators = Core.Presentation.Models.Validation.Validators;
+using DefaultValidators = ClientManagement.Models.Validation.Validators;
 
-namespace Core.Presentation.Models.Validation.Base
+namespace ClientManagement.Models.Validation.Base
 {
     public class ValidatorBase<TRecord> : IValidatorBase<TRecord> where TRecord: BaseDto, new()
     {

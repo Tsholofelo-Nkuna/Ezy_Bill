@@ -1,6 +1,6 @@
 ﻿
 
-using ClientManagement.Ai.Models;
+using ClientManagement.Models.AI;
 using Microsoft.Extensions.Options;
 using ModelContextProtocol.Client;
 
@@ -8,11 +8,11 @@ using System.ClientModel;
 
 namespace ClientManagement.Ai.Helpers
 {
-    public class AppStdIoTransportClient 
+    public class AppHttpTransportClient 
     {
 
         public IList<McpClientTool> Tools { get; set; }
-        public AppStdIoTransportClient(IOptions<AgentOptions> agentOptions)
+        public AppHttpTransportClient(IOptions<AgentOptions> agentOptions)
         {
          
             var stdioClientTransport = new HttpClientTransport(new HttpClientTransportOptions()

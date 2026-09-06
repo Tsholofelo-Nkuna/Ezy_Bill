@@ -6,7 +6,7 @@ using ClientManagement.BusinessLogicLayer.Interfaces;
 using Core.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.BearerToken;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 using ClientManagement.Presentation.Web.Controllers.Base;
 using Microsoft.Extensions.AI;
 using ClientManagement.Ai.Agents;

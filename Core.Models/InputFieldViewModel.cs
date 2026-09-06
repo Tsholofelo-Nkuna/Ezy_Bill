@@ -1,10 +1,10 @@
-﻿using Core.Presentation.Models.DataTransferObjects.Base;
-using Core.Presentation.Models.Interfaces;
-using Core.Presentation.Models.Interfaces.Base;
-using Core.Presentation.Models.Validation;
-using Core.Presentation.Models.Validation.Base;
+﻿using ClientManagement.Models.DataTransferObjects.Base;
+using ClientManagement.Models.Interfaces;
+using ClientManagement.Models.Interfaces.Base;
+using ClientManagement.Models.Validation;
+using ClientManagement.Models.Validation.Base;
 
-namespace Core.Presentation.Models
+namespace ClientManagement.Models
 {
    public enum ControlType
     {

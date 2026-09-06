@@ -1,4 +1,4 @@
-﻿namespace Core.Presentation.Models
+﻿namespace ClientManagement.Models
 {
     public interface IFilterable<TFilterSource, TData>
     {

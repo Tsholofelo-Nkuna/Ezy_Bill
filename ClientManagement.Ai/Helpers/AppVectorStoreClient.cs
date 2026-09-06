@@ -1,13 +1,13 @@
 using AutoMapper;
 using ClientManagement.Ai.Agents.Tools;
 using ClientManagement.Ai.Interfaces;
-using ClientManagement.Ai.Models;
+using ClientManagement.Models.AI;
 using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
 using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Entities;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 using Core.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -18,13 +18,13 @@ using Qdrant.Client.Grpc;
 
 namespace ClientManagement.Ai.Helpers
 {
-    public class   AppFileService : GenericService<AppFileDto, AppFileEntity>, IVectorStore
+    public class   AppVectorStoreClient : GenericService<AppFileDto, AppFileEntity>, IVectorStore
     {
         protected readonly IOptions<AgentOptions> agentOptions;
         protected readonly AssistantChatApiClient chatClient;
         protected readonly IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator;
         protected readonly QdrantClient qdrantClient;
-        public AppFileService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
+        public AppVectorStoreClient(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
               IAppStateManager<ApplicationState> appStateManager, IOptions<AgentOptions> agentOptions, AssistantChatApiClient chatClient) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
         {
             this.agentOptions = agentOptions;

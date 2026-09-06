@@ -1,6 +1,6 @@
 ﻿using ClientManagement.Ai.Agents;
 using ClientManagement.Ai.Agents.Workflows;
-using Core.Presentation.Models.ViewModels;
+using ClientManagement.Models.ViewModels;
 using Microsoft.Agents.AI;
 using Microsoft.Agents.AI.Workflows;
 using Microsoft.AspNetCore.Components;

@@ -1,4 +1,4 @@
-﻿namespace Core.Presentation.Models.DataTransferObjects
+﻿namespace ClientManagement.Models.DataTransferObjects
 {
     public class UserDto
     {

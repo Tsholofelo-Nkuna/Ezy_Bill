@@ -1,11 +1,11 @@
-﻿using Core.Presentation.Models.DataTransferObjects.Base;
+﻿using ClientManagement.Models.DataTransferObjects.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Presentation.Models.Interfaces
+namespace ClientManagement.Models.Interfaces
 {
     public interface IValidatorFn
     {

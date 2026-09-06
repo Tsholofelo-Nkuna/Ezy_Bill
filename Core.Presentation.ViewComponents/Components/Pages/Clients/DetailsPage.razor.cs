@@ -1,6 +1,6 @@
 ﻿
-using Core.Presentation.Models.DataTransferObjects;
-using Core.Presentation.Models.ViewModels;
+using ClientManagement.Models.DataTransferObjects;
+using ClientManagement.Models.ViewModels;
 using Core.Presentation.ViewComponents.Components.Base;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;

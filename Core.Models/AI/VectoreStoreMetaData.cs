@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClientManagement.Ai.Models
+namespace ClientManagement.Models.AI
 {
     public class VectoreStoreMetaData
     {

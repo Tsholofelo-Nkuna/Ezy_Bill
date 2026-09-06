@@ -1,9 +1,9 @@
 ﻿
 
-using Core.Presentation.Models.DataTransferObjects.Base;
-using Core.Presentation.Models.Base;
+using ClientManagement.Models.DataTransferObjects.Base;
+using ClientManagement.Models.Base;
 
-namespace Core.Presentation.Models
+namespace ClientManagement.Models
 {
     public class ModalViewModel<TRecordType> : GenericListViewModel<TRecordType> where TRecordType : BaseDto, new()
     {

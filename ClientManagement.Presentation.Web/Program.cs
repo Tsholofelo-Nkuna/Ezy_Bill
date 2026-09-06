@@ -10,7 +10,7 @@ using Core.Utils;
 
 using Core.Utils.Constants;
 
-using Core.Presentation.Models;
+using ClientManagement.Models;
 
 
 namespace ClientManagement.Presentation.Web

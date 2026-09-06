@@ -1,4 +1,4 @@
-﻿using Core.Presentation.Models.DataTransferObjects.Base;
+﻿using ClientManagement.Models.DataTransferObjects.Base;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Bcpg;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Presentation.Models.DataTransferObjects.login
+namespace ClientManagement.Models.DataTransferObjects.login
 {
     public class UserCredentialsDto: BaseDto
     {

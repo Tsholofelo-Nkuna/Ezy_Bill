@@ -1,8 +1,8 @@
-﻿using Core.Presentation.Models;
+﻿using ClientManagement.Models;
 using Core.Presentation.ViewComponents.Components;
 using Core.Presentation.ViewComponents.Components.Base;
-using Core.Presentation.Models.ViewModels;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.ViewModels;
+using ClientManagement.Models.DataTransferObjects;
 using Microsoft.JSInterop;
 using System.Net.Http.Json;
 

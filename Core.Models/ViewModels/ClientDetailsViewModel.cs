@@ -1,9 +1,9 @@
 ﻿
-using Core.Presentation.Models.Base;
+using ClientManagement.Models.Base;
 
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 
-namespace Core.Presentation.Models.ViewModels
+namespace ClientManagement.Models.ViewModels
 {
     public class ClientDetailsViewModel : GenericListViewModel<ClientDto>
     {

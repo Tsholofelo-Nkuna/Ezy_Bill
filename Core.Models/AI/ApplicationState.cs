@@ -1,6 +1,6 @@
 ﻿//using Core.Utils.State;
 
-//namespace ClientManagement.Ai.Models
+//namespaceClientManagement.Models.AI
 //{
 //    public class ApplicationState : AppState
 //    {

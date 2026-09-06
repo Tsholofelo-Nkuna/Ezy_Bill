@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ClientManagement.DataAccessLayer.Entities;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Identity;
 
 

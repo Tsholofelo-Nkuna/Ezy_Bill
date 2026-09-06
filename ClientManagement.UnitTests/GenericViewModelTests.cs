@@ -1,6 +1,6 @@
 using ClientManagement.UnitTests.DataProviders;
-using Core.Presentation.Models.DataTransferObjects;
-using Core.Presentation.Models.Base;
+using ClientManagement.Models.DataTransferObjects;
+using ClientManagement.Models.Base;
 
 
 namespace ClientManagement.UnitTests

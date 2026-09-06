@@ -1,12 +1,12 @@
-﻿using Core.Presentation.Models.DataTransferObjects;
-using Core.Presentation.Models.Base;
+﻿using ClientManagement.Models.DataTransferObjects;
+using ClientManagement.Models.Base;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core.Presentation.Models;
+using ClientManagement.Models;
 
 
 namespace ClientManagement.UnitTests.DataProviders

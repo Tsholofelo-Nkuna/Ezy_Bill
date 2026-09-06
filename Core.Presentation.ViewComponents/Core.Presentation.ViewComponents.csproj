@@ -9,7 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.Models\Core.Presentation.Models.csproj" />
+    <ProjectReference Include="..\Core.Models\ClientManagement.Models.csproj" />
+    <ProjectReference Include="..\Core.Models\ClientManagement.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

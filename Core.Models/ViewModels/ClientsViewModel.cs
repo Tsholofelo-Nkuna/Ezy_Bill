@@ -1,10 +1,10 @@
 ﻿
-using Core.Presentation.Models.Base;
-using Core.Presentation.Models.Validation.Base;
-using Core.Presentation.Models.Validation;
-using Core.Presentation.Models.DataTransferObjects;
+using ClientManagement.Models.Base;
+using ClientManagement.Models.Validation.Base;
+using ClientManagement.Models.Validation;
+using ClientManagement.Models.DataTransferObjects;
 
-namespace Core.Presentation.Models.ViewModels
+namespace ClientManagement.Models.ViewModels
 {
     public class ClientsViewModel : GenericListViewModel<ClientDto>
     {
