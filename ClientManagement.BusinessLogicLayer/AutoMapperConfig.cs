@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ClientManagement.BusinessLogicLayer
 {
-    internal class AutoMapperConfig : Profile
+    public class AutoMapperConfig : Profile
     {
         public AutoMapperConfig() {
             this.

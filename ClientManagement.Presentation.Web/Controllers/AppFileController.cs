@@ -1,4 +1,5 @@
-﻿using ClientManagement.BusinessLogicLayer.Interfaces;
+﻿using ClientManagement.Ai.Interfaces;
+using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.Presentation.Web.Controllers.Base;
 using Core.Presentation.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
@@ -11,9 +12,9 @@ namespace ClientManagement.Presentation.Web.Controllers
     [ApiController]
     public class AppFileController : ApiBaseController<AppFileController>
     {
-        private readonly IAppFileService _appFileService;
+        private readonly IVectorStore _appFileService;
 
-        public AppFileController(ILogger<AppFileController> logger, IAppFileService appFileService) : base(logger)
+        public AppFileController(ILogger<AppFileController> logger, IVectorStore appFileService) : base(logger)
         {
             _appFileService = appFileService;
         }

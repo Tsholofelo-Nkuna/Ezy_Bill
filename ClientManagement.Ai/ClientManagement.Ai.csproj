@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Agents\Skills\acquire-insight\Skill.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Agents\Skills\file-clipper\SKILL.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.VectorData.Qdrant" Version="1.0.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.5.1" />
+    <PackageReference Include="Microsoft.Agents.AI" Version="1.20.0" />
+	  <PackageReference Include="Microsoft.Agents.AI.Harness" Version="1.20.0" />
+	  <PackageReference Include="Microsoft.Agents.AI.Workflows" Version="1.20.0" />
+	  <PackageReference Include="ModelContextProtocol" Version="2.2.0" />
+    <PackageReference Include="OllamaSharp" Version="5.4.30" />
+	<PackageReference Include="UglyToad.PdfPig" Version="1.7.0-custom-5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClientManagement.BusinessLogicLayer\ClientManagement.BusinessLogicLayer.csproj" />
+  </ItemGroup>
+
+</Project>

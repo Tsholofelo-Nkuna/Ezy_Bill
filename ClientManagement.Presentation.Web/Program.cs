@@ -1,6 +1,6 @@
 using ClientManagement.Presentation.Web.Components;
 using Microsoft.EntityFrameworkCore;
-using ClientManagement.BusinessLogicLayer;
+using ClientManagement.Ai;
 using ClientManagement.DataAccessLayer;
 using Core.Utils.Logging;
 using System.Globalization;
@@ -67,7 +67,7 @@ namespace ClientManagement.Presentation.Web
             });
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
-            builder.Services.AddBusinessServices(builder.Configuration);
+            builder.Services.AddAiBusinessServices(builder.Configuration);
          
             var app = builder.Build();
             app.UseSession();

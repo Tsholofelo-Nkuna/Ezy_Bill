@@ -1,6 +1,5 @@
-﻿using ClientManagement.BusinessLogicLayer.Agents;
-using ClientManagement.BusinessLogicLayer.Agents.Tools;
-using ClientManagement.BusinessLogicLayer.Agents.Workflows;
+﻿using ClientManagement.Ai.Agents;
+using ClientManagement.Ai.Agents.Workflows;
 using Core.Presentation.Models.ViewModels;
 using Microsoft.Agents.AI;
 using Microsoft.Agents.AI.Workflows;

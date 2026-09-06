@@ -4,9 +4,7 @@ using Core.Presentation.Models;
 using Core.Presentation.ViewComponents.Components;
 using Core.Presentation.ViewComponents.Components.Base;
 using Microsoft.AspNetCore.Components;
-using ClientManagement.BusinessLogicLayer.Agents;
-using Microsoft.Extensions.AI;
-
+using ClientManagement.Ai.Agents;
 
 namespace ClientManagement.Presentation.Web.Components.Pages.Invoices
 {

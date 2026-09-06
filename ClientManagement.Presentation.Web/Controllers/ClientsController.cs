@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authentication.BearerToken;
 using Core.Presentation.Models.DataTransferObjects;
 using ClientManagement.Presentation.Web.Controllers.Base;
 using Microsoft.Extensions.AI;
-using ClientManagement.BusinessLogicLayer.Agents;
+using ClientManagement.Ai.Agents;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
