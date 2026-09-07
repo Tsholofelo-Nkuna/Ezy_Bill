@@ -17,6 +17,10 @@
     <ProjectReference Include="..\ClientManagement.DataAccessLayer\ClientManagement.DataAccessLayer.csproj" />
     <ProjectReference Include="..\Core.Models\ClientManagement.Models.csproj" />
     <ProjectReference Include="..\Core.Utils\Core.Utils.csproj" />
+	<PackageReference Include="CommunityToolkit.VectorData.Qdrant" />
+	<PackageReference Include="DocumentFormat.OpenXml" />
+	<PackageReference Include="UglyToad.PdfPig" />
+    <PackageReference Include="OllamaSharp" />
   </ItemGroup>
 	<PropertyGroup>
 		<NoWarn>$(NoWarn);NU1903</NoWarn>

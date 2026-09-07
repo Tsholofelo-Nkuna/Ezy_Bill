@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ClientManagement.BusinessLogicLayer.Interfaces
 {
-    public interface IAppFileService: IGenericService<AppFileDto, AppFileEntity>
+    public interface IAppFileService: IVectorStore, IGenericService<AppFileDto, AppFileEntity>
     {
     }
 }

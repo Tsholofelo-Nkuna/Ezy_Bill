@@ -5,11 +5,11 @@ using System.ComponentModel;
 
 using Core.Utils.Interfaces;
 using OllamaSharp;
-using ClientManagemet.Models;
+using ClientManagement.BusinessLogicLayer.Interfaces;
 
 namespace ClientManagement.Mcp.Helpers
 {
-    public class  RagToolKit(IVectorStore appFileService, IOptions<AgentOptions> agentOptions, OllamaApiClient assistantChatApi)
+    public class  RagToolKit(IAppFileService appFileService, IOptions<AgentOptions> agentOptions, OllamaApiClient assistantChatApi)
     {
         [Description("Adds more context to the user's inquiry, never respond to the user without first using this tool. You should also make use of this tool right after each handoff")]
         public async Task<string> AddInsightToPrompt([Description("The most recent instruction/question from the user.")] string instruction, [Description("The name of the agent currently handling the user's request")] string agentName)

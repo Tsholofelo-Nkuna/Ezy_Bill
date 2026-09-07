@@ -6,7 +6,6 @@ using Core.Utils.Interfaces;
 using Core.Utils.State;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.VectorData;
 
 
 namespace ClientManagement.BusinessLogicLayer
@@ -28,7 +27,7 @@ namespace ClientManagement.BusinessLogicLayer
                 .AddScoped<IInvoicePaymentService, InvoicePaymentService>()
                 .AddScoped<IProfileService, ProfileService>()
                 .AddScoped<IUserProfileService, UserProfileService>()
-                .AddScoped<IAppFileService, AppFileService>()
+                .AddScoped<IAppFileService, AppFileService>() //required an IEmbeddingGenerator<string, Embedding<float>> which is provided by `AddAiAgents` extension method found in the ClientManagement.AI project
                 .AddScoped<IAppStateManager<ApplicationState>, AppStateManager<ApplicationState>>();
                 
            

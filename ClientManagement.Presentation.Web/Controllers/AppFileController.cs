@@ -5,7 +5,6 @@ using ClientManagement.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
-using ClientManagemet.Models;
 
 namespace ClientManagement.Presentation.Web.Controllers
 {
@@ -16,10 +15,10 @@ namespace ClientManagement.Presentation.Web.Controllers
         private readonly IVectorStore _appVectorStore;
         private readonly IAppFileService _appFileService;
 
-        public AppFileController(ILogger<AppFileController> logger, IVectorStore appVectorStore, IAppFileService appFileService) : base(logger)
+        public AppFileController(ILogger<AppFileController> logger, IAppFileService appFileService) : base(logger)
         {
             _appFileService = appFileService;
-            _appVectorStore = appVectorStore;
+           // _appVectorStore = appVectorStore;
         }
 
         // POST api/<AppFileController>/{vectorStoreName}
@@ -29,7 +28,7 @@ namespace ClientManagement.Presentation.Web.Controllers
             var serviceReponse = await this._appFileService.AddOrUpdate(value);
             if (serviceReponse)
             {
-                return await this._appVectorStore.UpSert(vectorStoreName, value);
+                return await this._appFileService.UpSert(vectorStoreName, value);
             }
             else
             {

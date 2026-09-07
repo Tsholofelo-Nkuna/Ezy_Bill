@@ -1,7 +1,6 @@
-﻿
-using ClientManagement.Models.DataTransferObjects;
+﻿using ClientManagement.Models.DataTransferObjects;
 
-namespace ClientManagemet.Models;
+namespace ClientManagement.BusinessLogicLayer.Interfaces;
 
 public interface IVectorStore
 {

@@ -20,8 +20,6 @@
   <ItemGroup>
 	<PackageReference Include="ModelContextProtocol.AspNetCore" />
 	<PackageReference Include="CommunityToolkit.VectorData.Qdrant" />
-	<PackageReference Include="DocumentFormat.OpenXml" />
-	<PackageReference Include="UglyToad.PdfPig" />
 	<PackageReference Include="OllamaSharp" />
   </ItemGroup>
 

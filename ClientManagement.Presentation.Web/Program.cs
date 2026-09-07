@@ -67,8 +67,9 @@ namespace ClientManagement.Presentation.Web
             });
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
-            builder.Services.AddBusinessServices(builder.Configuration);
             builder.Services.AddAiAgents(builder.Configuration);
+            builder.Services.AddBusinessServices(builder.Configuration);
+          
          
             var app = builder.Build();
             app.UseSession();
