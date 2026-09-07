@@ -10,21 +10,21 @@ The bidirectional lines (`▲` / `▼` / `◀` / `▶`) emphasize that while cod
 
 ```
                       ┌────────────────────────────────────────────────────────┐
-                      │                      Blazor.Web                        │
+                      │                  ClientManagement.Web                  │
                       │         (Composition Root Shell / AG-UI Transport)     │
                       └───────────────▲───┬────────────────────────▲───┬───────┘
                                       │   │                        │   
                (AG-UI Protocol Data)  │   │                        │   
                                       │   ▼                        │   
         ┌──────────────────────────────────────────────────┐       │
-        │                    Blazor.AI                     │       │
+        │               ClientManagement.AI                │       │
         │             (Cognitive Brain Layer)              │       │ (Traditional Page Requests
         └─────────────────────▲───┬────────────────────────┘       │  & Core Domain Forms Data)
                               │   │                                │
      (MCP Standard JSON-RPC)  │   │                                │
                               │   ▼                                │
         ┌────────────────────────────────────────────────────────┐ │
-        │                    Blazor.MCP                          │ │
+        │                    ClientManagement.MCP                │ │
         │                                                        │ │
         │  Exposed MCP Tools Manifest (Flat Capability Line):    │ │
         │  ┌───────────────────────┐ ┌────────────────────────┐  │ │
@@ -36,7 +36,7 @@ The bidirectional lines (`▲` / `▼` / `◀` / `▶`) emphasize that while cod
  (Internal Tool Capabilities) │   │                                │
                               │   ▼                                ▼
         ┌──────────────────────────────────────────────────────────────────────┐
-        │                 Business Logic Layer                                 │
+        │                 ClientManagement.BusinessLogicLayer                  │
         │         (Core Domain, DB Context & Validation Rules)                 │
         └──────────────────────────────────────────────────────────────────────┘
 ```
