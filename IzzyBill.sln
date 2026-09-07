@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Utils", "Core.Utils\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManagement.Presentation.WebPages", "ClientManagement.Presentation.WebPages\ClientManagement.Presentation.WebPages.csproj", "{0346D680-CC6D-463A-87EF-CC7294526018}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManagement.Ai", "ClientManagement.Ai\ClientManagement.Ai.csproj", "{F2DC3C09-6811-4003-ACAE-EE1A7290ADF7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManagement.AI", "ClientManagement.Ai\ClientManagement.AI.csproj", "{F2DC3C09-6811-4003-ACAE-EE1A7290ADF7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManagement.Mcp", "ClientManagement.Mcp\ClientManagement.Mcp.csproj", "{945138AD-1F05-4934-987A-E9D101E42878}"
 EndProject

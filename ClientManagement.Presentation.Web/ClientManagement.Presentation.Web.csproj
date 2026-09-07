@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClientManagement.Ai\ClientManagement.Ai.csproj" />
+    <ProjectReference Include="..\ClientManagement.Ai\ClientManagement.AI.csproj" />
     <ProjectReference Include="..\ClientManagement.BusinessLogicLayer\ClientManagement.BusinessLogicLayer.csproj" />
     <ProjectReference Include="..\ClientManagement.Presentation.WebPages\ClientManagement.Presentation.WebPages.csproj" />
   </ItemGroup>
