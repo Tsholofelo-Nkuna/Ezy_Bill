@@ -10,7 +10,7 @@ The bidirectional lines (`▲` / `▼` / `◀` / `▶`) emphasize that while cod
 
 ```
                       ┌────────────────────────────────────────────────────────┐
-                      │                  ClientManagement.Web                  │
+                      │          ClientManagement.Web (Blazor Server App)      │
                       │         (Composition Root Shell / AG-UI Transport)     │
                       └───────────────▲───┬────────────────────────▲───┬───────┘
                                       │   │                        │   
@@ -24,11 +24,11 @@ The bidirectional lines (`▲` / `▼` / `◀` / `▶`) emphasize that while cod
      (MCP Standard JSON-RPC)  │   │                                │
                               │   ▼                                │
         ┌────────────────────────────────────────────────────────┐ │
-        │                    ClientManagement.MCP                │ │
+        │        ClientManagement.MCP (MCP Server)               │ │
         │                                                        │ │
         │  Exposed MCP Tools Manifest (Flat Capability Line):    │ │
         │  ┌───────────────────────┐ ┌────────────────────────┐  │ │
-        │  │   RAG Search Tool     │ │  Business Logic Tool   │  │ │
+        │  │   RAG Search Tool     │ │  Business Logic Tools  │  │ │
         │  │  (Queries Vector DB)  │ │ (Triggers Domain Core) │  │ │
         │  └───────────────────────┘ └────────────────────────┘  │ │
         └─────────────────────-───┬──────────────────────────────┘ │
