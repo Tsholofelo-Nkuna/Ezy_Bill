@@ -37,7 +37,7 @@
                 <Body>
                     @if (BookkeeperAgent?.ChatHistory?.Any()??false)
                     {
-                        <div id="chatPanel" class="border border-1 border-primary my-2 p-3" style="border-radius:8px;height:auto;overflow-y:auto;max-height:256px;">
+                        <div id="chatPanel" class="border border-1 border-primary my-2 p-3" style="border-radius:8px;height:auto;overflow-y:auto;max-height:256px;overflow-x:hidden;word-wrap:break-word;">
                             @foreach (var message in BookkeeperAgent.ChatHistory)
                             {
                                 <div class="my-2">
