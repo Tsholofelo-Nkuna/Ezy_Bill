@@ -11,7 +11,7 @@ using Core.Utils;
 using Core.Utils.Constants;
 
 using ClientManagement.Models;
-
+using ClientManagement.BusinessLogicLayer;
 
 namespace ClientManagement.Presentation.Web
 {
@@ -67,7 +67,8 @@ namespace ClientManagement.Presentation.Web
             });
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
-            builder.Services.AddAiBusinessServices(builder.Configuration);
+            builder.Services.AddBusinessServices(builder.Configuration);
+            builder.Services.AddAiAgents(builder.Configuration);
          
             var app = builder.Build();
             app.UseSession();

@@ -1,31 +1,27 @@
-using AutoMapper;
-using ClientManagement.Ai.Agents.Tools;
-using ClientManagement.Ai.Interfaces;
+
 using ClientManagement.Models.AI;
-using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
-using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
-using ClientManagement.DataAccessLayer.Entities;
 using ClientManagement.Models.DataTransferObjects;
 using Core.Utils.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
 using Qdrant.Client;
 using Qdrant.Client.Grpc;
+using OllamaSharp;
+using ClientManagemet.Models;
 
-namespace ClientManagement.Ai.Helpers
+namespace ClientManagement.Mcp.Helpers
 {
-    public class   AppVectorStoreClient : GenericService<AppFileDto, AppFileEntity>, IVectorStore
+    public class   AppVectorStoreClient : IVectorStore
     {
         protected readonly IOptions<AgentOptions> agentOptions;
-        protected readonly AssistantChatApiClient chatClient;
+        protected readonly OllamaApiClient chatClient;
         protected readonly IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator;
         protected readonly QdrantClient qdrantClient;
-        public AppVectorStoreClient(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
-              IAppStateManager<ApplicationState> appStateManager, IOptions<AgentOptions> agentOptions, AssistantChatApiClient chatClient) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
+        public AppVectorStoreClient(WebDbContext dbContext, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
+              IAppStateManager<ApplicationState> appStateManager, IOptions<AgentOptions> agentOptions, OllamaApiClient chatClient) 
         {
             this.agentOptions = agentOptions;
             this.chatClient = chatClient;

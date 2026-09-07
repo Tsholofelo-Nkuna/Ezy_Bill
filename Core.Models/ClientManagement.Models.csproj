@@ -5,11 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Configurations>Debug;Release;DevOnline</Configurations>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
   <ItemGroup>
-    <!--<PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />-->
-   <PackageReference Include="Microsoft.Agents.AI" Version="1.20.0" />
+    <PackageReference Include="Microsoft.Agents.AI" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
 
-namespace ClientManagement.Ai.Agents.Tools;
+namespace ClientManagement.Mcp.Helpers;
 
 /// <summary>
 /// Tooling helpers exposed to the agent framework via <see cref="AIFunctionFactory"/>.

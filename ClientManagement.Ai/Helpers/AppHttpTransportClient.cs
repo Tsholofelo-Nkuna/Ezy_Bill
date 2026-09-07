@@ -4,7 +4,6 @@ using ClientManagement.Models.AI;
 using Microsoft.Extensions.Options;
 using ModelContextProtocol.Client;
 
-using System.ClientModel;
 
 namespace ClientManagement.Ai.Helpers
 {

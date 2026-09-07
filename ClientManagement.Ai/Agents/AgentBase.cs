@@ -1,13 +1,9 @@
 ﻿using ClientManagement.Ai.Agents.Interfaces;
-using ClientManagement.Ai.Agents.Tools;
 using ClientManagement.Ai.Helpers;
 using ClientManagement.Models.AI;
-using Google.Protobuf.WellKnownTypes;
-using Grpc.Core;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
-using ModelContextProtocol.Client;
 
 namespace ClientManagement.Ai.Agents
 {
@@ -15,14 +11,12 @@ namespace ClientManagement.Ai.Agents
     {
         public List<ChatMessage> ChatHistory = [];
         protected readonly IOptions<AgentOptions> agentOptions;
-        protected readonly RagToolKit ragToolKit;
         protected readonly AssistantChatApiClient chatClient;
         private readonly AppHttpTransportClient stdIoTransportClient;
 
-        public AgentBase(IOptions<AgentOptions> agentOptions, RagToolKit ragToolKit, AssistantChatApiClient chatClient, AppHttpTransportClient stdIoTransportClient) : base(agentOptions)
+        public AgentBase(IOptions<AgentOptions> agentOptions,  AssistantChatApiClient chatClient, AppHttpTransportClient stdIoTransportClient) : base(agentOptions)
         {
             this.agentOptions = agentOptions;
-            this.ragToolKit = ragToolKit;
             this.chatClient = chatClient;
             this.stdIoTransportClient = stdIoTransportClient;
         }
@@ -50,7 +44,7 @@ namespace ClientManagement.Ai.Agents
                          ChatOptions = new()
                          {
                              Instructions = $"Your name is {agentName}. {aMetaData.Instructions}. Always refer to yourself by your name in the case you have to. All your responses should be in plain text. Never mention your internal tools. Always be kind, helpful and use a professional tone.",
-                             Tools = [AIFunctionFactory.Create(this.ragToolKit.AddInsightToPrompt), AIFunctionFactory.Create(DocumentToolKit.DocumentClipper), ..this.stdIoTransportClient.Tools],
+                             Tools = [..this.stdIoTransportClient.Tools],
                              ModelId = string.IsNullOrWhiteSpace(aMetaData.Model) ? this.agentOptions.Value.OllamaModel : aMetaData.Model,
                          },
                          Name = aMetaData.Name,
@@ -63,23 +57,6 @@ namespace ClientManagement.Ai.Agents
             return agent;
         }
 
-       public async Task InspectInputMiddleware(IEnumerable<ChatMessage> messages, AgentSession? session, AgentRunOptions?options, Func<IEnumerable<ChatMessage>, AgentSession?, AgentRunOptions?, CancellationToken, Task> next, CancellationToken cancellationToken)
-    {
-        // Example: Log incoming traffic or modify a shared state metric counter
-            Console.WriteLine($"Inspecting payload. Total user prompts: {messages.Count()}");
-            var userPrompt = messages.LastOrDefault();
-            var dataContent = userPrompt?.Contents?.OfType<DataContent>() ?? [];
-            
-            var augmentedTextPrompt = await ragToolKit.AddInsightToPrompt(userPrompt?.Text, Name);
-            var augmentedMessage = new ChatMessage(ChatRole.System, [new TextContent(augmentedTextPrompt),..dataContent]);
-            var augmentedMessages = messages.Select((message, index) =>
-            {
-                return index == messages.Count() - 1 ? augmentedMessage : message;
-            });
-            await next(augmentedMessages, session, options, cancellationToken);
-         
-       
-    }
         public static async Task<string> HandleUserRequest(AIAgent? agent,IList<AIContent> messageContents, IList<ChatMessage> ChatHistory, AgentSession? session = null )
         {
             await Task.Yield();

@@ -1,10 +1,11 @@
-﻿using ClientManagement.Ai.Interfaces;
+﻿
 using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.Presentation.Web.Controllers.Base;
 using ClientManagement.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
+using ClientManagemet.Models;
 
 namespace ClientManagement.Presentation.Web.Controllers
 {
@@ -12,11 +13,13 @@ namespace ClientManagement.Presentation.Web.Controllers
     [ApiController]
     public class AppFileController : ApiBaseController<AppFileController>
     {
-        private readonly IVectorStore _appFileService;
+        private readonly IVectorStore _appVectorStore;
+        private readonly IAppFileService _appFileService;
 
-        public AppFileController(ILogger<AppFileController> logger, IVectorStore appFileService) : base(logger)
+        public AppFileController(ILogger<AppFileController> logger, IVectorStore appVectorStore, IAppFileService appFileService) : base(logger)
         {
             _appFileService = appFileService;
+            _appVectorStore = appVectorStore;
         }
 
         // POST api/<AppFileController>/{vectorStoreName}
@@ -26,7 +29,7 @@ namespace ClientManagement.Presentation.Web.Controllers
             var serviceReponse = await this._appFileService.AddOrUpdate(value);
             if (serviceReponse)
             {
-                return await this._appFileService.UpSert(vectorStoreName, value);
+                return await this._appVectorStore.UpSert(vectorStoreName, value);
             }
             else
             {
@@ -44,7 +47,7 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpGet("[action]")]
         public IEnumerable<Dictionary<string, string>> VectoreStoreNames()
         {
-            return this._appFileService.GetVectoreStoreNames().Select(x =>
+            return this._appVectorStore.GetVectoreStoreNames().Select(x =>
             {
                 return new Dictionary<string, string> { ["Name"] = x.name, ["DisplayName"] = x.displayName };
             });

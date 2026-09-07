@@ -5,15 +5,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Configurations>Debug;Release;DevOnline</Configurations>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="4.17.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.11" />
-    <!--<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.9" />-->
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.11" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.11" />
-    <PackageReference Include="Select.HtmlToPdf.NetCore" Version="26.3.0" />
+    <PackageReference Include="MailKit" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+    <PackageReference Include="Select.HtmlToPdf.NetCore" />
   </ItemGroup>
 
 </Project>

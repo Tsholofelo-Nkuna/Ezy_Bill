@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <Configurations>Debug;Release;DevOnline</Configurations>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,10 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DartSassBuilder" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="10.0.1" />
+    <PackageReference Include="DartSassBuilder" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" />
   </ItemGroup>
 
 
