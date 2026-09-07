@@ -65,7 +65,7 @@
                     }
                     @if (!string.IsNullOrWhiteSpace(ImagePresentedToAgent.dataUrl))
                     {
-                       <div style="background-image:url('@ImagePresentedToAgent.dataUrl'); background-size:cover;width:128px; height:128px;" class="rounded-2 border border-2 border-primary-subtle m-2"></div>
+                       <div style="background-image:url('@ImagePresentedToAgent.dataUrl'); background-size:cover;width:64px; height:64px;" class="rounded-2 border border-2 border-primary-subtle m-2"></div>
                     }
                     <div style="display:grid; grid-template-columns: 1fr auto;" class="mb-2">
                         <input class="form-control mx-2" @bind-value="AgentInstructions" placeholder="Enter instructions" />
