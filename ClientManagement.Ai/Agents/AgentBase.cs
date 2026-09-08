@@ -33,9 +33,14 @@ namespace ClientManagement.Ai.Agents
 
         public virtual AIAgent? Instance(string agentName)
         {
-             
-            var agent = this.agentOptions.Value.AiAgentMetaData
-                 .Where(x => x.Name.Equals(agentName, StringComparison.OrdinalIgnoreCase))
+            var agentMetaData = this.agentOptions.Value.AiAgentMetaData.Where(x => x.Name.Equals(agentName, StringComparison.OrdinalIgnoreCase));
+            var knoweledgeBaseContext = this.agentOptions.Value.AiAgentMetaData.Where(x => x is { VecStoreMetaData : { Name: string, Description: string } }).Select(x =>
+            {
+                return $"- Name: {x.VecStoreMetaData!.Name}, Description: {x.VecStoreMetaData!.Description}, Owner: {x.Name}";
+            });
+            var knowledgeBaseContextString = $"The following is a list of available knowledge source names along with their descriptions and owners: {string.Join("", knoweledgeBaseContext)}";
+            var knowledgeSourceName = agentMetaData.FirstOrDefault()?.VecStoreMetaData?.Name;
+            var agent = agentMetaData
                  .Select(aMetaData =>
                  {
                      var options = new ChatClientAgentOptions()
@@ -43,12 +48,14 @@ namespace ClientManagement.Ai.Agents
                          AIContextProviders = [BaseSkill],
                          ChatOptions = new()
                          {
-                             Instructions = $"Your name is {agentName}. {aMetaData.Instructions}. Always refer to yourself by your name in the case you have to. All your responses should be in plain text. Never mention your internal tools. Always be kind, helpful and use a professional tone.",
+                             Instructions = $"Your name is {agentName}. {knowledgeBaseContextString}.\nYou have access to a single knowledge source called {knowledgeSourceName ?? "undefined"}. {aMetaData.Instructions}. All your responses should be in plain text. Never mention your internal tools. Always be kind, helpful and use a professional tone.",
                              Tools = [..this.stdIoTransportClient.Tools],
                              ModelId = string.IsNullOrWhiteSpace(aMetaData.Model) ? this.agentOptions.Value.OllamaModel : aMetaData.Model,
+                             
                          },
                          Name = aMetaData.Name,
                          Description = aMetaData.Description,
+                         
                          
                      };
                      return chatClient.AsAIAgent(options: options);//.AsBuilder().Use(sharedFunc: InspectInputMiddleware).Build();// new ChatClientAgent(chatClient, options);

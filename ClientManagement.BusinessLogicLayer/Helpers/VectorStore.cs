@@ -52,6 +52,7 @@ namespace ClientManagement.BusinessLogicLayer.Helpers
                 {
                     Distance = Distance.Cosine,
                     Size = 1024,
+                    
                 });
 
             }
