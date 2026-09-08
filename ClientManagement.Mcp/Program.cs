@@ -1,6 +1,16 @@
+using ClientManagement.Mcp;
+using ClientManagement.Mcp.Helpers;
 using ClientManagement.Mcp.Tools;
+using ClientManagement.Models.AI;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<AgentOptions>(options =>
+{
+    builder.Configuration.GetSection("AI").Bind(options);
+});
+
+builder.Services.AddMcpServices(builder.Configuration);
 
 // Add the MCP services: the transport to use (http) and the tools to register.
 builder.Services

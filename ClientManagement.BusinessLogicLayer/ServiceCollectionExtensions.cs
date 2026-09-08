@@ -1,4 +1,6 @@
-﻿using ClientManagement.BusinessLogicLayer.Interfaces;
+﻿using ClientManagement.BusinessLogicLayer.Helpers;
+using ClientManagement.BusinessLogicLayer.Helpers.Interface;
+using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
 using ClientManagement.BusinessLogicLayer.Services;
 using ClientManagement.Models.AI;
@@ -28,7 +30,8 @@ namespace ClientManagement.BusinessLogicLayer
                 .AddScoped<IProfileService, ProfileService>()
                 .AddScoped<IUserProfileService, UserProfileService>()
                 .AddScoped<IAppFileService, AppFileService>() //required an IEmbeddingGenerator<string, Embedding<float>> which is provided by `AddAiAgents` extension method found in the ClientManagement.AI project
-                .AddScoped<IAppStateManager<ApplicationState>, AppStateManager<ApplicationState>>();
+                .AddScoped<IAppStateManager<ApplicationState>, AppStateManager<ApplicationState>>()
+                .AddScoped<IVectorStore, VectorStore>();
                 
            
             return services;

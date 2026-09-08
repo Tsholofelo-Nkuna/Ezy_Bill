@@ -5,6 +5,7 @@ using ClientManagement.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
+using ClientManagement.BusinessLogicLayer.Helpers.Interface;
 
 namespace ClientManagement.Presentation.Web.Controllers
 {
@@ -12,13 +13,16 @@ namespace ClientManagement.Presentation.Web.Controllers
     [ApiController]
     public class AppFileController : ApiBaseController<AppFileController>
     {
-        private readonly IVectorStore _appVectorStore;
+        private readonly ILogger<AppFileController> logger;
         private readonly IAppFileService _appFileService;
+        private readonly IVectorStore _vectorStore;
 
-        public AppFileController(ILogger<AppFileController> logger, IAppFileService appFileService) : base(logger)
+        public AppFileController(ILogger<AppFileController> logger, IAppFileService appFileService, IVectorStore vectorStore) : base(logger)
         {
+            this.logger = logger;
             _appFileService = appFileService;
-           // _appVectorStore = appVectorStore;
+            this._vectorStore = vectorStore;
+            // _appVectorStore = appVectorStore;
         }
 
         // POST api/<AppFileController>/{vectorStoreName}
@@ -28,7 +32,7 @@ namespace ClientManagement.Presentation.Web.Controllers
             var serviceReponse = await this._appFileService.AddOrUpdate(value);
             if (serviceReponse)
             {
-                return await this._appFileService.UpSert(vectorStoreName, value);
+                return await this._vectorStore.UpSert(vectorStoreName, value, value.FirstOrDefault()?.AgentName ?? string.Empty);
             }
             else
             {
@@ -46,9 +50,9 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpGet("[action]")]
         public IEnumerable<Dictionary<string, string>> VectoreStoreNames()
         {
-            return this._appVectorStore.GetVectoreStoreNames().Select(x =>
+            return this._vectorStore.GetVectoreStoreNames().Select(x =>
             {
-                return new Dictionary<string, string> { ["Name"] = x.name, ["DisplayName"] = x.displayName };
+                return new Dictionary<string, string> { ["Name"] = x.name, ["DisplayName"] = x.displayName, ["AgentName"] = x.agentName };
             });
         }
 

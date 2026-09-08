@@ -18,7 +18,7 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Files
         private IHttpClientFactory _httpClientFactory { get; set; }
         public IList<AppFileDto> SelectedFiles { get; set; } = [];
         public bool FileSubmissionInProgress { get; set; } = false;
-        public IEnumerable<(string name, string displayName)> VectoreStoreNames { get; set; } = [];
+        public IEnumerable<(string name, string displayName, string agentName)> VectoreStoreNames { get; set; } = [];
         private string? SelectedVectoreStoreName { get; set; }
         public HttpClient AppApi
         {
@@ -60,7 +60,8 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Files
             {
                 x.TryGetValue("Name", out var name);
                 x.TryGetValue("DisplayName", out var displayName);
-                return (name, displayName);
+                x.TryGetValue("AgentName", out var agentName);
+                return (name, displayName, agentName);
             }) ?? [];
         }
 
@@ -101,7 +102,8 @@ namespace ClientManagement.Presentation.Web.Components.Pages.Files
                         FileName = file.Name,
                         MimeType = file.ContentType,
                         Contents = fileContents,
-                        FileSize = file.Size
+                        FileSize = file.Size,
+                        AgentName = this.VectoreStoreNames.FirstOrDefault(x => x.name.Equals(this.SelectedVectoreStoreName, StringComparison.OrdinalIgnoreCase)).agentName
                     });
                 }
             }
