@@ -23,23 +23,23 @@ namespace ClientManagement.Ai.Helpers
 
             Tools = client.Result.ListToolsAsync().Result;
 
-            var transportOptions = new StdioClientTransportOptions
-                {
-                    Command = "docker",
-                    Arguments = new[] { 
-                        "run", 
-                        "-i", 
-                        "--rm", 
-                        "-v", "C:/Users/tgnku/OneDrive/Desktop/Desktop:/projects", 
-                        "mcp/filesystem", 
-                        "/projects" 
-                    }
-                };
+            //var transportOptions = new StdioClientTransportOptions
+            //    {
+            //        Command = "docker",
+            //        Arguments = new[] { 
+            //            "run", 
+            //            "-i", 
+            //            "--rm", 
+            //            "-v", "C:/Users/tgnku/OneDrive/Desktop/Desktop:/projects", 
+            //            "mcp/filesystem", 
+            //            "/projects" 
+            //        }
+            //    };
 
-             var transport = new StdioClientTransport(transportOptions);
+            // var transport = new StdioClientTransport(transportOptions);
 
-            using var c = McpClient.CreateAsync(transport);
-            Tools = [..Tools, ..c.Result.ListToolsAsync().Result];
+            //using var c = McpClient.CreateAsync(transport);
+            //Tools = [..Tools, ..c.Result.ListToolsAsync().Result];
         }
 
         

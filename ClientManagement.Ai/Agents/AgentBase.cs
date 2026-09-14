@@ -101,18 +101,40 @@ namespace ClientManagement.Ai.Agents
                          Description = aMetaData.Description,
                      };
                      var keys = options.AIContextProviders.Select(x => x.StateKeys);
-                     return chatClient.AsAIAgent(options: options);//.AsBuilder()
-                     //.Use(sharedFunc: InspectInputMiddleware).Build();// new ChatClientAgent(chatClient, options);
+                     return chatClient.AsAIAgent(options: options).AsBuilder().Use(sharedFunc: InspectInputMiddleware).Build();// new ChatClientAgent(chatClient, options);
                  }).FirstOrDefault();
             
             return agent;
         }
 
-        //public async Task<string> HandleUserRequest(AIAgent? agent,IList<AIContent> messageContents, IList<ChatMessage> ChatHistory, AgentSession? session = null )
-        //{
-        //   this.H
-        //}
+        public async Task InspectInputMiddleware(
+        IEnumerable<ChatMessage> messages,
+        AgentSession? session,
+        AgentRunOptions? options,
+        Func<IEnumerable<ChatMessage>,AgentSession?, AgentRunOptions?, CancellationToken, Task> next,
+        CancellationToken cancellationToken)
+        {
+            var desctiptions = string.Join("\n", this.agentOptions.Value.AiAgentMetaData
+                .Select(x => x.VecStoreMetaData?.Description)
+                .Where(x => x is not null)
+                .Select(x => $"- Data source: {x}"));
+            var inquiry = string.Join("\n", messages);
+            var question = $"Is there a suitable data source from the provided options that can be used to respond to the given question/instruction; Provide me with a simple yes or no answer:\n{desctiptions}\nQuestion/instruction: {inquiry}";
+            var response = await this.chatClient.GenerateAsync(new() { Prompt = question }).StreamToEndAsync();
+            if(response is { Response : string } validResponse && validResponse.Response.Contains("Yes", StringComparison.OrdinalIgnoreCase)){
+               
+            }
+            else
+            {
+                var textContent = new TextContent("Mention to the user that their request is outside the scope of your knowledge sources. Be brief and direct");
+                messages = [new(Microsoft.Extensions.AI.ChatRole.System, [textContent])];
+               
+            }
 
+             await next(messages, session, options, cancellationToken);
+            
+
+        }
         public ValueTask<AgentSession> CreateSessionAsync()
         {
             return AgentInstance!.CreateSessionAsync(); 
