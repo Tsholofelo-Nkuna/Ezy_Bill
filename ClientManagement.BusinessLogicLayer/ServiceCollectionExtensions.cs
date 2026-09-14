@@ -1,8 +1,8 @@
-﻿using ClientManagement.BusinessLogicLayer.Helpers;
-using ClientManagement.BusinessLogicLayer.Helpers.Interface;
-using ClientManagement.BusinessLogicLayer.Interfaces;
+﻿using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
 using ClientManagement.BusinessLogicLayer.Services;
+using ClientManagement.DataAccessLayer;
+using ClientManagement.DataAccessLayer.Helpers.Interface;
 using ClientManagement.Models.AI;
 using Core.Utils.Interfaces;
 using Core.Utils.State;
@@ -15,11 +15,7 @@ namespace ClientManagement.BusinessLogicLayer
     public static class ServiceCollectionExtensions
     {
        public static IServiceCollection AddBusinessServices(this IServiceCollection services, IConfiguration config) {
-           
-            services.Configure<AgentOptions>(options =>
-            {
-                config.Bind("AI", options);
-            });
+          
             services
                 .AddAutoMapper(typeof(AutoMapperConfig))
                 .AddScoped<IClientService, ClientService>()

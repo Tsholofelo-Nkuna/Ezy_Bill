@@ -11,15 +11,26 @@ namespace ClientManagement.Ai.Agents.Workflows
     {
         public Workflow Create()
         {
+            IEnumerable<AIAgent> agents = [bookkeepingAgent.AgentInstance, imageAnalystAgent.AgentInstance, cvAnalystAgent.AgentInstance];
+            //return AgentWorkflowBuilder.BuildConcurrent([bookkeepingAgent.AgentInstance, imageAnalystAgent.AgentInstance, cvAnalystAgent.AgentInstance]);
             return AgentWorkflowBuilder.CreateHandoffBuilderWith(imageAnalystAgent.AgentInstance)
-                .WithHandoff(imageAnalystAgent.AgentInstance, bookkeepingAgent.AgentInstance, handoffReason: "User's request is accounting or finance related.")
-                .WithHandoff(imageAnalystAgent.AgentInstance, cvAnalystAgent.AgentInstance, handoffReason: "User's request is regarding the gathering of information about an individual's identity or professional history.")
-                .WithHandoff(bookkeepingAgent.AgentInstance, imageAnalystAgent.AgentInstance, handoffReason:"User's request is related to interpeting or describing visual content")
-                 .WithHandoff(cvAnalystAgent.AgentInstance, imageAnalystAgent.AgentInstance, handoffReason: "User's request is related to interpeting or describing visual content")
-                .EnableReturnToPrevious()
+                .WithHandoff(imageAnalystAgent.AgentInstance, bookkeepingAgent.AgentInstance, $"User's request is accounting or finance related or access to knowledge source owned by {bookkeepingAgent.AgentInstance.Name} is required.")
+                .WithHandoff(imageAnalystAgent.AgentInstance, cvAnalystAgent.AgentInstance, $"User's request is regarding the gathering of information about an individual's identity or professional history or access to knowledge source owned by {cvAnalystAgent.AgentInstance.Name} is required.")
+                       //.EnableReturnToPrevious()
                 .Build();
-        }
 
- 
-    }
+            //return AgentWorkflowBuilder.CreateGroupChatBuilderWith(agents => new RoundRobinGroupChatManager(agents) { MaximumIterationCount = agents.Count()}).
+            //    AddParticipants(agents)
+            //    .Build();
+            //    return AgentWorkflowBuilder.CreateMagenticBuilderWith(imageAnalystAgent.AgentInstance)
+            //        .AddParticipants(bookkeepingAgent.AgentInstance, cvAnalystAgent.AgentInstance)
+            //        .RequirePlanSignoff(false)
+            //        .WithMaxStalls(1)
+            //        .WithMaxResets(3)
+            //        .WithMaxRounds(5)
+            //        .Build();
+            }
+
+
+        }
 }

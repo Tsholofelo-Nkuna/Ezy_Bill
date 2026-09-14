@@ -14,12 +14,6 @@ namespace ClientManagement.Ai
     public static class ServiceCollectionExtensions
     {
        public static IServiceCollection AddAiAgents(this IServiceCollection services, IConfiguration config) {
-           
-            services.Configure<AgentOptions>(options =>
-            {
-                config.Bind("AI", options);
-                
-            });
             //services
             //    .AddAutoMapper(typeof(AutoMapperConfig))
             //    .AddScoped<IClientService, ClientService> ()

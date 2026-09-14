@@ -1,5 +1,5 @@
-﻿using ClientManagement.BusinessLogicLayer.Helpers;
-using ClientManagement.BusinessLogicLayer.Helpers.Interface;
+﻿using ClientManagement.DataAccessLayer;
+using ClientManagement.DataAccessLayer.Helpers.Interface;
 using ClientManagement.Mcp.Helpers;
 using ClientManagement.Models.AI;
 using Microsoft.Extensions.AI;

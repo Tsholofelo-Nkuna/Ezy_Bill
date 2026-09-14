@@ -1,17 +1,18 @@
-using ClientManagement.Presentation.Web.Components;
-using Microsoft.EntityFrameworkCore;
 using ClientManagement.Ai;
-using ClientManagement.DataAccessLayer;
-using Core.Utils.Logging;
-using System.Globalization;
-using Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf;
-using Microsoft.AspNetCore.Identity;
-using Core.Utils;
-
-using Core.Utils.Constants;
-
-using ClientManagement.Models;
 using ClientManagement.BusinessLogicLayer;
+using ClientManagement.DataAccessLayer;
+using ClientManagement.Models;
+using ClientManagement.Models.AI;
+using ClientManagement.Presentation.Web.Components;
+using Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf;
+using Core.Utils;
+using Core.Utils.Constants;
+using Core.Utils.Logging;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace ClientManagement.Presentation.Web
 {
@@ -67,6 +68,12 @@ namespace ClientManagement.Presentation.Web
             });
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+            builder.Services.Configure<AgentOptions>(options =>
+            {
+               // options = new();
+                builder.Configuration.Bind("AI", options);
+
+            });
             builder.Services.AddAiAgents(builder.Configuration);
             builder.Services.AddBusinessServices(builder.Configuration);
           

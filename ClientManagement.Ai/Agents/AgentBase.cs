@@ -1,9 +1,20 @@
-﻿using ClientManagement.Ai.Agents.Interfaces;
+﻿using ClientManagement.Ai.Agents.Enums;
+using ClientManagement.Ai.Agents.Interfaces;
 using ClientManagement.Ai.Helpers;
+using ClientManagement.AI.Constants;
+using ClientManagement.DataAccessLayer.Helpers.Interface;
 using ClientManagement.Models.AI;
+using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Math;
+using DocumentFormat.OpenXml.Office.CustomUI;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
+using OllamaSharp;
+using OllamaSharp.Models.Chat;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace ClientManagement.Ai.Agents
 {
@@ -13,14 +24,40 @@ namespace ClientManagement.Ai.Agents
         protected readonly IOptions<AgentOptions> agentOptions;
         protected readonly AssistantChatApiClient chatClient;
         private readonly AppHttpTransportClient stdIoTransportClient;
+        private readonly IVectorStore _vectorStore;
 
-        public AgentBase(IOptions<AgentOptions> agentOptions,  AssistantChatApiClient chatClient, AppHttpTransportClient stdIoTransportClient) : base(agentOptions)
+        public event EventHandler<string> ChatResponseReceived;
+        public AgentBase(IOptions<AgentOptions> agentOptions,  AssistantChatApiClient chatClient, AppHttpTransportClient stdIoTransportClient, IVectorStore vectorStore) : base(agentOptions)
         {
             this.agentOptions = agentOptions;
             this.chatClient = chatClient;
             this.stdIoTransportClient = stdIoTransportClient;
-        }
-        public AgentSkillsProvider BaseSkill => new AgentSkillsProvider(Path.Combine(AppContext.BaseDirectory, agentOptions.Value.SkillPath));
+            this._vectorStore = vectorStore;
+
+            var baseSkillPath = this.agentOptions.Value.SkillPath;
+            var replacement = "Ai";
+            DirectoryInfo skillsDirInfo = new DirectoryInfo(Path.Combine(AppContext.BaseDirectory.Replace("Presentation.Web",replacement), baseSkillPath));
+            var agentDirNames = this.agentOptions.Value.AiAgentMetaData.Select(x => new DirectoryInfo(Path.Combine(AppContext.BaseDirectory.Replace("Presentation.Web", replacement), x.SkillPath)));
+            skillsDirInfo
+                .GetDirectories().Where(x => !agentDirNames.Select(x => x.FullName).Contains(x.FullName))
+                .ToList()
+                .ForEach(sourceDir => {
+                    sourceDir.EnumerateFiles().ToList().ForEach(f =>
+                    {
+                        var newFilePath = Path.Combine(f.Directory.Name, f.Name);
+                        var names = agentDirNames.Select(aD => Path.Combine(aD.FullName, newFilePath));
+                        foreach (var item in names)
+                        {
+                            File.Copy(f.FullName, item, true);
+                        }
+                       
+                    });
+                    //return dirContents;
+                });
+        } 
+       // public AgentSkillsProvider BaseSkill => new AgentSkillsProvider(Path.Combine(AppContext.BaseDirectory, agentOptions.Value.SkillPath));
+        public AgentSkillsProvider Skill => new AgentSkillsProvider(Path.Combine(AppContext.BaseDirectory, agentOptions.Value.AiAgentMetaData.FirstOrDefault(x => x.Name == Name)?.SkillPath));
+
         public AIAgent? AgentInstance
         { 
             get
@@ -38,72 +75,47 @@ namespace ClientManagement.Ai.Agents
             {
                 return $"- Name: {x.VecStoreMetaData!.Name}, Description: {x.VecStoreMetaData!.Description}, Owner: {x.Name}";
             });
-            var knowledgeBaseContextString = $"The following is a list of available knowledge source names along with their descriptions and owners: {string.Join("", knoweledgeBaseContext)}";
+            var knowledgeBaseContextStringForMaster = $"The following is a list of available knowledge source names along with their descriptions and owners (you are amongst the owners, the source you have access to is listed with your name): {string.Join("", knoweledgeBaseContext)}. **Access to knowledge source rule**: Only the owner of the knowledge source has access to it; you should always delegate any request for information from their knowledge sources to them.";
+          
             var knowledgeSourceName = agentMetaData.FirstOrDefault()?.VecStoreMetaData?.Name;
+            var knowledgeBaseContextStringForWorkers = $"You are the sole owner of a knowledge source called {knowledgeSourceName}, treat it as your source of truth as it's the only source of information you have.";
+            //var knowledgeSourceString = !string.IsNullOrWhiteSpace(knowledgeSourceName) ? $"You have access to a single knowledge source called {knowledgeSourceName}" : "Always handoff the user's inquiry if it's outside your area of expertise";
             var agent = agentMetaData
                  .Select(aMetaData =>
                  {
+                     var kBStr = aMetaData.Type.Equals(AgentType.Master, StringComparison.OrdinalIgnoreCase) ?  knowledgeBaseContextStringForMaster : knowledgeBaseContextStringForWorkers;
+                    
                      var options = new ChatClientAgentOptions()
+
                      {
-                         AIContextProviders = [BaseSkill],
+                         AIContextProviders = [Skill],
                          ChatOptions = new()
                          {
-                             Instructions = $"Your name is {agentName}. {knowledgeBaseContextString}.\nYou have access to a single knowledge source called {knowledgeSourceName ?? "undefined"}. {aMetaData.Instructions}. All your responses should be in plain text. Never mention your internal tools. Always be kind, helpful and use a professional tone.",
-                             Tools = [..this.stdIoTransportClient.Tools],
+                             Instructions = $"Your name is {agentName}. {kBStr}. {aMetaData.Instructions}. All your responses should be in plain text. Never mention your internal tools.",
+                             Tools = [.. this.stdIoTransportClient.Tools],
                              ModelId = string.IsNullOrWhiteSpace(aMetaData.Model) ? this.agentOptions.Value.OllamaModel : aMetaData.Model,
-                             
+                             AdditionalProperties =new AdditionalPropertiesDictionary { [AgentRunOptionProperties.AgentName] = agentName }
+
                          },
                          Name = aMetaData.Name,
                          Description = aMetaData.Description,
-                         
-                         
                      };
-                     return chatClient.AsAIAgent(options: options);//.AsBuilder().Use(sharedFunc: InspectInputMiddleware).Build();// new ChatClientAgent(chatClient, options);
+                     var keys = options.AIContextProviders.Select(x => x.StateKeys);
+                     return chatClient.AsAIAgent(options: options);//.AsBuilder()
+                     //.Use(sharedFunc: InspectInputMiddleware).Build();// new ChatClientAgent(chatClient, options);
                  }).FirstOrDefault();
             
             return agent;
         }
 
-        public static async Task<string> HandleUserRequest(AIAgent? agent,IList<AIContent> messageContents, IList<ChatMessage> ChatHistory, AgentSession? session = null )
-        {
-            await Task.Yield();
-            if(session is null)
-            {
-                session = await agent.CreateSessionAsync();
-            }
-           
-            var userMessage = new ChatMessage(ChatRole.User, messageContents);
-            IList<AIContent> chatContext = [..ChatHistory.SelectMany(x => x.Contents), ..messageContents];
-            ChatHistory.Add(userMessage);
-            var response = agent.RunStreamingAsync(new ChatMessage(ChatRole.User, chatContext), session);
-            var agentResponse = string.Empty;
-            await foreach (var item in response)
-            {
-
-                var toolApprovalRequestContent = item.Contents
-                    .OfType<ToolApprovalRequestContent>().FirstOrDefault();
-                if (toolApprovalRequestContent is not null)
-                {
-                    var toolResponse = toolApprovalRequestContent.CreateResponse(true);
-                    var wrapped = new ChatMessage(ChatRole.User, [toolResponse]);
-                    await foreach (var approvedItem in agent.RunStreamingAsync(wrapped, session))
-                    {
-                        agentResponse += approvedItem.Text;
-                    }
-                }
-                else
-                {
-                    agentResponse += item.Text;
-                }
-                await Task.Yield();
-            }
-            ChatHistory.Add(new ChatMessage(ChatRole.Assistant, [new TextContent(agentResponse)]));
-            return agentResponse;
-        }
+        //public async Task<string> HandleUserRequest(AIAgent? agent,IList<AIContent> messageContents, IList<ChatMessage> ChatHistory, AgentSession? session = null )
+        //{
+        //   this.H
+        //}
 
         public ValueTask<AgentSession> CreateSessionAsync()
         {
-            return AgentInstance!.CreateSessionAsync();
+            return AgentInstance!.CreateSessionAsync(); 
         }
     }
 }

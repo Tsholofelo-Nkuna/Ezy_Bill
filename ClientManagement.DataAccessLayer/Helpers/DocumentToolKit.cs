@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
 
-namespace ClientManagement.BusinessLogicLayer.Helpers;
+namespace ClientManagement.DataAccessLayer.Helpers;
 
 /// <summary>
 /// Tooling helpers exposed to the agent framework via <see cref="AIFunctionFactory"/>.
@@ -40,6 +40,7 @@ public static class DocumentToolKit
     /// </summary>
     /// <param name="filePath">Absolute or working-directory-relative path to the PDF.</param>
     /// <param name="cancellationToken">Token used to cancel the streaming operation.</param>
+    
     public static async IAsyncEnumerable<string> ReadPdf(
         byte[] pdfContents,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)

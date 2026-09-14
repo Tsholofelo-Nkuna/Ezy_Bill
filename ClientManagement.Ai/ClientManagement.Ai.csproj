@@ -11,9 +11,6 @@
     <Content Include="Agents\Skills\acquire-insight\Skill.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Agents\Skills\file-clipper\SKILL.md">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -29,10 +26,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ClientManagement.DataAccessLayer\ClientManagement.DataAccessLayer.csproj" />
     <ProjectReference Include="..\Core.Models\ClientManagement.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Agents\Skills\jimmy\" />
+    <Folder Include="Agents\Skills\linda\" />
+    <Folder Include="Agents\Skills\paul\" />
     <Folder Include="Interfaces\" />
   </ItemGroup>
 

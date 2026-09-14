@@ -1,6 +1,6 @@
 ﻿using ClientManagement.Models.DataTransferObjects;
 
-namespace ClientManagement.BusinessLogicLayer.Helpers.Interface;
+namespace ClientManagement.DataAccessLayer.Helpers.Interface;
 
 public interface IVectorStore
 {

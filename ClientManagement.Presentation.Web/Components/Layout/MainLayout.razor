@@ -38,6 +38,7 @@
                     @if (BookkeeperAgent?.ChatHistory?.Any()??false)
                     {
                         <div id="chatPanel" class="border border-1 border-primary my-2 p-3" style="border-radius:8px;height:auto;overflow-y:auto;max-height:256px;overflow-x:hidden;word-wrap:break-word;">
+                            
                             @foreach (var message in BookkeeperAgent.ChatHistory)
                             {
                                 <div class="my-2">
@@ -52,6 +53,18 @@
                                     </div>
                                 </div>
                             }
+                            @if (AgentIsBusy)
+                            {
+                                <div style="font-size:0.733em;color:darkgray;">
+                                    <div>Thinking...</div>
+                                    @foreach(var entry in AgentThoughts)
+                                    {
+                                        <div class="container mx-2">
+                                            <strong>@entry.Key:</strong> @entry.Value
+                                        </div>
+                                    }
+                                </div>
+                            }
                         </div>
                     }
                     @foreach(var chatMessage in BookkeeperAgent?.ChatHistory ?? [])
@@ -63,10 +76,7 @@
                         }
                        
                     }
-                    @if (!string.IsNullOrWhiteSpace(ImagePresentedToAgent.dataUrl))
-                    {
-                       <div style="background-image:url('@ImagePresentedToAgent.dataUrl'); background-size:cover;width:64px; height:64px;" class="rounded-2 border border-2 border-primary-subtle m-2"></div>
-                    }
+                 
                     <div style="display:grid; grid-template-columns: 1fr auto;" class="mb-2">
                         <input class="form-control mx-2" @bind-value="AgentInstructions" placeholder="Enter instructions" />
                         <ButtonTemplate 
@@ -173,5 +183,10 @@
        
        
      })();
+
+     function scrollChatPanelDown(){
+         let element = document.querySelector("#chatPanel");
+         element.scrollTop = element.scrollHeight;
+     }
     
 </script>

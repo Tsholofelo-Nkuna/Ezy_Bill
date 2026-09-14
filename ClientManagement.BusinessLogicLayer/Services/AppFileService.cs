@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ClientManagement.BusinessLogicLayer.Helpers;
 using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
 using ClientManagement.BusinessLogicLayer.Services.Base;

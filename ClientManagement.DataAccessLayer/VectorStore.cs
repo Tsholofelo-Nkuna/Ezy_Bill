@@ -1,4 +1,5 @@
-﻿using ClientManagement.BusinessLogicLayer.Helpers.Interface;
+﻿using ClientManagement.DataAccessLayer.Helpers;
+using ClientManagement.DataAccessLayer.Helpers.Interface;
 using ClientManagement.Models.AI;
 using ClientManagement.Models.DataTransferObjects;
 using Microsoft.Extensions.AI;
@@ -9,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClientManagement.BusinessLogicLayer.Helpers
+namespace ClientManagement.DataAccessLayer
 {
     public class VectorStore : IVectorStore
     {
@@ -33,10 +34,10 @@ namespace ClientManagement.BusinessLogicLayer.Helpers
                 return [];
             }
             var input = (await this.chatClient.GenerateVectorAsync(text, new() { ModelId = this.agentOptions.Value.EmbeddingModel })).ToArray();
-            
-            var response = await this.qdrantClient.QueryAsync(vectorStoreCollectionName, query: input, payloadSelector: true, limit: 5, filter: Conditions.MatchText("agent_name", agentName.ToLower()) );
 
-            return response.Select(x =>
+            var response = await this.qdrantClient.QueryAsync(vectorStoreCollectionName, query: input, payloadSelector: true, limit: 5, filter: Conditions.MatchText("agent_name", agentName.ToLower()));
+
+            return response.Where(x => x.Score >= 0.5).Select(x =>
             {
                 x.Payload.TryGetValue("text", out var text);
                 return text.ToString();
@@ -52,7 +53,7 @@ namespace ClientManagement.BusinessLogicLayer.Helpers
                 {
                     Distance = Distance.Cosine,
                     Size = 1024,
-                    
+
                 });
 
             }

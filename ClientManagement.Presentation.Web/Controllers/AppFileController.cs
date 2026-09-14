@@ -2,11 +2,8 @@
 using ClientManagement.BusinessLogicLayer.Interfaces;
 using ClientManagement.Presentation.Web.Controllers.Base;
 using ClientManagement.Models.DataTransferObjects;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
-using ClientManagement.BusinessLogicLayer.Helpers.Interface;
-
+using ClientManagement.DataAccessLayer.Helpers.Interface;
 namespace ClientManagement.Presentation.Web.Controllers
 {
     [Route("api/[controller]")]

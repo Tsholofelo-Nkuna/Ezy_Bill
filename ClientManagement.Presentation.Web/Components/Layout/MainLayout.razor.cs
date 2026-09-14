@@ -1,5 +1,6 @@
 ﻿using ClientManagement.Ai.Agents;
 using ClientManagement.Ai.Agents.Workflows;
+using ClientManagement.AI;
 using ClientManagement.Models.ViewModels;
 using Microsoft.Agents.AI;
 using Microsoft.Agents.AI.Workflows;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.AI;
+using Microsoft.JSInterop;
 using System.Net.NetworkInformation;
 
 namespace ClientManagement.Presentation.Web.Components.Layout
@@ -27,10 +29,13 @@ namespace ClientManagement.Presentation.Web.Components.Layout
         public (string contentType, byte[] contents, string dataUrl) ImagePresentedToAgent;
         public bool AgentIsBusy { get; set;  } = false;
         public string AgentResponse { get; set; } = string.Empty;
+        public Dictionary<string, string> AgentThoughts {  get; set; } = new();
         [Inject]
         public BookkeepingAgent? BookkeeperAgent { get; set; }
         [Inject] AppAssistantWorkflowProvider? AppAssitantWorkFlowProviderInstance { get; set; }
         public AIAgent? AppAssistantAgent { get; set; }
+        [Inject]
+        IJSRuntime JsRunTime { get; set; }
         public List<ChatMessage> ChatHistory 
         {
             get;
@@ -106,17 +111,23 @@ namespace ClientManagement.Presentation.Web.Components.Layout
         public async Task OnSendAgentInstructions()
         {
             AgentIsBusy = true;
-            AgentResponse = string.Empty;
+           
             await Task.Yield();
             IList<AIContent> messageContents = [new TextContent(AgentInstructions)];
-            
+
             if (!string.IsNullOrWhiteSpace(ImagePresentedToAgent.contentType))
             {
                 messageContents.Add(new DataContent(ImagePresentedToAgent.dataUrl));
             }
-            
-            AgentResponse = await AgentBase.HandleUserRequest(AppAssistantAgent,messageContents, BookkeeperAgent.ChatHistory) ?? string.Empty;
-            
+
+
+            await AppAssistantAgent.HandleUserRequest(messageContents, BookkeeperAgent.ChatHistory, assistantReasoningTokenHandler: async (reasoningToken) => {
+                AgentThoughts = reasoningToken;
+                StateHasChanged();
+                await JsRunTime.InvokeVoidAsync("scrollChatPanelDown");
+
+            });
+            AgentThoughts = new();
             AgentIsBusy = false;
             AgentInstructions = string.Empty;
             ImagePresentedToAgent = default;

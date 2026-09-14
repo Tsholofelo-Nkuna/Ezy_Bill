@@ -1,5 +1,4 @@
 using ClientManagement.Mcp;
-using ClientManagement.Mcp.Helpers;
 using ClientManagement.Mcp.Tools;
 using ClientManagement.Models.AI;
 
@@ -22,7 +21,7 @@ builder.Services
         // See https://csharp.sdk.modelcontextprotocol.io/concepts/transports/transports.html for details.
         options.Stateless = true;
     })
-    .WithToolsFromAssembly(typeof(FileSystemTool).Assembly);
+    .WithToolsFromAssembly(typeof(RagToolKit).Assembly);
 
 var app = builder.Build();
 app.MapMcp();
