@@ -27,7 +27,7 @@ namespace ClientManagement.Ai
             //    .AddScoped<IAppStateManager<ApplicationState>, AppStateManager<ApplicationState>>()
             //    .AddScoped<AssistantChatApiClient>()
             //    .AddScoped<BookkeepingAgent>()
-            //    .AddScoped<ImageAnalystAgent>()
+            //    .AddScoped<manageAgent>()
             //    .AddScoped<CvAnalystAgent>()
             //    .AddScoped<AppAssistantWorkflowProvider>()
             //    .AddScoped<RagToolKit>()
@@ -36,7 +36,7 @@ namespace ClientManagement.Ai
                 services
                 .AddScoped<AssistantChatApiClient>()
                 .AddScoped<BookkeepingAgent>()
-                .AddScoped<ImageAnalystAgent>()
+                .AddScoped<ManagerAgent>()
                 .AddScoped<CvAnalystAgent>()
                 .AddScoped<AppAssistantWorkflowProvider>()
                 .AddScoped<AppHttpTransportClient>()
