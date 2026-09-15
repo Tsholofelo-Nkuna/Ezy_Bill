@@ -1,6 +1,6 @@
 ﻿using ClientManagement.BusinessLogicLayer.Interfaces.Base;
 using ClientManagement.Models.DataTransferObjects;
-using Core.Utils;
+using ClientManagement.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClientManagement.Presentation.Web.Controllers.Base

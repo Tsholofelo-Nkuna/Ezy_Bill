@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Core.Utils.Interfaces;
+using ClientManagement.Utils.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
 using ClientManagement.Models.DataTransferObjects;
 

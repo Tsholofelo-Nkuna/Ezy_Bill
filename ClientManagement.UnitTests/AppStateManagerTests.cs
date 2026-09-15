@@ -1,6 +1,6 @@
 ﻿using ClientManagement.UnitTests.DataProviders;
 using ClientManagement.Models.DataTransferObjects.Base;
-using Core.Utils.Interfaces;
+using ClientManagement.Utils.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

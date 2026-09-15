@@ -1,5 +1,5 @@
-using Core.Utils.Constants;
-using Core.Utils.Mail;
+using ClientManagement.Utils.Constants;
+using ClientManagement.Utils.Mail;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;

@@ -1,7 +1,7 @@
 using ClientManagement.Models;
 using ClientManagement.Models.DataTransferObjects.login;
-using Core.Utils;
-using Core.Utils.Constants;
+using ClientManagement.Utils;
+using ClientManagement.Utils.Constants;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;

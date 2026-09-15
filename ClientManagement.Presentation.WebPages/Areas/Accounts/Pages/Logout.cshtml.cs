@@ -1,4 +1,4 @@
-using Core.Utils.Constants;
+using ClientManagement.Utils.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

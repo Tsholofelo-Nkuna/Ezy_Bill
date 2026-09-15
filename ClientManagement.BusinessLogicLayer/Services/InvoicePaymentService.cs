@@ -12,7 +12,7 @@ using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Entities;
 using ClientManagement.Models.DataTransferObjects;
-using Core.Utils.Interfaces;
+using ClientManagement.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

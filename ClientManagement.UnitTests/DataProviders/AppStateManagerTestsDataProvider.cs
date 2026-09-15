@@ -1,6 +1,6 @@
 ﻿using ClientManagement.Presentation.Web;
 using ClientManagement.Models.DataTransferObjects.Base;
-using Core.Utils.State;
+using ClientManagement.Utils.State;
 using System;
 using System.Collections.Generic;
 using System.Linq;

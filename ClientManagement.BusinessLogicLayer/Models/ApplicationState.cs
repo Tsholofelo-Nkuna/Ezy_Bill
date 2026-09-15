@@ -1,4 +1,4 @@
-﻿using Core.Utils.State;
+﻿using ClientManagement.Utils.State;
 
 namespace ClientManagement.BusinessLogicLayer.Models
 {

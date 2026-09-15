@@ -2,7 +2,7 @@
 
 using ClientManagement.Presentation.Web.Controllers.Base;
 using ClientManagement.Models.DataTransferObjects;
-using Core.Utils;
+using ClientManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -10,8 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.Models\ClientManagement.Models.csproj" />
-    <ProjectReference Include="..\Core.Models\ClientManagement.Models.csproj" />
+    <ProjectReference Include="..\ClientManagement.Models\ClientManagement.Models.csproj" />
+    <ProjectReference Include="..\ClientManagement.Models\ClientManagement.Models.csproj" />
+    <ProjectReference Include="..\ClientManagement.Utils\ClientManagement.Utils.csproj" />
   </ItemGroup>
 
   <ItemGroup>

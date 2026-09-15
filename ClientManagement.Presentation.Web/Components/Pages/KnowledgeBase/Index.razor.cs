@@ -1,7 +1,7 @@
 using ClientManagement.Presentation.Web.Controllers;
 using ClientManagement.Models;
 using ClientManagement.Models.DataTransferObjects;
-using Core.Utils.Constants;
+using ClientManagement.Utils.Constants;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Org.BouncyCastle.Bcpg.OpenPgp;

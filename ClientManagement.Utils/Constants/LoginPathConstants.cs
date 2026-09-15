@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ClientManagement.Utils.Constants
+{
+    public class LoginPathConstants
+    {
+        public const string Login = "/Accounts/Login";
+        public const string Logout = "/Accounts/Logout";
+        public const string ForgotPassword = "/Accounts/ForgotPassword";
+        public const string Register = "/Accounts/Register";
+        public const string ResetPassword = "/Accounts/ResetPasswordLink";
+    }
+}

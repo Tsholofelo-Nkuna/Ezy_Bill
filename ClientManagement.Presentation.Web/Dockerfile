@@ -18,7 +18,7 @@ COPY ["ClientManagement.Presentation.Web/ClientManagement.Presentation.Web.cspro
 COPY ["ClientManagement.BusinessLogicLayer/ClientManagement.BusinessLogicLayer.csproj", "ClientManagement.BusinessLogicLayer/"]
 COPY ["ClientManagement.DataAccessLayer/ClientManagement.DataAccessLayer.csproj", "ClientManagement.DataAccessLayer/"]
 COPY ["Core.Models/ClientManagement.Models.csproj", "Core.Models/"]
-COPY ["Core.Utils/Core.Utils.csproj", "Core.Utils/"]
+COPY ["ClientManagement.Utils/ClientManagement.Utils.csproj", "ClientManagement.Utils/"]
 COPY ["ClientManagement.Presentation.WebPages/ClientManagement.Presentation.WebPages.csproj", "ClientManagement.Presentation.WebPages/"]
 COPY ["Core.Presentation.ViewComponents/Core.Presentation.ViewComponents.csproj", "Core.Presentation.ViewComponents/"]
 RUN dotnet restore "./ClientManagement.Presentation.Web/ClientManagement.Presentation.Web.csproj"

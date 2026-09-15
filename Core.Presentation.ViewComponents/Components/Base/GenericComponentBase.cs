@@ -14,9 +14,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using System.Security.Principal;
-using Core.Utils.Constants;
 using ClientManagement.Models.Interfaces.Base;
 using ClientManagement.Models.DataTransferObjects.Base;
+using ClientManagement.Utils.Constants;
 
 
 namespace Core.Presentation.ViewComponents.Components.Base

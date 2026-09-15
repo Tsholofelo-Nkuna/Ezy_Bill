@@ -2,7 +2,7 @@
 using ClientManagement.Models.DataTransferObjects;
 using ClientManagement.Models.DataTransferObjects.Base;
 using Core.Presentation.ViewComponents.Components.Base;
-using Core.Utils;
+using ClientManagement.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;

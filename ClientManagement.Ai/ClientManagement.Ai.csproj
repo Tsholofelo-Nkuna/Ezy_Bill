@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClientManagement.DataAccessLayer\ClientManagement.DataAccessLayer.csproj" />
-    <ProjectReference Include="..\Core.Models\ClientManagement.Models.csproj" />
+    <ProjectReference Include="..\ClientManagement.Models\ClientManagement.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

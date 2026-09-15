@@ -2,9 +2,6 @@
 using ClientManagement.DataAccessLayer.Helpers.Interface;
 using ClientManagement.Models.AI;
 using Microsoft.Extensions.Options;
-using Org.BouncyCastle.Crypto;
-
-
 
 namespace ClientManagement.Ai.Agents
 {

@@ -5,7 +5,7 @@ VisualStudioVersion = 18.0.11222.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Presentation.ViewComponents", "Core.Presentation.ViewComponents\Core.Presentation.ViewComponents.csproj", "{C87671CC-39EE-4E43-B0DA-F31AF523B5A2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientManagement.Models", "Core.Models\ClientManagement.Models.csproj", "{8A6060E2-947D-4ED3-ACEC-D39563107D1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientManagement.Models", "ClientManagement.Models\ClientManagement.Models.csproj", "{8A6060E2-947D-4ED3-ACEC-D39563107D1E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientManagement.UnitTests", "ClientManagement.UnitTests\ClientManagement.UnitTests.csproj", "{062F4CF7-9F26-4AF3-B65F-977BAC88AC27}"
 EndProject
@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManagement.BusinessLo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManagement.DataAccessLayer", "ClientManagement.DataAccessLayer\ClientManagement.DataAccessLayer.csproj", "{A741567E-9873-4D64-A8C7-B08CBCD0C9AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Utils", "Core.Utils\Core.Utils.csproj", "{A0EFCEAB-E2D5-4060-97DE-0E7E0239E446}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManagement.Utils", "ClientManagement.Utils\ClientManagement.Utils.csproj", "{A0EFCEAB-E2D5-4060-97DE-0E7E0239E446}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManagement.Presentation.WebPages", "ClientManagement.Presentation.WebPages\ClientManagement.Presentation.WebPages.csproj", "{0346D680-CC6D-463A-87EF-CC7294526018}"
 EndProject

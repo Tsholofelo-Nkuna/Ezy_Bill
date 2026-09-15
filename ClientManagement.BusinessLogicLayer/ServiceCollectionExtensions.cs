@@ -4,8 +4,8 @@ using ClientManagement.BusinessLogicLayer.Services;
 using ClientManagement.DataAccessLayer;
 using ClientManagement.DataAccessLayer.Helpers.Interface;
 using ClientManagement.Models.AI;
-using Core.Utils.Interfaces;
-using Core.Utils.State;
+using ClientManagement.Utils.Interfaces;
+using ClientManagement.Utils.State;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

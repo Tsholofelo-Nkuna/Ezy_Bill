@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ClientManagement.BusinessLogicLayer.Interfaces;
 
-using Core.Utils;
+using ClientManagement.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using ClientManagement.Models.DataTransferObjects;

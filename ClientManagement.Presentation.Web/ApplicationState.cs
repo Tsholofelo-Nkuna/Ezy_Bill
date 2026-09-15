@@ -1,5 +1,5 @@
-﻿using Core.Utils.Interfaces;
-using Core.Utils.State;
+﻿using ClientManagement.Utils.Interfaces;
+using ClientManagement.Utils.State;
 
 namespace ClientManagement.Presentation.Web
 {

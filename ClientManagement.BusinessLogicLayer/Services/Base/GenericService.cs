@@ -8,9 +8,9 @@ using System.Linq.Expressions;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Core.Utils.Interfaces;
+using ClientManagement.Utils.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
-using Core.Utils.Constants;
+using ClientManagement.Utils.Constants;
 using ClientManagement.Models.DataTransferObjects;
 
 namespace ClientManagement.BusinessLogicLayer.Services.Base
