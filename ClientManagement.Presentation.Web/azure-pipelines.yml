@@ -29,7 +29,6 @@ stages:
             cd ./Core.Presentation.ViewComponents
             libman restore
             cd ..
-            dotnet ef --help
             dotnet workload restore
             
       # 2. Build Step (with --no-restore)
