@@ -66,7 +66,7 @@ stages:
           script: |
             docker login -u $(registryUserName) -p $(registryPassword)
             cd $(projectPath)
-            docker build --tag $(containerRepository):v$(imageTag) .
+            dotnet publish --os linux --arch x64 /t:PublishContainer /p:ContainerRepository=$(containerRepository) /p:ContainerImageTags=v$(imageTag)
             docker push $(containerRepository):v$(imageTag)
             cd ../
             docker --version
