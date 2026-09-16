@@ -52,6 +52,7 @@ stages:
         inputs:
           command: 'publish'
           publishWebProjects: false
+          projects: '**/ClientManagement.Presentation.Web.csproj'
           arguments: '--configuration $(buildConfiguration) --output $(drop)'
           zipAfterPublish: false
           modifyOutputPath: false
