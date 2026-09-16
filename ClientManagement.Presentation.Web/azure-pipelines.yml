@@ -6,7 +6,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 pool:
-  vmImage: 'windows-latest'
+   vmImage: 'ubuntu-latest'
 
 variables:
   - group: dockerCredentials
