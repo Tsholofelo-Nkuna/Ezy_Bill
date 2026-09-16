@@ -25,7 +25,6 @@ variables:
   - name: projectPath
     value: './ClientManagement.Presentation.Web'
 
-
 stages:
   - stage: Build
     jobs:
