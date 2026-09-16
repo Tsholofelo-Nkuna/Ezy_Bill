@@ -9,12 +9,21 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'DevOnline'
-  containerRepository: 'tsholofelo768'
-  imageTag: 'clientmanagement-presentation-web'
-  drop: '$(build.artifactstagingdirectory)/drop'
+  - group: dockerCredentials
+  - name: solution
+    value: '**/*.sln'
+  - name: buildPlatform
+    value: 'Any CPU'
+  - name: buildConfiguration
+    value: 'DevOnline'
+  - name: containerRepository
+    value: 'tsholofelo768'
+  - name: imageTag
+    value: 'clientmanagement-presentation-web'
+  - name: drop
+    value: '$(build.artifactstagingdirectory)/drop'
+
+
 stages:
   - stage: Build
     jobs:
@@ -49,6 +58,9 @@ stages:
         inputs:
           PathtoPublish: '$(drop)'
           ArtifactName: 'drop'
+      - task: DockerInstaller@0
+        inputs:
+          dockerVersion: '17.09.0-ce'
       - task: Bash@3
         inputs:
           targetType: 'inline'
