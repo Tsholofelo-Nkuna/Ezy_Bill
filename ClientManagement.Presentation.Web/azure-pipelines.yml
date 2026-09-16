@@ -68,6 +68,7 @@ stages:
             docker build --tag $(containerRepository):v$(imageTag) .
             docker push $(containerRepository):v$(imageTag)
             cd ../
+            docker --version
 
 
             
