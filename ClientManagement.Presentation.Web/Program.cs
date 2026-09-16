@@ -21,7 +21,6 @@ namespace ClientManagement.Presentation.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Logging.AddProvider(new FileLoggerProvider());
            
             builder.Services.AddSession();
             builder.Services.AddSwaggerGen();

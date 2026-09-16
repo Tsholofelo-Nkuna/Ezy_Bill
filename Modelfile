@@ -1,0 +1,5 @@
+FROM qwen2.5-coder:3b-instruct-q4_K_M
+# Set a tight context limit to stop memory bus thrashing as conversation grows
+PARAMETER num_ctx 4096
+# Keep the model active in shared RAM so it doesn't constantly reload
+PARAMETER num_keep -1

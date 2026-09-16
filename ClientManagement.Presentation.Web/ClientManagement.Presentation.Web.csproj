@@ -6,9 +6,10 @@
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Configurations>Debug;Release;DevOnline</Configurations>
 	<UserSecretsId>e18a12b8-ac49-4418-9a45-ab66597bdc9d</UserSecretsId>
-	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
 	<IsPackable>true</IsPackable>
 	<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>

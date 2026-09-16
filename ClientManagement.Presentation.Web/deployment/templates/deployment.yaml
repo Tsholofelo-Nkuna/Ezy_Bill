@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: {{.Values.appName}}
-          image: "{{.Values.appName}}:{{.Values.image.tag}}"
+          image: "{{.Values.image.repository}}/{{.Values.appName}}:{{.Values.image.tag}}"
           imagePullPolicy: {{.Values.image.pullPolicy}}
           ports:
             - containerPort: 8080
