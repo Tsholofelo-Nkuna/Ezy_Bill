@@ -70,7 +70,7 @@ stages:
             cd ./Client
             docker login -u $(registryUserName) -p $(registryPassword)
             cd $(projectPath)
-            dotnet publish --os linux --arch x64 /t:PublishContainer /p:ContainerRepository=$(containerRepository) /p:ContainerImageTags=$(imageTag)
+            dotnet publish --os linux --arch x64 -t:PublishContainer -p:ContainerRepository=$(containerRepository) -p:ContainerImageTags=$(imageTag)
             cd ../
             
          
