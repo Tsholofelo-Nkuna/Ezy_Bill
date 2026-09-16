@@ -60,18 +60,11 @@ stages:
         inputs:
           PathtoPublish: '$(drop)'
           ArtifactName: 'drop'
-      - task: DockerInstaller@0
-        inputs:
-          dockerVersion: '29.6.2-rd'
-      - task: Docker@2
-        inputs:
-          command: 'login'
-          arguments: '-u $(registryUserName) -p $(registryPassword)'
       - task: Bash@3
         inputs:
           targetType: 'inline'
           script: |
-            cd ./Client
+            docker login -u $(registryUserName) -p $(registryPassword)
             cd $(projectPath)
             dotnet publish --os linux --arch x64 -t:PublishContainer -p:ContainerRepository=$(containerRepository) -p:ContainerImageTags=$(imageTag)
             cd ../
