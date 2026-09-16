@@ -17,9 +17,9 @@ variables:
   - name: buildConfiguration
     value: 'DevOnline'
   - name: containerRepository
-    value: 'tsholofelo768'
+    value: 'tsholofelo768/clientmanagement-presentation-web'
   - name: imageTag
-    value: 'clientmanagement-presentation-web'
+    value: '$(build.buildId)'
   - name: drop
     value: '$(build.artifactstagingdirectory)/drop'
   - name: projectPath
