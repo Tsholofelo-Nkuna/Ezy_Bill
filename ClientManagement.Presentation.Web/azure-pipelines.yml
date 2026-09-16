@@ -6,13 +6,25 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 pool:
-  vmImage: 'windows-latest'
+   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'DevOnline'
-  drop: '$(build.artifactstagingdirectory)/drop'
+  - group: dockerCredentials
+  - name: solution
+    value: '**/*.sln'
+  - name: buildPlatform
+    value: 'Any CPU'
+  - name: buildConfiguration
+    value: 'DevOnline'
+  - name: containerRepository
+    value: 'tsholofelo768/clientmanagement-presentation-web'
+  - name: imageTag
+    value: '$(build.buildId)'
+  - name: drop
+    value: '$(build.artifactstagingdirectory)/drop'
+  - name: projectPath
+    value: './ClientManagement.Presentation.Web'
+
 stages:
   - stage: Build
     jobs:
@@ -27,7 +39,6 @@ stages:
             cd ./Core.Presentation.ViewComponents
             libman restore
             cd ..
-            dotnet ef --help
             dotnet workload restore
             
       # 2. Build Step (with --no-restore)
@@ -48,6 +59,25 @@ stages:
         inputs:
           PathtoPublish: '$(drop)'
           ArtifactName: 'drop'
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: |
+            docker login -u $(registryUserName) -p $(registryPassword)
+            cd $(projectPath)
+            docker build --tag $(containerRepository):v$(imageTag) .
+            docker push $(containerRepository):v$(imageTag)
+            cd ../
+            docker --version
+
+
+            
+         
+         
+      
+          
+
+      
          
       
 
