@@ -66,6 +66,7 @@ stages:
           targetType: 'inline'
           script: |
             docker login -u $(registryUserName) -p $(registryPassword)
+            dotnet publish --os linux --arch x64 /t:PublishContainer /p:ContainerRepository=$(containerRepository) /p:ContainerImageTags=$(imageTag)
             
          
          
