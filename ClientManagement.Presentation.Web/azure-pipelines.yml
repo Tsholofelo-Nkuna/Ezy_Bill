@@ -12,6 +12,8 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'DevOnline'
+  containerRepository: 'tsholofelo768'
+  imageTag: 'clientmanagement-presentation-web'
   drop: '$(build.artifactstagingdirectory)/drop'
 stages:
   - stage: Build
@@ -48,6 +50,15 @@ stages:
         inputs:
           PathtoPublish: '$(drop)'
           ArtifactName: 'drop'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'publish'
+          publishWebProjects: false
+          arguments: 'dotnet publish --os linux --arch x64 /t:PublishContainer /p:ContainerRepository=$(containerRepository) /p:ContainerImageTags=$(imageTag)'
+          zipAfterPublish: false
+          modifyOutputPath: false
+
+      
          
       
 
