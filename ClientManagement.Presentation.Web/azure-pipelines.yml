@@ -1,12 +1,10 @@
 # ASP.NET Core (.NET Framework) 
-
-
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 pool:
-   vmImage: 'windows-latest'
+  vmImage: 'windows-latest'
 
 variables:
   - group: dockerCredentials
@@ -28,58 +26,54 @@ variables:
 stages:
   - stage: Build
     jobs:
-    - job: Build
-      displayName: "Build ClientManagement.Web"
-      steps:
-      - task: Bash@3
-        inputs:
-          targetType: 'inline'
-          script: |
-            dotnet tool install -g Microsoft.Web.LibraryManager.Cli
-            cd ./Core.Presentation.ViewComponents
-            libman restore
-            cd ..
-            dotnet workload restore
+      - job: Build
+        displayName: "Build ClientManagement.Web"
+        steps:
+          # 1. Restore client-side libraries and workloads
+          - task: Bash@3
+            displayName: 'Restore Libman & Workloads'
+            inputs:
+              targetType: 'inline'
+              script: |
+                dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+                cd ./Core.Presentation.ViewComponents
+                libman restore
+                cd ..
+                dotnet workload restore
             
-      # 2. Build Step (with --no-restore)
-      # - task: DotNetCoreCLI@2
-      #   displayName: 'Build ClientManagement.Web'
-      #   inputs:
-      #     command: 'publish'
-      #     projects: '**/ClientManagement.Presentation.Web.csproj'
-      #     arguments: ''
-      - task: DotNetCoreCLI@2
-        inputs:
-          command: 'publish'
-          publishWebProjects: false
-          projects: '**/ClientManagement.Presentation.Web.csproj'
-          arguments: '--configuration $(buildConfiguration) --output $(drop)'
-          zipAfterPublish: false
-          modifyOutputPath: false
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: '$(drop)'
-          ArtifactName: 'drop'
-      - task: Bash@3
-        inputs:
-          targetType: 'inline'
-          script: |
-            docker login -u $(registryUserName) -p $(registryPassword)
-            cd $(projectPath)
-            dotnet publish --os linux --arch x64 /t:PublishContainer /p:ContainerRepository=$(containerRepository) /p:ContainerImageTags=v$(imageTag)
-            docker push $(containerRepository):v$(imageTag)
-            cd ../
-            docker --version
+          # 2. Publish Web Files to Drop (for traditional deployment)
+          - task: DotNetCoreCLI@2
+            displayName: 'Publish Web Files to Drop'
+            inputs:
+              command: 'publish'
+              publishWebProjects: false
+              projects: '**/ClientManagement.Presentation.Web.csproj'
+              arguments: '--configuration $(buildConfiguration) --output $(drop)'
+              zipAfterPublish: false
+              modifyOutputPath: false
 
-
-            
-         
-         
-      
-          
-
-      
-         
-      
-
-                          
+          # 3. Save traditional build artifacts
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Drop Artifacts'
+            inputs:
+              PathtoPublish: '$(drop)'
+              ArtifactName: 'drop'
+     
+          # 4. Containerize and Push Directly via native .NET CLI 
+          # (Fixed alignment and eliminated Git Bash pathing errors)
+          - task: DotNetCoreCLI@2
+            displayName: 'Build & Push Docker Container'
+            inputs:
+              command: 'custom'
+              custom: 'publish'
+              projects: '**/ClientManagement.Presentation.Web.csproj'
+              arguments: >
+                --configuration $(buildConfiguration)
+                --os linux
+                --arch x64
+                -p:PublishContainer=true
+                -p:ContainerRepository=$(containerRepository)
+                -p:ContainerImageTags=v$(imageTag)
+                -p:ContainerRegistry=index.docker.io
+                -p:ContainerRegistryUsername=$(registryUserName)
+                -p:ContainerRegistryPassword=$(registryPassword)
