@@ -30,7 +30,7 @@ variables:
     value: 'tsholofelo768/clientmanagement-mcp'
 
 stages:
-  - stage: Build
+  - stage: Build_Web
     jobs:
       - job: Build_Web
         displayName: "Build ClientManagement.Web"
@@ -70,11 +70,12 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                dotnet workload restore
                 cd $(projectDir)
+                dotnet workload restore
                 docker login -u $(registryUserName) -p $(registryPassword)
                 dotnet publish --configuration $(buildConfiguration) --os linux --arch x64 -t:PublishContainer -p:ContainerRepository=$(containerRepository) -p:ContainerImageTags=$(imageTag) -p:ContainerRegistry=docker.io 
-               
+  - stage: Build_MCP
+    jobs:         
       - job: Build_MCP
         displayName: "Build ClientManagement.Mcp"
         steps:
@@ -83,8 +84,8 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                dotnet workload restore
                 cd $(mcpProjectPath)
+                dotnet workload restore
                 docker login -u $(registryUserName) -p $(registryPassword)
                 dotnet publish --configuration $(buildConfiguration) --os linux --arch x64 -t:PublishContainer -p:ContainerRepository=$(mcpContainerRepository) -p:ContainerImageTags=$(imageTag) -p:ContainerRegistry=docker.io
        
