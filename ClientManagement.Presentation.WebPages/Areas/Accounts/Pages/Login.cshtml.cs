@@ -42,7 +42,6 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
                 {
                    var user =  _userManager.Users.FirstOrDefault(x => x.UserName == userCredentials.Username)!;
                    await _signInManager.SignInAsync(user, false);
-                   Console.WriteLine($"{user.Email} successfully logged in");
                    HttpContext.Response.Redirect("/");
                 }
             }
