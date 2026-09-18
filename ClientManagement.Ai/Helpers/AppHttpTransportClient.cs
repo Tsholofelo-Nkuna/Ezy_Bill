@@ -1,6 +1,7 @@
 ﻿
 
 using ClientManagement.Models.AI;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ModelContextProtocol.Client;
 
@@ -9,11 +10,13 @@ namespace ClientManagement.Ai.Helpers
 {
     public class AppHttpTransportClient 
     {
+        private readonly ILogger<AppHttpTransportClient> _logger;
 
         public IList<McpClientTool> Tools { get; set; }
-        public AppHttpTransportClient(IOptions<AgentOptions> agentOptions)
+        public AppHttpTransportClient(IOptions<AgentOptions> agentOptions, ILogger<AppHttpTransportClient> logger)
         {
-
+            this._logger = logger;
+            _logger.LogInformation("Mcp service initializing");
             var stdioClientTransport = new HttpClientTransport(new HttpClientTransportOptions()
             {
                 Endpoint = new Uri(agentOptions.Value.McpUrl)
@@ -40,6 +43,7 @@ namespace ClientManagement.Ai.Helpers
 
             using var c = McpClient.CreateAsync(transport);
             Tools = [.. Tools, .. c.Result.ListToolsAsync().Result];
+           
         }
 
         
