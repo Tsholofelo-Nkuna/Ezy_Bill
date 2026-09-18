@@ -1,12 +1,10 @@
-# ASP.NET Core (.NET Framework) 
-
-
+# ASP.NET Core (.NET Framework)
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
 # Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# https://microsoft.com
 
 pool:
-   vmImage: 'windows-latest'
+  vmImage: 'windows-latest'
 
 variables:
   - group: dockerCredentials
@@ -23,62 +21,55 @@ variables:
   - name: drop
     value: '$(build.artifactstagingdirectory)/drop'
   - name: projectPath
-    value: './ClientManagement.Presentation.Web'
+    value: 'ClientManagement.Presentation.Web/ClientManagement.Presentation.Web.csproj'
+  - name: projectDir
+    value: ClientManagement.Presentation.Web
 
 stages:
   - stage: Build
     jobs:
-    - job: Build
-      displayName: "Build ClientManagement.Web"
-      steps:
-      - task: Bash@3
-        inputs:
-          targetType: 'inline'
-          script: |
-            dotnet tool install -g Microsoft.Web.LibraryManager.Cli
-            cd ./Core.Presentation.ViewComponents
-            libman restore
-            cd ..
-            dotnet workload restore
-            
-      # 2. Build Step (with --no-restore)
-      # - task: DotNetCoreCLI@2
-      #   displayName: 'Build ClientManagement.Web'
-      #   inputs:
-      #     command: 'publish'
-      #     projects: '**/ClientManagement.Presentation.Web.csproj'
-      #     arguments: ''
-      - task: DotNetCoreCLI@2
-        inputs:
-          command: 'publish'
-          publishWebProjects: false
-          arguments: '--configuration $(buildConfiguration) --output $(drop)'
-          zipAfterPublish: false
-          modifyOutputPath: false
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: '$(drop)'
-          ArtifactName: 'drop'
-      - task: Bash@3
-        inputs:
-          targetType: 'inline'
-          script: |
-            docker login -u $(registryUserName) -p $(registryPassword)
-            cd $(projectPath)
-            docker build --tag $(containerRepository):v$(imageTag) .
-            docker push $(containerRepository):v$(imageTag)
-            cd ../
-            docker --version
+      - job: Build
+        displayName: "Build ClientManagement.Web"
+        steps:
+          # 1. Restore client-side libraries and workloads
+          - task: Bash@3
+            displayName: 'Restore Libman & Workloads'
+            inputs:
+              targetType: 'inline'
+              script: |
+                dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+                cd ./Core.Presentation.ViewComponents
+                libman restore
+                cd ..
+                dotnet workload restore
 
+          # 2. Publish Web Files to Drop (for traditional deployment)
+          # - task: DotNetCoreCLI@2
+          #   displayName: 'Publish Web Files to Drop'
+          #   inputs:
+          #     command: 'publish'
+          #     publishWebProjects: false
+          #     projects: '$(projectPath)' # Fixed: Explicit direct path
+          #     arguments: '--configuration $(buildConfiguration) --output $(drop)'
+          #     zipAfterPublish: false
+          #     modifyOutputPath: false
 
-            
-         
-         
-      
-          
+          # 3. Save traditional build artifacts
+          # - task: PublishBuildArtifacts@1
+          #   displayName: 'Publish Drop Artifacts'
+          #   inputs:
+          #     PathtoPublish: '$(drop)'
+          #     ArtifactName: 'drop'
 
-      
-         
-      
-
-                          
+          - task: Bash@3
+            displayName: 'Restore Workloads and publish container'
+            inputs:
+              targetType: 'inline'
+              script: |
+                dotnet workload restore
+                cd $(projectDir)
+                docker login -u $(registryUserName) -p $(registryPassword)
+                dotnet publish --configuration $(buildConfiguration) --os linux --arch x64 -t:PublishContainer -p:ContainerRepository=$(containerRepository) -p:ContainerImageTags=v$(imageTag) -p:ContainerRegistry=docker.io 
+               
+          # 4. Containerize and Push Directly via native .NET CLI
+       
