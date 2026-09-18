@@ -27,6 +27,7 @@ spec:
                 name: {{.Values.appConfigName}}
             - secretRef:
                 name: {{.Values.appSecretName}}
+          ASPNETCORE_URLS": "http://*:8080;"
         - name: {{.Values.mcpName}}
           image: "{{.Values.image.repository}}/{{.Values.mcpName}}:{{.Values.image.tag}}"
           imagePullPolicy: {{.Values.image.pullPolicy}}
@@ -38,3 +39,4 @@ spec:
                 name: {{.Values.appConfigName}}
             - secretRef:
                 name: {{.Values.appSecretName}}
+          ASPNETCORE_URLS": "http://*:8082;"
