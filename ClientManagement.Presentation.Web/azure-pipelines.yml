@@ -1,7 +1,7 @@
-# ASP.NET Core (.NET Framework) 
+# ASP.NET Core (.NET Framework)
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
 # Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# https://microsoft.com
 
 pool:
   vmImage: 'windows-latest'
@@ -21,7 +21,7 @@ variables:
   - name: drop
     value: '$(build.artifactstagingdirectory)/drop'
   - name: projectPath
-    value: './ClientManagement.Presentation.Web'
+    value: 'ClientManagement.Presentation.Web/ClientManagement.Presentation.Web.csproj'
 
 stages:
   - stage: Build
@@ -40,14 +40,14 @@ stages:
                 libman restore
                 cd ..
                 dotnet workload restore
-            
+
           # 2. Publish Web Files to Drop (for traditional deployment)
           - task: DotNetCoreCLI@2
             displayName: 'Publish Web Files to Drop'
             inputs:
               command: 'publish'
               publishWebProjects: false
-              projects: '**/ClientManagement.Presentation.Web.csproj'
+              projects: '$(projectPath)' # Fixed: Explicit direct path
               arguments: '--configuration $(buildConfiguration) --output $(drop)'
               zipAfterPublish: false
               modifyOutputPath: false
@@ -58,15 +58,14 @@ stages:
             inputs:
               PathtoPublish: '$(drop)'
               ArtifactName: 'drop'
-     
-          # 4. Containerize and Push Directly via native .NET CLI 
-          # (Fixed alignment and eliminated Git Bash pathing errors)
+
+          # 4. Containerize and Push Directly via native .NET CLI
           - task: DotNetCoreCLI@2
             displayName: 'Build & Push Docker Container'
             inputs:
               command: 'custom'
               custom: 'publish'
-              projects: '**/ClientManagement.Presentation.Web.csproj'
+              projects: '$(projectPath)' # Fixed: Explicit direct path prevents pulling in Desktop project
               arguments: >
                 --configuration $(buildConfiguration)
                 --os linux
