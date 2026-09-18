@@ -59,6 +59,12 @@ stages:
               PathtoPublish: '$(drop)'
               ArtifactName: 'drop'
 
+          - task: Bash@3
+            displayName: 'Restore Workloads'
+            inputs:
+              targetType: 'inline'
+              script: |
+                dotnet workload restore
           # 4. Containerize and Push Directly via native .NET CLI
           - task: DotNetCoreCLI@2
             displayName: 'Build & Push Docker Container'
