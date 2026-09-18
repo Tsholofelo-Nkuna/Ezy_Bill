@@ -22,6 +22,8 @@ variables:
     value: '$(build.artifactstagingdirectory)/drop'
   - name: projectPath
     value: 'ClientManagement.Presentation.Web/ClientManagement.Presentation.Web.csproj'
+  - name: projectDir
+    value: ClientManagement.Presentation.Web
 
 stages:
   - stage: Build
@@ -60,25 +62,12 @@ stages:
               ArtifactName: 'drop'
 
           - task: Bash@3
-            displayName: 'Restore Workloads'
+            displayName: 'Restore Workloads and publish container'
             inputs:
               targetType: 'inline'
               script: |
                 dotnet workload restore
+                cd $(projectDir)
+                dotnet publish --configuration $(buildConfiguration) --os linux --arch x64 -p:PublishContainer=true -p:ContainerRepository=$(containerRepository) -p:ContainerImageTags=v$(imageTag) -p:ContainerRegistry=index.docker.io -p:ContainerRegistryUsername=$(registryUserName) -p:ContainerRegistryPassword=$(registryPassword)
           # 4. Containerize and Push Directly via native .NET CLI
-          - task: DotNetCoreCLI@2
-            displayName: 'Build & Push Docker Container'
-            inputs:
-              command: 'custom'
-              custom: 'publish'
-              projects: '$(projectPath)' # Fixed: Explicit direct path prevents pulling in Desktop project
-              arguments: >
-                --configuration $(buildConfiguration)
-                --os linux
-                --arch x64
-                -p:PublishContainer=true
-                -p:ContainerRepository=$(containerRepository)
-                -p:ContainerImageTags=v$(imageTag)
-                -p:ContainerRegistry=index.docker.io
-                -p:ContainerRegistryUsername=$(registryUserName)
-                -p:ContainerRegistryPassword=$(registryPassword)
+       
