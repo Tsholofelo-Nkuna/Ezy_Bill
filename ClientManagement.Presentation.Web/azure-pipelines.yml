@@ -69,8 +69,7 @@ stages:
                 dotnet workload restore
                 cd $(projectDir)
                 docker login -u $(registryUserName) -p $(registryPassword)
-                dotnet publish --configuration $(buildConfiguration) --os linux --arch x64 -t:PublishContainer -p:ContainerRepository=$(containerRepository) -p:ContainerImageTags=v$(imageTag) -p:ContainerRegistry=index.docker.io 
-                docker push $(containerRepository):v$(imageTag)
-                docker image list
+                dotnet publish --configuration $(buildConfiguration) --os linux --arch x64 -t:PublishContainer -p:ContainerRepository=$(containerRepository) -p:ContainerImageTags=v$(imageTag),latest -p:ContainerRegistry=index.docker.io 
+               
           # 4. Containerize and Push Directly via native .NET CLI
        
