@@ -6,7 +6,7 @@
 replicaCount: 1
 
 appName: clientmanagement-presentation-web
-mcpName: clientmanagemet-mcp
+mcpName: clientmanagement-mcp
 namespace: development
 appSecretName: izybill-secret
 appConfigName: izybill-config

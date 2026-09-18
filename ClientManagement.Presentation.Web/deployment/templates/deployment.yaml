@@ -31,7 +31,7 @@ spec:
           image: "{{.Values.image.repository}}/{{.Values.mcpName}}:{{.Values.image.tag}}"
           imagePullPolicy: {{.Values.image.pullPolicy}}
           ports:
-            - containerPort: 8080
+            - containerPort: 8082
           env:
           envFrom:
             - configMapRef:
