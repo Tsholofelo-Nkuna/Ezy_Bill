@@ -26,6 +26,8 @@ variables:
     value: ClientManagement.Presentation.Web
   - name: mcpProjectPath
     value: 'ClientManagement.Mcp/ClientManagement.Mcp.csproj'
+  - name: mcpProjectDir
+    value: 'ClientManagement.Mcp'
   - name: mcpContainerRepository
     value: 'tsholofelo768/clientmanagement-mcp'
 
@@ -84,7 +86,7 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                cd $(mcpProjectPath)
+                cd $(mcpProjectDir)
                 dotnet workload restore
                 docker login -u $(registryUserName) -p $(registryPassword)
                 dotnet publish --configuration $(buildConfiguration) --os linux --arch x64 -t:PublishContainer -p:ContainerRepository=$(mcpContainerRepository) -p:ContainerImageTags=$(imageTag) -p:ContainerRegistry=docker.io
