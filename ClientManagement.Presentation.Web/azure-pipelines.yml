@@ -44,15 +44,15 @@ stages:
                 dotnet workload restore
 
           # 2. Publish Web Files to Drop (for traditional deployment)
-          - task: DotNetCoreCLI@2
-            displayName: 'Publish Web Files to Drop'
-            inputs:
-              command: 'publish'
-              publishWebProjects: false
-              projects: '$(projectPath)' # Fixed: Explicit direct path
-              arguments: '--configuration $(buildConfiguration) --output $(drop)'
-              zipAfterPublish: false
-              modifyOutputPath: false
+          # - task: DotNetCoreCLI@2
+          #   displayName: 'Publish Web Files to Drop'
+          #   inputs:
+          #     command: 'publish'
+          #     publishWebProjects: false
+          #     projects: '$(projectPath)' # Fixed: Explicit direct path
+          #     arguments: '--configuration $(buildConfiguration) --output $(drop)'
+          #     zipAfterPublish: false
+          #     modifyOutputPath: false
 
           # 3. Save traditional build artifacts
           - task: PublishBuildArtifacts@1
