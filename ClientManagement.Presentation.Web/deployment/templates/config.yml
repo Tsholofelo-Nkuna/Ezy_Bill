@@ -54,7 +54,7 @@ data:
       {
         "Name": "Linda",
         "SkillPath": "Agents/Skills/linda",
-        //"Model": "qwen3.5:9b",
+        #//"Model": "qwen3.5:9b",
         "instructions": "You provide information about an individuals identity or profession as requested by the user.",
         "Type": "Master",
         "VecStoreMetaData": {
@@ -66,7 +66,7 @@ data:
       {
         "Name": "Jimmy",
         "SkillPath": "Agents/Skills/jimmy",
-        // "Model": "qwen3.5:9b",
+       # // "Model": "qwen3.5:9b",
         "Instructions": "You provide advise on finance and accounting as per the user's request'.",
         "Type": "Master",
         "VecStoreMetaData": {
@@ -77,5 +77,5 @@ data:
       }
     ]
   }
-
+}
  
