@@ -102,7 +102,7 @@ namespace ClientManagement.Presentation.Web
               
             }
 
-            app.UseHttpsRedirection();
+           // app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();
