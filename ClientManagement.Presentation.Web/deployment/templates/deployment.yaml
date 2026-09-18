@@ -20,7 +20,18 @@ spec:
           image: "{{.Values.image.repository}}/{{.Values.appName}}:{{.Values.image.tag}}"
           imagePullPolicy: {{.Values.image.pullPolicy}}
           ports:
-            - containerPort: 8081
+            - containerPort: 8080
+          env:
+          envFrom:
+            - configMapRef:
+                name: {{.Values.appConfigName}}
+            - secretRef:
+                name: {{.Values.appSecretName}}
+        - name: {{.Values.mcpName}}
+          image: "{{.Values.image.repository}}/{{.Values.mcpName}}:{{.Values.image.tag}}"
+          imagePullPolicy: {{.Values.image.pullPolicy}}
+          ports:
+            - containerPort: 8080
           env:
           envFrom:
             - configMapRef:

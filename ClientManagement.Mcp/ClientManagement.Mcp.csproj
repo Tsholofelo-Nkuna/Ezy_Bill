@@ -15,7 +15,7 @@
 
 	<!-- Set up the MCP server to be a single file executable -->
 	<PublishSingleFile>true</PublishSingleFile>
-	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>

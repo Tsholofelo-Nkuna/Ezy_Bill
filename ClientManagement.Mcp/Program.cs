@@ -25,6 +25,6 @@ builder.Services
 
 var app = builder.Build();
 app.MapMcp();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.Run();
