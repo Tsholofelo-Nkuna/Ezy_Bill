@@ -87,9 +87,8 @@ namespace ClientManagement.Presentation.Web
                 
             });
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment() || true)
+            if (!app.Environment.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseExceptionHandler("/Error");
                
               
@@ -103,7 +102,7 @@ namespace ClientManagement.Presentation.Web
               
             }
 
-           // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();
