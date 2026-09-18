@@ -4,57 +4,78 @@ metadata:
   name: {{.Values.appConfigName}}
   namespace: {{.Values.namespace}}
 data:
-  Logging__LogLevel__Default: Information
-  Logging__LogLevel__Microsoft.AspNetCore: Warning
-
-  AllowedHosts: "*"
-  ApiBaseUrl: "https://izybill-dev.bakgatlasolutions.com"
-
-  EmailSettings__Smtp: "smtp.gmail.com"
-  EmailSettings__SendFrom: "izybill85@gmail.com"
-  EmailSettings__Password: "owuj gxtw ycfz xxwj"
-  EmailSettings__Port: "587"
-
-  AppInfo__Version: "0.3.1"
-  AppInfo__Name: "IzyBill"
-  AppInfo__PoweredBy: "Growthlytix"
-
-  Pagination__PageSize: "10"
-
-  AdminAccount__Username: "izybill"
-  AdminAccount__Password: "izybill@777"
-
-  AI__SkillPath: "Agents/Skills"
-  AI__OllamaUrl: "http://localhost:11434"
-  AI__VectorStoreUrl: "http://localhost:6334"
-  AI__VectorStoreCollectionName: "Knowledge_base"
-  AI__EmbeddingModel: "qwen3-embedding:0.6b"
-  AI__OllamaModel: "qwen3.5:4b"
-  AI__McpUrl: "http://localhost:6174"
-
-  AI__AiAgentMetaData__0__Name: "Paul"
-  AI__AiAgentMetaData__0__SkillPath: "Agents/Skills/paul"
-  # AI__AiAgentMetaData__0__Model: "qwen3.5:4b"
-  AI__AiAgentMetaData__0__Type: "Master"
-  AI__AiAgentMetaData__0__Instructions: "You are a manager"
-
-  AI__AiAgentMetaData__1__Name: "Linda"
-  AI__AiAgentMetaData__1__SkillPath: "Agents/Skills/linda"
-  # AI__AiAgentMetaData__1__Model: "qwen3.5:9b"
-  AI__AiAgentMetaData__1__instructions: "You provide information about an individuals identity or profession as requested by the user."
-  AI__AiAgentMetaData__1__Type: "Master"
-  AI__AiAgentMetaData__1__VecStoreMetaData__Name: "CVs"
-  AI__AiAgentMetaData__1__VecStoreMetaData__DisplayName: "CVs"
-  AI__AiAgentMetaData__1__VecStoreMetaData__Description: "Contains details information about an individuals identity and proffesional history."
-
-  AI__AiAgentMetaData__2__Name: "Jimmy"
-  AI__AiAgentMetaData__2__SkillPath: "Agents/Skills/jimmy"
-  # AI__AiAgentMetaData__2__Model: "qwen3.5:9b"
-  AI__AiAgentMetaData__2__Instructions: "You provide advise on finance and accounting as per the user's request'."
-  AI__AiAgentMetaData__2__Type: "Master"
-  AI__AiAgentMetaData__2__VecStoreMetaData__Name: "Accounting"
-  AI__AiAgentMetaData__2__VecStoreMetaData__DisplayName: "Accounting and finance"
-  AI__AiAgentMetaData__2__VecStoreMetaData__Description: "Contains information about accounting and financial management."
-  # ASPNETCORE_URLS: "http://*:8080;https://*:8081"
-  ASPNETCORE_HTTPS_PORT: "8081"
-  ASPNETCORE_HTTP_PORT: "8080"
+ appsettings.json: |
+  {
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "Default": "Initial Catalog=rswyrbgd_izybill;Server=148.251.89.211;Trust Server Certificate=True;User ID=rswyrbgd_izybill;Password=&cx3!N6fojZ0qJbg;"
+  },
+  "ApiBaseUrl": "https://izybill-dev.bakgatlasolutions.com",
+  "EmailSettings": {
+    "Smtp": "smtp.gmail.com",
+    "SendFrom": "izybill85@gmail.com",
+    "Password": "owuj gxtw ycfz xxwj",
+    "Port": 587
+  },
+  "AppInfo": {
+    "Version": "0.3.1",
+    "Name": "IzyBill",
+    "PoweredBy": "Growthlytix"
+  },
+  "Pagination": {
+    "PageSize": 10
+  },
+  "AdminAccount": {
+    "Username": "izybill",
+    "Password": "izybill@777"
+  },
+  "AI": {
+    "SkillPath": "Agents/Skills",
+    "OllamaUrl": "http://localhost:11434",
+    "VectorStoreUrl": "http://localhost:6334",
+    "VectorStoreCollectionName": "Knowledge_base",
+    "EmbeddingModel": "qwen3-embedding:0.6b",
+    "OllamaModel": "qwen3.5:4b",
+    "McpUrl": "http://localhost:6174",
+    "AiAgentMetaData": [
+      {
+        "Name": "Paul",
+        "SkillPath": "Agents/Skills/paul",
+        //"Model": "qwen3.5:4b",
+        "Type": "Master",
+        "Instructions": "You are a manager"
+      },
+      {
+        "Name": "Linda",
+        "SkillPath": "Agents/Skills/linda",
+        //"Model": "qwen3.5:9b",
+        "instructions": "You provide information about an individuals identity or profession as requested by the user.",
+        "Type": "Master",
+        "VecStoreMetaData": {
+          "Name": "CVs",
+          "DisplayName": "CVs",
+          "Description": "Contains details information about an individuals identity and proffesional history."
+        }
+      },
+      {
+        "Name": "Jimmy",
+        "SkillPath": "Agents/Skills/jimmy",
+        // "Model": "qwen3.5:9b",
+        "Instructions": "You provide advise on finance and accounting as per the user's request'.",
+        "Type": "Master",
+        "VecStoreMetaData": {
+          "Name": "Accounting",
+          "DisplayName": "Accounting and finance",
+          "Description": "Contains information about accounting and financial management."
+        }
+      }
+    ]
+  }
+}
+ 
