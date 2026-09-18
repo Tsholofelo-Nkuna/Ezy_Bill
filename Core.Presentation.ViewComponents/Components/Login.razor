@@ -40,7 +40,6 @@
 
     let tokenResponse = await response.json();
     document.cookie+= `access_token=${tokenResponse.accessToken};refresh_token=${tokenResponse.refreshToken}`;
-    console.log(tokenResponse);
     location.href = "/";
     }
     }

@@ -42,7 +42,7 @@ namespace Core.Presentation.ViewComponents.Areas.Accounts.Pages
                 {
                    var user =  _userManager.Users.FirstOrDefault(x => x.UserName == userCredentials.Username)!;
                    await _signInManager.SignInAsync(user, false);
-                   HttpContext.Response.Redirect("/");
+                  // HttpContext.Response.Redirect("/");
                 }
             }
             this.CredentialsDto.Password = userCredentials.Password;
