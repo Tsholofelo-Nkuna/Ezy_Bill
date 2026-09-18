@@ -55,11 +55,11 @@ stages:
           #     modifyOutputPath: false
 
           # 3. Save traditional build artifacts
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publish Drop Artifacts'
-            inputs:
-              PathtoPublish: '$(drop)'
-              ArtifactName: 'drop'
+          # - task: PublishBuildArtifacts@1
+          #   displayName: 'Publish Drop Artifacts'
+          #   inputs:
+          #     PathtoPublish: '$(drop)'
+          #     ArtifactName: 'drop'
 
           - task: Bash@3
             displayName: 'Restore Workloads and publish container'
