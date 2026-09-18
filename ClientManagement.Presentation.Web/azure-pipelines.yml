@@ -24,11 +24,15 @@ variables:
     value: 'ClientManagement.Presentation.Web/ClientManagement.Presentation.Web.csproj'
   - name: projectDir
     value: ClientManagement.Presentation.Web
+  - name: mcpProjectPath
+    value: 'ClientManagement.Mcp/ClientManagement.Mcp.csproj'
+  - name: mcpContainerRepository
+    value: 'tsholofelo768/clientmanagement-mcp'
 
 stages:
-  - stage: Build
+  - stage: Build_Web
     jobs:
-      - job: Build
+      - job: Build_Web
         displayName: "Build ClientManagement.Web"
         steps:
           # 1. Restore client-side libraries and workloads
@@ -66,10 +70,22 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                dotnet workload restore
                 cd $(projectDir)
+                dotnet workload restore
                 docker login -u $(registryUserName) -p $(registryPassword)
                 dotnet publish --configuration $(buildConfiguration) --os linux --arch x64 -t:PublishContainer -p:ContainerRepository=$(containerRepository) -p:ContainerImageTags=$(imageTag) -p:ContainerRegistry=docker.io 
-               
-          # 4. Containerize and Push Directly via native .NET CLI
+  - stage: Build_MCP
+    jobs:         
+      - job: Build_MCP
+        displayName: "Build ClientManagement.Mcp"
+        steps:
+          - task: Bash@3
+            displayName: 'Restore Workloads and publish container'
+            inputs:
+              targetType: 'inline'
+              script: |
+                cd $(mcpProjectPath)
+                dotnet workload restore
+                docker login -u $(registryUserName) -p $(registryPassword)
+                dotnet publish --configuration $(buildConfiguration) --os linux --arch x64 -t:PublishContainer -p:ContainerRepository=$(mcpContainerRepository) -p:ContainerImageTags=$(imageTag) -p:ContainerRegistry=docker.io
        
