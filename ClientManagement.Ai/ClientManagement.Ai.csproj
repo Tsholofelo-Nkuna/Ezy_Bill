@@ -35,7 +35,7 @@
     <Folder Include="Agents\Skills\linda\" />
     <Folder Include="Agents\Skills\paul\" />
     <Folder Include="Interfaces\" />
-	<Content Include="Agents/**/*.md" CopyToOutputDirectory="Always"></Content>
+	<Content Include="Agents/Skills/**/*.md" CopyToOutputDirectory="Always"></Content>
   </ItemGroup>
 
 </Project>
