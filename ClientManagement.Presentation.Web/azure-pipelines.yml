@@ -17,7 +17,7 @@ variables:
   - name: containerRepository
     value: 'tsholofelo768/clientmanagement-presentation-web'
   - name: imageTag
-    value: 'dev'
+    value: '$(build.buildNumber)'
   - name: drop
     value: '$(build.artifactstagingdirectory)/drop'
   - name: projectPath
