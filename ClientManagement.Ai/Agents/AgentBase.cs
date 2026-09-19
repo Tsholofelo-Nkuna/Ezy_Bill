@@ -36,8 +36,10 @@ namespace ClientManagement.Ai.Agents
 
             var baseSkillPath = this.agentOptions.Value.SkillPath;
             var replacement = "Ai";
-            DirectoryInfo skillsDirInfo = new DirectoryInfo(Path.Combine(AppContext.BaseDirectory.Replace("Presentation.Web",replacement), baseSkillPath));
-            var agentDirNames = this.agentOptions.Value.AiAgentMetaData.Select(x => new DirectoryInfo(Path.Combine(AppContext.BaseDirectory.Replace("Presentation.Web", replacement), x.SkillPath)));
+            Console.WriteLine(AppContext.BaseDirectory);
+            DirectoryInfo skillsDirInfo = new DirectoryInfo(Path.Combine(AppContext.BaseDirectory.Replace("Presentation.Web",replacement, StringComparison.OrdinalIgnoreCase), baseSkillPath));
+            Console.WriteLine(skillsDirInfo.FullName);
+            var agentDirNames = this.agentOptions.Value.AiAgentMetaData.Select(x => new DirectoryInfo(Path.Combine(AppContext.BaseDirectory.Replace("Presentation.Web", replacement, StringComparison.OrdinalIgnoreCase), x.SkillPath)));
             skillsDirInfo
                 .GetDirectories().Where(x => !agentDirNames.Select(x => x.FullName).Contains(x.FullName))
                 .ToList()
