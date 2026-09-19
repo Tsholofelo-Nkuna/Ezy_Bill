@@ -48,6 +48,10 @@ namespace ClientManagement.Ai.Agents
                         var names = agentDirNames.Select(aD => Path.Combine(aD.FullName, newFilePath));
                         foreach (var item in names)
                         {
+                            if (!File.Exists(item))
+                            {
+                               using var _  = File.Create(item);
+                            }
                             File.Copy(f.FullName, item, true);
                         }
                        
