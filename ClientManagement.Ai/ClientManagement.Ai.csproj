@@ -31,8 +31,11 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <Content Include="Agents/**/*" CopyToOutputDirectory="Always"></Content>
+    <Folder Include="Agents\Skills\jimmy\" />
+    <Folder Include="Agents\Skills\linda\" />
+    <Folder Include="Agents\Skills\paul\" />
     <Folder Include="Interfaces\" />
+	  <Content Include="Agents/**/*" CopyToOutputDirectory="Always"></Content>
   </ItemGroup>
 
 </Project>
