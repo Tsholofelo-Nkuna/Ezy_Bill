@@ -48,7 +48,7 @@ namespace ClientManagement.Ai.Agents
                 }
                 else
                 {
-                    Logger.LogInformation($"Skipping directory creation; folder ({dirName}) already exists.");
+                    Logger.LogInformation($"Skipping creation of folder ({dirName}), it already exists.");
                     return new DirectoryInfo(dirName);
                 }
             });
@@ -59,20 +59,20 @@ namespace ClientManagement.Ai.Agents
                     Logger.LogInformation($"Initiating copying of base skill ({sourceDir.Name})");
                     sourceDir.EnumerateFiles().ToList().ForEach(f =>
                     {
-                        var newFilePath = Path.Combine(f.Directory.Name, f.Name);
-                       
+                        //var newFilePath = Path.Combine(f.Directory.Name, f.Name);
                         var names = agentDirInfo.Select(aD =>
                         {
-                            if (!Directory.Exists(aD.FullName))
+                            var baseSkillDir = new DirectoryInfo(Path.Combine(aD.FullName, sourceDir.Name));
+                            if (!Directory.Exists(baseSkillDir.FullName))
                             {
-                                var created = Directory.CreateDirectory(aD.FullName);
-                                Logger.LogInformation($"Creating folder ({created.FullName})");
+                                var created = Directory.CreateDirectory(baseSkillDir.FullName);
+                                Logger.LogInformation($"Creating folder ({baseSkillDir.FullName})");
                             }
                             else
                             {
-                                Logger.LogInformation($"Skipping creation of ({aD.FullName}), folder already exists");
+                                Logger.LogInformation($"Skipping creation of ({baseSkillDir.FullName}), folder already exists");
                             }
-                            return Path.Combine(aD.FullName, newFilePath);
+                            return Path.Combine(baseSkillDir.FullName, f.Name);
                         });
                         foreach (var item in names)
                         {
