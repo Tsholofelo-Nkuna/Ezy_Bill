@@ -90,6 +90,7 @@ namespace ClientManagement.Ai.Agents
 
         public virtual AIAgent? Instance(string agentName)
         {
+            Logger.LogInformation($"Configuring agent ({agentName})");
             var agentMetaData = this.agentOptions.Value.AiAgentMetaData.Where(x => x.Name.Equals(agentName, StringComparison.OrdinalIgnoreCase));
             var knoweledgeBaseContext = this.agentOptions.Value.AiAgentMetaData.Where(x => x is { VecStoreMetaData : { Name: string, Description: string } }).Select(x =>
             {
@@ -123,7 +124,7 @@ namespace ClientManagement.Ai.Agents
                      var keys = options.AIContextProviders.Select(x => x.StateKeys);
                      return chatClient.AsAIAgent(options: options).AsBuilder().Use(sharedFunc: InspectInputMiddleware).Build();// new ChatClientAgent(chatClient, options);
                  }).FirstOrDefault();
-            
+            Logger.LogInformation($"Agent configuration for {agentName} completed.");
             return agent;
         }
 
@@ -141,11 +142,14 @@ namespace ClientManagement.Ai.Agents
             var inquiry = string.Join("\n", messages);
             var question = $"Is there a suitable data source from the provided options that can be used to respond to the given question/instruction; Provide me with a simple yes or no answer:\n{desctiptions}\nQuestion/instruction: {inquiry}";
             var response = await this.chatClient.GenerateAsync(new() { Prompt = question }).StreamToEndAsync();
+            Logger.LogInformation("Initiating knowledge source alignment checks. Checking whether chat history content aligns with available knowledge source(s)?");
             if(response is { Response : string } validResponse && validResponse.Response.Contains("Yes", StringComparison.OrdinalIgnoreCase)){
-               
+
+                Logger.LogInformation($"chat history content is in alignment with agent's knowledge source(s)");
             }
             else
             {
+                Logger.LogInformation($"chat history content is not in alignment with agent's knowledge source(s)");
                 var textContent = new TextContent("Mention to the user that their request is outside the scope of your knowledge sources. Be brief and direct");
                 messages = [new(Microsoft.Extensions.AI.ChatRole.System, [textContent])];
                
