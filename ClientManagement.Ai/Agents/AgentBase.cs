@@ -60,7 +60,20 @@ namespace ClientManagement.Ai.Agents
                     sourceDir.EnumerateFiles().ToList().ForEach(f =>
                     {
                         var newFilePath = Path.Combine(f.Directory.Name, f.Name);
-                        var names = agentDirInfo.Select(aD => Path.Combine(aD.FullName, newFilePath));
+                       
+                        var names = agentDirInfo.Select(aD =>
+                        {
+                            if (!Directory.Exists(aD.FullName))
+                            {
+                                var created = Directory.CreateDirectory(aD.FullName);
+                                Logger.LogInformation($"Creating folder ({created.FullName})");
+                            }
+                            else
+                            {
+                                Logger.LogInformation($"Skipping creation of ({aD.FullName}), folder already exists");
+                            }
+                            return Path.Combine(aD.FullName, newFilePath);
+                        });
                         foreach (var item in names)
                         {
                             if (!File.Exists(item))
