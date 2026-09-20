@@ -75,7 +75,7 @@ stages:
                 cd $(projectDir)
                 dotnet workload restore
                 docker login -u $(registryUserName) -p $(registryPassword)
-                dotnet publish --configuration $(buildConfiguration) --os linux --arch x64 -t:PublishContainer -p:ContainerRepository=$(containerRepository) -p:ContainerImageTags=$(imageTag) -p:ContainerRegistry=docker.io
+                dotnet publish --configuration $(buildConfiguration) --os linux --arch x64 -t:PublishContainer -p:ContainerRepository=$(containerRepository) -p:ContainerImageTags=$(imageTag) -p:ContainerRegistry=docker.io -p:ContainerUser=root
   - stage: Build_MCP
     jobs:         
       - job: Build_MCP
