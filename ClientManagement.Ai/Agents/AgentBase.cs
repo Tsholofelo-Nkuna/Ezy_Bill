@@ -10,10 +10,12 @@ using DocumentFormat.OpenXml.Office.CustomUI;
 using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OllamaSharp;
 using OllamaSharp.Models.Chat;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace ClientManagement.Ai.Agents
@@ -27,7 +29,7 @@ namespace ClientManagement.Ai.Agents
         private readonly IVectorStore _vectorStore;
 
         public event EventHandler<string> ChatResponseReceived;
-        public AgentBase(IOptions<AgentOptions> agentOptions,  AssistantChatApiClient chatClient, AppHttpTransportClient stdIoTransportClient, IVectorStore vectorStore) : base(agentOptions)
+        public AgentBase(IOptions<AgentOptions> agentOptions,  AssistantChatApiClient chatClient, AppHttpTransportClient stdIoTransportClient, IVectorStore vectorStore, ILogger<AgentBase> logger) : base(agentOptions, logger)
         {
             this.agentOptions = agentOptions;
             this.chatClient = chatClient;
@@ -35,19 +37,30 @@ namespace ClientManagement.Ai.Agents
             this._vectorStore = vectorStore;
 
             var baseSkillPath = this.agentOptions.Value.SkillPath;
-            var replacement = "Ai";
-            Console.WriteLine(AppContext.BaseDirectory);
-            DirectoryInfo skillsDirInfo = new DirectoryInfo(Path.Combine(AppContext.BaseDirectory.Replace("Presentation.Web",replacement, StringComparison.OrdinalIgnoreCase), baseSkillPath));
-            Console.WriteLine(skillsDirInfo.FullName);
-            var agentDirNames = this.agentOptions.Value.AiAgentMetaData.Select(x => new DirectoryInfo(Path.Combine(AppContext.BaseDirectory.Replace("Presentation.Web", replacement, StringComparison.OrdinalIgnoreCase), x.SkillPath)));
+            DirectoryInfo skillsDirInfo = new DirectoryInfo(Path.Combine(AppContext.BaseDirectory, baseSkillPath));
+            var agentDirNames = this.agentOptions.Value.AiAgentMetaData.Select(x => (Path.Combine(AppContext.BaseDirectory, x.SkillPath)));
+            Logger.LogInformation($"Configured skill paths: {JsonSerializer.Serialize(agentDirNames)}");
+            var agentDirInfo = agentDirNames.Select(dirName => {
+                if (!Directory.Exists(dirName))
+                {
+                      Logger.LogInformation($"Creating directory ({dirName})");
+                      return Directory.CreateDirectory(dirName);
+                }
+                else
+                {
+                    Logger.LogInformation($"Skipping directory creation; folder ({dirName}) already exists.");
+                    return new DirectoryInfo(dirName);
+                }
+            });
             skillsDirInfo
-                .GetDirectories().Where(x => !agentDirNames.Select(x => x.FullName).Contains(x.FullName))
+                .GetDirectories().Where(x => !agentDirInfo.Select(x => x.FullName).Contains(x.FullName))
                 .ToList()
                 .ForEach(sourceDir => {
+                    Logger.LogInformation($"Initiating copying of base skill ({sourceDir.Name})");
                     sourceDir.EnumerateFiles().ToList().ForEach(f =>
                     {
                         var newFilePath = Path.Combine(f.Directory.Name, f.Name);
-                        var names = agentDirNames.Select(aD => Path.Combine(aD.FullName, newFilePath));
+                        var names = agentDirInfo.Select(aD => Path.Combine(aD.FullName, newFilePath));
                         foreach (var item in names)
                         {
                             if (!File.Exists(item))
@@ -55,6 +68,7 @@ namespace ClientManagement.Ai.Agents
                                using var _  = File.Create(item);
                             }
                             File.Copy(f.FullName, item, true);
+                            Logger.LogInformation($"Copied {f.FullName} to {item}");
                         }
                        
                     });
