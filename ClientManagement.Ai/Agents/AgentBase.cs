@@ -37,8 +37,10 @@ namespace ClientManagement.Ai.Agents
             this._vectorStore = vectorStore;
 
             var baseSkillPath = this.agentOptions.Value.SkillPath;
-            DirectoryInfo skillsDirInfo = new DirectoryInfo(Path.Combine(AppContext.BaseDirectory, baseSkillPath));
-            var agentDirNames = this.agentOptions.Value.AiAgentMetaData.Select(x => (Path.Combine(AppContext.BaseDirectory, x.SkillPath)));
+            var replacement = "Ai";
+            var replacee = "Presentation.Web";
+            DirectoryInfo skillsDirInfo = new DirectoryInfo(Path.Combine(AppContext.BaseDirectory, baseSkillPath).Replace(replacee, replacement));
+            var agentDirNames = this.agentOptions.Value.AiAgentMetaData.Select(x => (Path.Combine(AppContext.BaseDirectory, x.SkillPath).Replace(replacee, replacement)));
             Logger.LogInformation($"Configured skill paths: {JsonSerializer.Serialize(agentDirNames)}");
             var agentDirInfo = agentDirNames.Select(dirName => {
                 if (!Directory.Exists(dirName))
