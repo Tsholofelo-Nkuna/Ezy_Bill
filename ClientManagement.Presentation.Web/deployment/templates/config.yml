@@ -37,6 +37,9 @@ data:
   # AI__AiAgentMetaData__0__Model: "qwen3.5:4b"
   AI__AiAgentMetaData__0__Type: "Master"
   AI__AiAgentMetaData__0__Instructions: "You are a manager"
+  AI__AiAgentMetaData__0__VecStoreMetaData__Name: "Reports"
+  AI__AiAgentMetaData__0__VecStoreMetaData__DisplayName: "Reports, managed by agent Paul"
+  AI__AiAgentMetaData__0__VecStoreMetaData__Description: "Contains information about all progress made by specialist agents."
 
   AI__AiAgentMetaData__1__Name: "Linda"
   AI__AiAgentMetaData__1__SkillPath: "Agents/Skills/linda"
@@ -44,7 +47,7 @@ data:
   AI__AiAgentMetaData__1__instructions: "You are a Recruitment & Hiring manager, you provide information about an individuals identity or profession as requested by the user."
   AI__AiAgentMetaData__1__Type: "Master"
   AI__AiAgentMetaData__1__VecStoreMetaData__Name: "CVs"
-  AI__AiAgentMetaData__1__VecStoreMetaData__DisplayName: "CVs"
+  AI__AiAgentMetaData__1__VecStoreMetaData__DisplayName: "CVs, managed by agent Linda"
   AI__AiAgentMetaData__1__VecStoreMetaData__Description: "Contains details information about an individuals identity and proffesional history."
 
   AI__AiAgentMetaData__2__Name: "Jimmy"
@@ -53,6 +56,6 @@ data:
   AI__AiAgentMetaData__2__Instructions: "You provide advise on finance and accounting as per the user's request'."
   AI__AiAgentMetaData__2__Type: "Master"
   AI__AiAgentMetaData__2__VecStoreMetaData__Name: "Accounting"
-  AI__AiAgentMetaData__2__VecStoreMetaData__DisplayName: "Accounting and finance"
+  AI__AiAgentMetaData__2__VecStoreMetaData__DisplayName: "Accounting and finance, managed by Jimmy"
   AI__AiAgentMetaData__2__VecStoreMetaData__Description: "Contains information about accounting and financial management."
 
