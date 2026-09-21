@@ -171,3 +171,46 @@ Opening the individual pod instance (e.g., `clientmanagement-presentation-web-[r
 
 *Note: Any restart count greater than 0 or a missing checkmark on any individual container layer indicates a partial pod failure (e.g., a tool handler crash or a localized LLM context error), even if the top-level Pod status claims to be "Running".*
 
+## 🔍 Production Verification Reference: Successful Deployment State
+
+The following section defines the exact visual and technical characteristics of a verified, healthy **`izzy-bill`** release within the Rancher Desktop Kubernetes dashboard environment. Use these annotated baselines during smoke testing and cluster audits.
+
+### 1. High-Level Workloads Matrix
+When navigating to the **Workloads** view, a fully operational deployment must satisfy the state boundaries shown below:
+
+![Workloads Overview](image_tj4cah.png)
+
+*   **Target Namespace**: All resources must belong exclusively to the **`development`** namespace.
+*   **Compilation Firewall Validation**: 
+    *   **`clientmanagement-presentation-web`**: Deployed cleanly as a **Deployment** type. This acts as the structural Composition Root shell.
+    *   **`qdrant`**: Deployed cleanly as a **StatefulSet** type to handle the persistence layer for RAG vector storage.
+*   **Health and Stability Metrics**:
+    *   The **Health** column must display an unbroken, uniform **green status bar** for all workloads, indicating that all underlying replica counts and readiness probes match their desired configurations.
+    *   The **Restarts** count across all top-level workloads must sit firmly at **`0`**, validating runtime memory stability.
+
+### 2. Deployment Resource Specification & Scale
+Clicking into the **`clientmanagement-presentation-web`** Deployment reveals the health status of the orchestrator:
+
+![Deployment Resource Details](image_yMV2Oh.png)
+
+*   **Active Status**: The core deployment resource must be explicitly flagged as **`Active`**.
+*   **Pod Scale Metrics**: The cluster orchestration must reflect complete parity between desired and actual states:
+    *   **`Ready: 1/1`** — confirming the scheduled pod has completed its lifecycle initialization.
+    *   **`Up-to-date: 1`** — confirming the latest container image digests are pulled and applied.
+    *   **`Available: 1`** — confirming the network endpoints are ready to accept traffic.
+*   **Pods by State**: The dashboard visual block must show exactly **`1 Running`** pod instance.
+
+### 3. Multi-Container Pod Anatomy
+Because the Web project is purposefully deployed as a **multi-container pod** to ensure low-latency communication across the AG-UI and MCP Standard JSON-RPC channels, a status of `Running` is not enough. You must verify that all specialized application layers are healthy inside the pod detail view.
+
+![Multi-Container Pod Layout](image_7tIZM_.png)
+
+Opening the individual pod instance and navigating to the **Containers** tab must show **`Ready: 3/3`** with three distinct sub-components running concurrently:
+
+| Container Name | Runtime Role | Expected Readiness | Expected Restarts |
+| :--- | :--- | :--- | :--- |
+| **`clientmanagement-presentation-web`** | Blazor Server App / AG-UI Transport Shell | `✓` (Ready) | `0` |
+| **`clientmanagement-mcp`** | Model Context Protocol Server (Exposed Tools Manifest) | `✓` (Ready) | `0` |
+| **`ollama`** | Local LLM Runtime Engine | `✓` (Ready) | `0` |
+
+*Note: Any restart count greater than 0 or a missing checkmark on any individual container layer indicates a partial pod failure (e.g., a tool handler crash or a localized LLM context error), even if the top-level Pod status claims to be "Running".*
