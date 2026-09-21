@@ -12,7 +12,7 @@ data:
 
   EmailSettings__Smtp: "smtp.gmail.com"
   EmailSettings__SendFrom: "izybill85@gmail.com"
-  EmailSettings__Password: "owuj gxtw ycfz xxwj"
+  EmailSettings__Password: "{{.Values.emailPassword}}"
   EmailSettings__Port: "587"
 
   AppInfo__Version: "0.3.1"
