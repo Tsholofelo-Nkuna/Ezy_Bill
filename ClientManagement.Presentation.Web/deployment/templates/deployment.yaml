@@ -43,19 +43,10 @@ spec:
             - secretRef:
                 name: {{.Values.appSecretName}}
         - name: ollama
-          image: "alpine/ollama:latest"
+          image: "ollama/ollama:latest"
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 11434
-          env:
-          resources:
-            limits:
-              cpu: "12"
-              memory: 8Gi
-              # ://nvidia.com: "1" # Uncomment if your cluster nodes have GPUs
-            requests:
-              cpu: "8"
-              memory: 4Gi
           volumeMounts:
             - name: ollama-storage
               mountPath: /root/.ollama

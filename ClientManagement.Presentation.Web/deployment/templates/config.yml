@@ -8,7 +8,7 @@ data:
   Logging__LogLevel__Microsoft.AspNetCore: Warning
 
   AllowedHosts: "*"
-  ApiBaseUrl: "https://izybill-dev.bakgatlasolutions.com"
+  ApiBaseUrl: "http://localhost:8080"
 
   EmailSettings__Smtp: "smtp.gmail.com"
   EmailSettings__SendFrom: "izybill85@gmail.com"
