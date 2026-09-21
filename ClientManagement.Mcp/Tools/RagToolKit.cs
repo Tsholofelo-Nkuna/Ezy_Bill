@@ -22,6 +22,7 @@ namespace ClientManagement.Mcp.Tools
         {
             try
             {
+                logger.LogInformation($"{nameof(AddInsightToPrompt)} invoked by {yourName}");
                 if (!yourName.Equals(agentName, StringComparison.OrdinalIgnoreCase))
                 {
                     logger.LogInformation($"{yourName} denied access to {knowledgSourceName}. Access priviledges are assigned to {agentName}");

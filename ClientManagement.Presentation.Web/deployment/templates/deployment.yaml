@@ -50,11 +50,11 @@ spec:
           env:
           resources:
             limits:
-              cpu: "4"
+              cpu: "12"
               memory: 8Gi
               # ://nvidia.com: "1" # Uncomment if your cluster nodes have GPUs
             requests:
-              cpu: "2"
+              cpu: "8"
               memory: 4Gi
           volumeMounts:
             - name: ollama-storage
