@@ -63,4 +63,56 @@ spec:
         - name: ollama-storage
           hostPath:
             path: /var/lib/ollama/ollamamodels # On your physical host machine
-            type: DirectoryOrCreate     
+            type: DirectoryOrCreate  
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: qdrant
+  namespace: {{.Values.namespace}}
+  labels:
+    app: qdrant
+spec:
+  serviceName: "qdrant" # Must match the Headless Service name above
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qdrant
+  template:
+    metadata:
+      labels:
+        app: qdrant
+    spec:
+      containers:
+        - name: qdrant
+          image: "qdrant/qdrant:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6333
+              name: http
+            - containerPort: 6334
+              name: grpc
+          resources:
+            limits:
+              cpu: "2"
+              memory: 4Gi
+            requests:
+              cpu: "1"
+              memory: 2Gi
+          volumeMounts:
+            - name: qdrant-storage
+              mountPath: /qdrant/storage
+  # This dynamically creates a dedicated PVC for each replica
+  volumeClaimTemplates:
+    - metadata:
+        name: qdrant-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        # Uncomment and set a storageClassName if you aren't using your cluster's default
+        # storageClassName: "standard" 
+        resources:
+          requests:
+            storage: 10Gi
+ 
+

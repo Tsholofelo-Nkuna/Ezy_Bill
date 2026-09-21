@@ -13,3 +13,22 @@ spec:
     - port: {{.Values.service.port}}
       targetPort: 8080
       protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qdrant
+  namespace: {{.Values.namespace}}
+  labels:
+    app: qdrant
+spec:
+  clusterIP: None # Makes it a headless service
+  selector:
+    app: qdrant   # Must match the labels on your Qdrant pods
+  ports:
+    - port: 6333
+      targetPort: 6333
+      name: http  # Used for REST API operations and dashboard access
+    - port: 6334
+      targetPort: 6334
+      name: grpc  # Used for fast, high-performance vector search operations

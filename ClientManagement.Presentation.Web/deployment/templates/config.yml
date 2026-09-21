@@ -26,7 +26,7 @@ data:
 
   AI__SkillPath: "Agents/Skills"
   AI__OllamaUrl: "http://localhost:11434"
-  AI__VectorStoreUrl: "http://localhost:6334"
+  AI__VectorStoreUrl: "http://qdrant-0.qdrant.{{.Values.namespace}}.svc.cluster.local:6334"
   AI__VectorStoreCollectionName: "Knowledge_base"
   AI__EmbeddingModel: "qwen3-embedding:0.6b"
   AI__OllamaModel: "qwen3.5:4b"
