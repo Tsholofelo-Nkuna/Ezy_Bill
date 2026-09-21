@@ -31,10 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="deployment\local-secrets.yaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="DartSassBuilder" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <PrivateAssets>all</PrivateAssets>
