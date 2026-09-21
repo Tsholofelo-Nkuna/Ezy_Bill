@@ -65,7 +65,7 @@ The system utilizes distinct bidirectional communication channels depending on w
 *   **MCP ➔ BLL:** The `Business Logic Tool` unpackages the parameters, satisfies local safety checks, and calls your scoped core domain engines or persistence models.
 *   **BLL ➔ MCP:** The database validates mutations or fetches rows, returning success payloads back up to the awaiting `ClientManagement.MCP` interface wrapper.
 *   **MCP ➔ AI:** `ClientManagement.MCP` (or the internal RAG search execution) flattens the result into clean text blocks and passes them back up to the `ClientManagement.AI` workspace.
-
+*   **AI ➔ Web:** The Agent synthesizes an optimized response utilizing its newly acquired context, streaming incremental tokens and rich dynamic UI update components back up through **AG-UI** to update the user interface.
 ---
 
 ## 🛠️ Environment & Tooling Setup
