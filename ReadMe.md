@@ -1,6 +1,6 @@
 # Enterprise Decoupled AI Architecture Blueprint
 
-This document defines the strict, decoupled structural architecture utilizing the **.NET Agent Framework**, **AG-UI Protocol**, and **Model Context Protocol (MCP)** across a multi-project .NET 11 layout.
+This document defines the strict, decoupled structural architecture utilizing the **.NET Agent Framework**, **AG-UI Protocol**, and **Model Context Protocol (MCP)** across a multi-project .NET 10 layout.
 
 ## 🏗️ Architectural Topology & Reference Boundaries
 
@@ -186,7 +186,7 @@ To add a new agent (e.g., a 4th agent), add the following entries to the `data` 
 AI__AiAgentMetaData__3__Name: "AgentName"
 AI__AiAgentMetaData__3__SkillPath: "Agents/Skills/agentname"
 AI__AiAgentMetaData__3__Instructions: "Detailed description of the agent's role and personality."
-AI__AiAgentMetaData__3__Type: "Worker"
+AI__AiAgentMetaData__3__Type: "Master"
 AI__AiAgentMetaData__3__VecStoreMetaData__Name: "CollectionName"
 AI__AiAgentMetaData__3__VecStoreMetaData__DisplayName: "Friendly name for the knowledge base"
 AI__AiAgentMetaData__3__VecStoreMetaData__Description: "Description of what information this vector store contains."
@@ -198,16 +198,17 @@ AI__AiAgentMetaData__3__VecStoreMetaData__Description: "Description of what info
 | `Name` | The unique identifier for the agent. | `Paul` |
 | `SkillPath` | The path to the agent's specific skill/tool definitions. | `Agents/Skills/paul` |
 | `Instructions` | The system prompt that defines the agent's behavior. | `You are a manager` |
-| `Type` | The agent's hierarchy level (e.g., `Worker`). | `Worker` |
+| `Type` | The agent's hierarchy level (e.g., `Master`). | `Master` |
 | `VecStoreMetaData__Name` | The actual name of the Qdrant collection this agent uses. | `Reports` |
 | `VecStoreMetaData__DisplayName` | The name shown in the UI for the knowledge source. | `Reports, managed by Paul` |
 | `VecStoreMetaData__Description` | A summary of the knowledge the agent can access. | `Contains information about accounting and financial management.` |
 
 ### 💡 Pro-Tips for Agent Configuration
 - **Zero-Based Indexing**: Ensure the index number (e.g., `__0__`, `__1__`) is sequential. If you skip a number, the application may stop loading agents after the gap.
-- **Vector Store Sync**: When adding a new agent, ensure the `VecStoreMetaData__Name` matches an existing collection in your **Qdrant** instance; otherwise, the agent will not be able to perform RAG queries.
+- **Vector Store Sync**: The Blazor UI contains a knowledge base page, this serves as the agent's domain knowledge and an ingestion pipeline to feed **QDrant* collections (agent's expert knowledge) with any data related to an agent's specialty. 
+  
 - **Applying Changes**: After editing the `config.yml` and running the Helm upgrade, you may need to restart the Web pod for the new configuration to take effect:
   ```powershell
-   helm upgrade izzy-bill . -f .\values.yaml --install --namespace development --create-namespace
+    helm upgrade izzy-bill . -f .\values.yaml -f local-secrets.yaml --install --namespace development --create-namespace
   ```
 
