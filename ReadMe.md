@@ -68,6 +68,83 @@ The system utilizes distinct bidirectional communication channels depending on w
 *   **AI ➔ Web:** The Agent synthesizes an optimized response utilizing its newly acquired context, streaming incremental tokens and rich dynamic UI update components back up through **AG-UI** to update the user interface.
 ---
 
+# Model Context Protocol (MCP) Role-Based Tool Filtering
+
+This component defines the deterministic, decoupled **Capability Governance Layer** operating between `ClientManagement.AI` and `ClientManagement.MCP`. It ensures that multi-agent workspaces are tightly scoped to an agent's specific professional domain, mitigating tool hallucination and enforcing a zero-trust execution perimeter.
+
+## 🧠 Architectural Overview & Problem Resolution
+
+In a standard `ModelContextProtocol.AspNetCore` topology, tool discovery (`tools/list`) occurs globally at application startup. This creates an architectural paradox: **the MCP server exposes all enterprise tools horizontally before individual agent sessions or user contexts are instantiated.**
+
+To maintain our strict project-level compilation firewalls and block `ClientManagement.AI` from referencing internal MCP code structures or .NET Reflection attributes, this system exploits our shared Kubernetes Pod file space (`ConfigMap`).
+
+```
+                                  [ Shared Kubernetes ConfigMap ]
+                                                │
+                       ┌────────────────────────┴────────────────────────┐
+                       ▼                                                 ▼
+             ClientManagement.AI                                ClientManagement.MCP
+       (Filters tools via string tokens)                 (Enforces execution boundaries)
+                       │                                                 │
+                       ▼                                                 ▼
+   ┌───────────────────────────────────────┐           ┌───────────────────────────────────┐
+   │ 1. Fetches global master manifest     │           │ 1. Compiles custom tool methods   │
+   │ 2. Strips [Roles: ...] text metadata   │ ──(RPC)──>│ 2. Appends roles into descriptions│
+   │ 3. Masks agent's kernel in-memory    │           │ 3. Intercepts calls via execution │
+   └───────────────────────────────────────┘           │    middleware filter guard        │
+                                                       └───────────────────────────────────┘
+```
+
+By transitioning the architecture from a non-deterministic LLM-driven filtering loop to a **C# string parsing mechanism**, the framework achieves zero-latency capability masking with absolute architectural predictability.
+
+---
+
+## 🛠️ Configuration Architecture (`values.yaml`)
+
+Since all containers are co-located in the same Pod infrastructure space, the agent identities and tool mapping boundaries are driven out of a single, synchronized source of truth.
+
+```yaml
+# ConfigMap values mounted across all containers in the Pod space
+AI__AiAgentMetaData__0__Name: "Paul"
+AI__AiAgentMetaData__0__SkillPath: "Agents/Skills/paul"
+AI__AiAgentMetaData__0__Model: "qwen3.5:4b"
+AI__AiAgentMetaData__0__Type: "Master"
+AI__AiAgentMetaData__0__Profession: "Manager"
+AI__AiAgentMetaData__0__Instructions: "You are a manager"
+AI__AiAgentMetaData__0__VecStoreMetaData__Name: "Reports"
+AI__AiAgentMetaData__0__VecStoreMetaData__DisplayName: "Reports, managed by agent Paul"
+AI__AiAgentMetaData__0__VecStoreMetaData__Description: "Contains information about all progress made by specialist agents."
+```
+---
+
+## 🏛️ Technical Operational Layout
+
+### 1. Capability Decoration Layer (`ClientManagement.MCP`)
+The server application exposes its capabilities as a flat pipeline. To flow access metadata across the out-of-process boundary without sharing assemblies or types, the target professions are baked directly into the native protocol string representations of each tool descriptor using a structured layout token: `[Roles: NameOfProfession]`.
+
+### 2. In-Memory Governance Masking Layer (`ClientManagement.AI`)
+During the initialization lifecycle of a specific specialist agent, the agent factory intercepts the global tool manifest. It cross-references the agent's identifier with the configuration profile mounted from the shared `ConfigMap`. 
+
+The system performs a sub-millisecond deterministic string parsing operation to evaluate if the token embedded within the descriptor matches the agent's profession. If it matches, the tool is bound to that agent's kernel instance. To prevent internal governance data from leaking or affecting LLM attention token weights, the metadata tag is cleanly scrubbed from the description payload before registration is finalized.
+
+### 3. Server-Side Execution Guard Middleware (`ClientManagement.MCP`)
+To guarantee that a compromised agent layer or an LLM payload bypass cannot invoke low-level endpoints directly over the JSON-RPC pipe, a gateway interceptor resides on the incoming request pipeline. This middleware parses the caller identity attached to the execution metadata, reads the compiled capability requirement locally, and drops unauthorized traffic before it can ever execute a state mutation against the downstream `BusinessLogicLayer`.
+
+---
+
+## ✅ Operational Testing & Success Verification
+
+### Verification Scenario: Tool Masking Validation
+1. Deploy the application stack within the local **Rancher Desktop** cluster space via Helm (`izzy-bill`).
+2. Trigger the instantiation of the recruitment specialist (`Linda`).
+3. Query the initialized agent instance kernel properties. Verify that financial execution endpoints are **completely absent** from its available capabilities manifest and that all active tool descriptions are clear of governance tag fragments.
+
+### Verification Scenario: Security Bypass Defense
+1. Simulate an adversarial or corrupted system state by forcing the recruitment layer to dispatch an explicit JSON-RPC payload call targeting a financial capability, passing the metadata claim identifier tracking back to the recruitment profile.
+2. Verify that `ClientManagement.MCP` catches the command at the network gateway interface, drops the transaction with an explicit access violation error, and prevents any downstream interaction with core domain components.
+
+
+
 ## 🛠️ Environment & Tooling Setup
 
 To successfully build and run the application, the following tooling must be installed and configured on your development machine:
