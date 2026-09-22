@@ -205,7 +205,8 @@ AI__AiAgentMetaData__3__VecStoreMetaData__Description: "Description of what info
 
 ### 💡 Pro-Tips for Agent Configuration
 - **Zero-Based Indexing**: Ensure the index number (e.g., `__0__`, `__1__`) is sequential. If you skip a number, the application may stop loading agents after the gap.
-- **Vector Store Sync**: When adding a new agent, ensure the `VecStoreMetaData__Name` matches an existing collection in your **Qdrant** instance; otherwise, the agent will not be able to perform RAG queries.
+- **Vector Store Sync**: The Blazor UI contains a knowledge base page, this serves as the agent's domain knowledge and an ingestion pipeline to feed **QDrant* collections (agent's expert knowledge) with any data related to an agent's specialty. 
+  
 - **Applying Changes**: After editing the `config.yml` and running the Helm upgrade, you may need to restart the Web pod for the new configuration to take effect:
   ```powershell
     helm upgrade izzy-bill . -f .\values.yaml -f local-secrets.yaml --install --namespace development --create-namespace
