@@ -50,13 +50,13 @@ spec:
           volumeMounts:
             - name: ollama-storage
               mountPath: /root/.ollama
-          resources:
-            limits:
-              cpu: 4
-              memory: 8Gi
-            requests:
-              cpu: 2
-              memory: 4Gi
+          # resources:
+          #   limits:
+          #     cpu: 4
+          #     memory: 8Gi
+          #   requests:
+          #     cpu: 2
+          #     memory: 4Gi
       volumes:
         - name: ollama-storage
           hostPath:
@@ -91,13 +91,13 @@ spec:
               name: http
             - containerPort: 6334
               name: grpc
-          resources:
-            limits:
-              cpu: "4"
-              memory: 4Gi
-            requests:
-              cpu: "2"
-              memory: 2Gi
+          # resources:
+          #   limits:
+          #     cpu: "4"
+          #     memory: 4Gi
+          #   requests:
+          #     cpu: "2"
+          #     memory: 2Gi
           volumeMounts:
             - name: qdrant-storage
               mountPath: /qdrant/storage
