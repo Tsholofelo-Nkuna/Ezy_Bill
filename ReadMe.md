@@ -1,6 +1,6 @@
 # Enterprise Decoupled AI Architecture Blueprint
 
-This document defines the strict, decoupled structural architecture utilizing the **.NET Agent Framework**, **AG-UI Protocol**, and **Model Context Protocol (MCP)** across a multi-project .NET 11 layout.
+This document defines the strict, decoupled structural architecture utilizing the **.NET Agent Framework**, **AG-UI Protocol**, and **Model Context Protocol (MCP)** across a multi-project .NET 10 layout.
 
 ## 🏗️ Architectural Topology & Reference Boundaries
 
