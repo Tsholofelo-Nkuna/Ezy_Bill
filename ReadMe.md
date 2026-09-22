@@ -172,7 +172,59 @@ Opening the individual pod instance (e.g., `clientmanagement-presentation-web-[r
 
 ---
 
-## 🤖 Managing AI Agents
+## ⚙️ Resource Allocation & Tuning
+
+Since the application runs heavy AI workloads (LLMs and Vector Search), you may need to adjust the CPU and Memory allocation depending on your machine's specifications. **You are encouraged to scale up these resources as you see fit** to improve performance or support larger models.
+
+These settings are located in `ClientManagement.Presentation.Web/deployment/templates/deployment.yaml`.
+
+### 1. Ollama (LLM Runtime)
+The application uses the `alpine/ollama:latest` image for a lightweight, efficient LLM runtime. Ollama is the most resource-intensive component. If you experience slow response times or "Out of Memory" (OOM) crashes, increase these values.
+
+**Note on Models:** Since Ollama starts empty, you must pull the required models (e.g., `qwen3.5:4b`) into the container after deployment via the Ollama API or CLI:
+`kubectl exec -it [pod-name] -c ollama -n development -- ollama pull qwen3.5:4b`
+
+**Current Configuration:**
+- **Limits** (Maximum allowed): `CPU: 4`, `Memory: 8Gi`
+- **Requests** (Guaranteed): `CPU: 2`, `Memory: 4Gi`
+
+**How to update:**
+Find the `ollama` container section in `deployment.yaml` and modify the `resources` block. Feel free to increase these limits based on your available hardware:
+```yaml
+resources:
+  limits:
+    cpu: "8"      # Example: Scale up to 8 cores for faster inference
+    memory: "16Gi" # Example: Scale up to 16Gi for larger models
+  requests:
+    cpu: "4"
+    memory: "8Gi"
+```
+
+### 2. Qdrant (Vector Database)
+Qdrant handles the knowledge base indexing. While less demanding than the LLM, it requires stable memory for large collections.
+
+**Current Configuration:**
+- **Limits** (Maximum allowed): `CPU: 4`, `Memory: 4Gi`
+- **Requests** (Guaranteed): `CPU: 2`, `Memory: 2Gi`
+
+**How to update:**
+Find the `qdrant` container section in the `StatefulSet` part of `deployment.yaml` and scale the resources as needed for your dataset size:
+```yaml
+resources:
+  limits:
+    cpu: "4"
+    memory: "8Gi" # Example: Scale up if you have millions of vectors
+  requests:
+    cpu: "2"
+    memory: "4Gi"
+```
+
+### ⚠️ Important Notes
+- **Rancher Desktop Limits**: Ensure that the total memory allocated to Rancher Desktop (in Settings $\rightarrow$ Virtual Machine) is higher than the sum of all `limits` defined in your YAML, otherwise the cluster will be unstable.
+- **Applying Changes**: After modifying `deployment.yaml`, you must re-run the Helm upgrade command to apply the new resource constraints:
+  ```powershell
+  helm upgrade izzy-bill . -f .\values.yaml -f .\local-secrets.yaml --install --namespace development --create-namespace
+  ```
 
 The application utilizes a configuration-driven approach to define AI agents. You can add or modify agents without changing the source code by updating the Kubernetes **ConfigMap**.
 
