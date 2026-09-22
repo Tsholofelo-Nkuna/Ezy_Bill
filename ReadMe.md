@@ -208,6 +208,6 @@ AI__AiAgentMetaData__3__VecStoreMetaData__Description: "Description of what info
 - **Vector Store Sync**: When adding a new agent, ensure the `VecStoreMetaData__Name` matches an existing collection in your **Qdrant** instance; otherwise, the agent will not be able to perform RAG queries.
 - **Applying Changes**: After editing the `config.yml` and running the Helm upgrade, you may need to restart the Web pod for the new configuration to take effect:
   ```powershell
-   helm upgrade izzy-bill . -f .\values.yaml --install --namespace development --create-namespace
+    helm upgrade izzy-bill . -f .\values.yaml -f local-secrets.yaml --install --namespace development --create-namespace
   ```
 
