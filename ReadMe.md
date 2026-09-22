@@ -105,11 +105,15 @@ Since all containers are co-located in the same Pod infrastructure space, the ag
 
 ```yaml
 # ConfigMap values mounted across all containers in the Pod space
-AI__AgentProfiles:
-  - Name: "Paul"
-    Profession: "Finance"
-  - Name: "Linda"
-    Profession: "Recruitment"
+AI__AiAgentMetaData__0__Name: "Paul"
+AI__AiAgentMetaData__0__SkillPath: "Agents/Skills/paul"
+AI__AiAgentMetaData__0__Model: "qwen3.5:4b"
+AI__AiAgentMetaData__0__Type: "Master"
+AI__AiAgentMetaData__0__Profession: "Manager"
+AI__AiAgentMetaData__0__Instructions: "You are a manager"
+AI__AiAgentMetaData__0__VecStoreMetaData__Name: "Reports"
+AI__AiAgentMetaData__0__VecStoreMetaData__DisplayName: "Reports, managed by agent Paul"
+AI__AiAgentMetaData__0__VecStoreMetaData__Description: "Contains information about all progress made by specialist agents."
 ```
 ---
 
