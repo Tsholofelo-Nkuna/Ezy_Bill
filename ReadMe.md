@@ -46,7 +46,7 @@ The bidirectional lines (`▲` / `▼` / `◀` / `▶`) emphasize that while cod
 ## 🚫 Core Isolation Rules
 
 1. **`ClientManagement.Presentaion.Web` references `ClientManagement.AI` and `Business Logic Layer` ONLY.** It acts as the structural Composition Root shell. It handles regular application traffic, standard forms, and identity verification. It is explicitly blocked from referencing `ClientManagement.MCP`, ensuring presentation pages cannot bypass cognitive agents to invoke low-level tool handlers directly.
-2. **`ClientManagement.AI` references `ClientManagement.MCP` ONLY.** The agent framework layer remains a pure cognitive manager. It has **zero runtime or compile-time visibility** into the database layouts, internal workflows, or algorithms of the Business Logic Layer.
+2. **`ClientManagement.AI` communicates to `ClientManagement.MCP` via HTTP.** The agent framework layer remains a pure cognitive manager. It has **zero runtime or compile-time visibility** into the database layouts, internal workflows, or algorithms of the Business Logic Layer and **ClientManagement.MCP**.
 3. **`ClientManagement.MCP` references the `Business Logic Layer` ONLY.** It serves as a secure, flat capabilities abstraction line. It hosts your **RAG Service** directly alongside transactional modules, exposing them horizontally to the AI layer as pure protocol tool configurations.
 
 ---
