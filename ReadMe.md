@@ -186,7 +186,7 @@ To add a new agent (e.g., a 4th agent), add the following entries to the `data` 
 AI__AiAgentMetaData__3__Name: "AgentName"
 AI__AiAgentMetaData__3__SkillPath: "Agents/Skills/agentname"
 AI__AiAgentMetaData__3__Instructions: "Detailed description of the agent's role and personality."
-AI__AiAgentMetaData__3__Type: "Worker"
+AI__AiAgentMetaData__3__Type: "Master"
 AI__AiAgentMetaData__3__VecStoreMetaData__Name: "CollectionName"
 AI__AiAgentMetaData__3__VecStoreMetaData__DisplayName: "Friendly name for the knowledge base"
 AI__AiAgentMetaData__3__VecStoreMetaData__Description: "Description of what information this vector store contains."
@@ -198,7 +198,7 @@ AI__AiAgentMetaData__3__VecStoreMetaData__Description: "Description of what info
 | `Name` | The unique identifier for the agent. | `Paul` |
 | `SkillPath` | The path to the agent's specific skill/tool definitions. | `Agents/Skills/paul` |
 | `Instructions` | The system prompt that defines the agent's behavior. | `You are a manager` |
-| `Type` | The agent's hierarchy level (e.g., `Worker`). | `Worker` |
+| `Type` | The agent's hierarchy level (e.g., `Master`). | `Master` |
 | `VecStoreMetaData__Name` | The actual name of the Qdrant collection this agent uses. | `Reports` |
 | `VecStoreMetaData__DisplayName` | The name shown in the UI for the knowledge source. | `Reports, managed by Paul` |
 | `VecStoreMetaData__Description` | A summary of the knowledge the agent can access. | `Contains information about accounting and financial management.` |
