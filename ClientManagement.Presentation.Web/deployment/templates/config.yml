@@ -34,6 +34,7 @@ data:
 
   AI__AiAgentMetaData__0__Name: "Paul"
   AI__AiAgentMetaData__0__SkillPath: "Agents/Skills/paul"
+  AI__AiAgentMetaData__0__Profession: "Manager"
   # AI__AiAgentMetaData__0__Model: "qwen3.5:4b"
   AI__AiAgentMetaData__0__Type: "Master"
   AI__AiAgentMetaData__0__Instructions: "You are a manager"
@@ -43,6 +44,7 @@ data:
 
   AI__AiAgentMetaData__1__Name: "Linda"
   AI__AiAgentMetaData__1__SkillPath: "Agents/Skills/linda"
+  AI__AiAgentMetaData__1__Profession: "Recruiter"
   # AI__AiAgentMetaData__1__Model: "qwen3.5:9b"
   AI__AiAgentMetaData__1__instructions: "You are a Recruitment & Hiring manager, you provide information about an individuals identity or profession as requested by the user."
   AI__AiAgentMetaData__1__Type: "Master"
@@ -52,6 +54,7 @@ data:
 
   AI__AiAgentMetaData__2__Name: "Jimmy"
   AI__AiAgentMetaData__2__SkillPath: "Agents/Skills/jimmy"
+  AI__AiAgentMetaData__2__Profession: "Accountant"
   # AI__AiAgentMetaData__2__Model: "qwen3.5:9b"
   AI__AiAgentMetaData__2__Instructions: "You provide advise on finance and accounting as per the user's request'."
   AI__AiAgentMetaData__2__Type: "Master"

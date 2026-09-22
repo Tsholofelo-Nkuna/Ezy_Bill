@@ -128,7 +128,7 @@ namespace ClientManagement.Ai.Agents
                          ChatOptions = new()
                          {
                              Instructions = $"Your name is {agentName}. {kBStr}. {aMetaData.Instructions}. All your responses should be in plain text. Never mention your internal tools.",
-                             Tools = [.. this.stdIoTransportClient.Tools],
+                             Tools = [.. this.stdIoTransportClient.GetTools(aMetaData.Profession)],
                              ModelId = string.IsNullOrWhiteSpace(aMetaData.Model) ? this.agentOptions.Value.OllamaModel : aMetaData.Model,
                              AdditionalProperties =new AdditionalPropertiesDictionary { [AgentRunOptionProperties.AgentName] = agentName }
 

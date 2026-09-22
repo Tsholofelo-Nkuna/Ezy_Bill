@@ -4,6 +4,7 @@ using ClientManagement.Models.AI;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ModelContextProtocol.Client;
+using System.Text.RegularExpressions;
 
 
 namespace ClientManagement.Ai.Helpers
@@ -45,6 +46,23 @@ namespace ClientManagement.Ai.Helpers
            
         }
 
-        
+        /// <summary>
+        /// Get a list of tools assocated with the given role
+        /// </summary>
+        /// <param name="role">name of the role to retrieve tools for</param>
+        /// <returns></returns>
+        public IEnumerable<McpClientTool> GetTools(string role) => Tools.Select(x =>
+        {
+            var roleContents = Regex.Match(x.Description, @"\[\s*(role)s?\s*:\s*\w+\]", RegexOptions.IgnoreCase).Value;
+            if(roleContents is string validRoleContents)
+            {
+                var roleList = Regex.Match(validRoleContents,@"(?<=:)(\s*[\w\d]+)").Value.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(y => y.Trim().ToLower());
+                return roleList.Contains(role.Trim().ToLower()) || roleList.Contains("any") ? x : null;
+            }
+            else
+            {
+                return null;
+            }
+        }).Where(tool => tool is not null) as IEnumerable<McpClientTool>;
     }
 }

@@ -13,7 +13,7 @@ namespace ClientManagement.Mcp.Tools
      [McpServerToolType]
     public class  RagToolKit(IVectorStore vectorStore, ILogger<RagToolKit> logger)
     {
-        [McpServerTool, Description("Adds more context to the user's inquiry, never respond to the user without first using this tool.")]
+        [McpServerTool, Description("Adds more context to the user's inquiry, never respond to the user without first using this tool. [Roles: any]")]
         public async Task<string> AddInsightToPrompt(
             [Description("The exact name of the owner of the knowledge source.")] string agentName,
             [Description("The exact name of the knowledge source.")] string knowledgSourceName,
