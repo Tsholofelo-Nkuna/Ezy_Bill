@@ -53,16 +53,16 @@ namespace ClientManagement.Ai.Helpers
         /// <returns></returns>
         public IEnumerable<McpClientTool> GetTools(string role) => Tools.Select(x =>
         {
-            var roleContents = Regex.Match(x.Description, @"\[\s*(role)s?\s*:\s*\w+\]", RegexOptions.IgnoreCase).Value;
+            var roleContents = Regex.Match(x.Description, @"\[\s*(role)s?\s*:\s*(\w+\s*,?\s*)+\]", RegexOptions.IgnoreCase).Value;
             if(roleContents is string validRoleContents)
             {
-                var roleList = Regex.Match(validRoleContents,@"(?<=:)(\s*[\w\d]+)").Value.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(y => y.Trim().ToLower());
+                var roleList = Regex.Match(validRoleContents, @"(?<=:)\s*(\w+\s*,?\s*)+").Value.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(y => y.Trim().ToLower());
                 return roleList.Contains(role.Trim().ToLower()) || roleList.Contains("any") ? x : null;
             }
             else
             {
                 return null;
             }
-        }).Where(tool => tool is not null) as IEnumerable<McpClientTool>;
+        }).OfType<McpClientTool>();
     }
 }
