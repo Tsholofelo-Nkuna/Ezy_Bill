@@ -21,8 +21,8 @@ data:
 
   Pagination__PageSize: "10"
 
-  AdminAccount__Username: "izybill"
-  AdminAccount__Password: "izybill@777"
+  AdminAccount__Username: "{{.Values.rootUser}}"
+  AdminAccount__Password: "{{.Values.rootPassword}}"
 
   AI__SkillPath: "Agents/Skills"
   AI__OllamaUrl: "http://localhost:11434"
