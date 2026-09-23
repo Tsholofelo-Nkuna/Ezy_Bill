@@ -23,7 +23,7 @@ namespace ClientManagement.Mcp.Tools
             try
             {
                 logger.LogInformation($"{nameof(AddInsightToPrompt)} invoked by {yourName}");
-                if (!yourName.Equals(agentName, StringComparison.OrdinalIgnoreCase))
+                if (!yourName.Equals(agentName, StringComparison.OrdinalIgnoreCase)) //need to assign agents keys that only they know about
                 {
                     logger.LogInformation($"{yourName} denied access to {knowledgSourceName}. Access priviledges are assigned to {agentName}");
                     return $"{yourName} is not allowed to access this knowledge source ({knowledgSourceName}) it's owned by {agentName}.";

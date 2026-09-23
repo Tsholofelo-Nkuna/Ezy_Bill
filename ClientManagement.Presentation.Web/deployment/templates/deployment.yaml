@@ -21,6 +21,9 @@ spec:
           imagePullPolicy: {{.Values.image.pullPolicy}}
           ports:
             - containerPort: 8080
+          volumeMounts:
+            - name: agent-storagekey-map
+              mountPath: /agent-store-keys/
           env:
             - name: ASPNETCORE_HTTP_PORTS
               value: "8080"
@@ -34,6 +37,9 @@ spec:
           imagePullPolicy: {{.Values.image.pullPolicy}}
           ports:
             - containerPort: 8082
+          volumeMounts:
+            - name: agent-storagekey-map
+              mountPath: /agent-store-keys/
           env:
             - name: ASPNETCORE_HTTP_PORTS
               value: "8082"
@@ -61,7 +67,13 @@ spec:
         - name: ollama-storage
           hostPath:
             path: /var/lib/ollama/ollamamodels # On your physical host machine
-            type: DirectoryOrCreate  
+            type: DirectoryOrCreate 
+        - name:  agent-storagekey-map
+          configMap:
+            name: {{.Values.agentStoreKeyMapName}}
+            items:
+              - key: agent-storekey-map.json
+                path: agent-storekey-map.json              
 ---
 
 apiVersion: apps/v1

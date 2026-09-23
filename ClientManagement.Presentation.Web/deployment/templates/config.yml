@@ -61,4 +61,5 @@ data:
   AI__AiAgentMetaData__2__VecStoreMetaData__Name: "Accounting"
   AI__AiAgentMetaData__2__VecStoreMetaData__DisplayName: "Accounting and finance, managed by Jimmy"
   AI__AiAgentMetaData__2__VecStoreMetaData__Description: "Contains information about accounting and financial management."
+  
 

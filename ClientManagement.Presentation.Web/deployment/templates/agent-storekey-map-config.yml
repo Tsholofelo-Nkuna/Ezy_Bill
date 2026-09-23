@@ -1,0 +1,12 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{.Values.agentStoreKeyMapName}}
+  namespace: {{.Values.namespace}}
+data:
+  agent-storekey-map.json: |
+    {
+      "k8s-agent-storekey-v0001": "Paul",
+      "k8s-agent-storekey-v0002": "Linda",
+      "k8s-agent-storekey-v0003": "Jimmy"
+    }  
