@@ -4,6 +4,7 @@ using ClientManagement.Ai.Helpers;
 using ClientManagement.AI.Constants;
 using ClientManagement.DataAccessLayer.Helpers.Interface;
 using ClientManagement.Models.AI;
+using ClientManagement.Utils.Ai;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Office.CustomUI;
@@ -27,15 +28,18 @@ namespace ClientManagement.Ai.Agents
         protected readonly AssistantChatApiClient chatClient;
         private readonly AppHttpTransportClient stdIoTransportClient;
         private readonly IVectorStore _vectorStore;
-
+        protected readonly AgentStoreKeyRegistry storeKeyRegistry;
         public event EventHandler<string> ChatResponseReceived;
-        public AgentBase(IOptions<AgentOptions> agentOptions,  AssistantChatApiClient chatClient, AppHttpTransportClient stdIoTransportClient, IVectorStore vectorStore, ILogger<AgentBase> logger) : base(agentOptions, logger)
+        public AgentBase(
+            IOptions<AgentOptions> agentOptions,  
+            AssistantChatApiClient chatClient, AppHttpTransportClient stdIoTransportClient, 
+            IVectorStore vectorStore, ILogger<AgentBase> logger, AgentStoreKeyRegistry storeKeyRegistry) : base(agentOptions, logger)
         {
             this.agentOptions = agentOptions;
             this.chatClient = chatClient;
             this.stdIoTransportClient = stdIoTransportClient;
             this._vectorStore = vectorStore;
-
+            this.storeKeyRegistry = storeKeyRegistry;
             var baseSkillPath = this.agentOptions.Value.SkillPath;
             var replacement = "Ai";
             var replacee = "Presentation.Web";
@@ -112,9 +116,9 @@ namespace ClientManagement.Ai.Agents
                 return $"- Name: {x.VecStoreMetaData!.Name}, Description: {x.VecStoreMetaData!.Description}, Owner: {x.Name}";
             });
             var knowledgeBaseContextStringForMaster = $"The following is a list of available knowledge source names along with their descriptions and owners (you are amongst the owners, the source you have access to is listed with your name): {string.Join("", knoweledgeBaseContext)}. **Access to knowledge source rule**: Only the owner of the knowledge source has access to it; you should always delegate any request for information from their knowledge sources to them.";
-          
+            var agentStoreKey = this.storeKeyRegistry.Registry.FirstOrDefault(entry => entry.Value.Equals(agentName, StringComparison.OrdinalIgnoreCase)).Key;
             var knowledgeSourceName = agentMetaData.FirstOrDefault()?.VecStoreMetaData?.Name;
-            var knowledgeBaseContextStringForWorkers = $"You are the sole owner of a knowledge source called {knowledgeSourceName}, treat it as your source of truth as it's the only source of information you have.";
+            var knowledgeBaseContextStringForWorkers = $"You are the sole owner of a knowledge source called {knowledgeSourceName}, your private store key is {agentStoreKey}; use it to access your knowledge source.";
             //var knowledgeSourceString = !string.IsNullOrWhiteSpace(knowledgeSourceName) ? $"You have access to a single knowledge source called {knowledgeSourceName}" : "Always handoff the user's inquiry if it's outside your area of expertise";
             var agent = agentMetaData
                  .Select(aMetaData =>

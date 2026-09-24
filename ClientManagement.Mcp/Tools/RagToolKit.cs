@@ -24,7 +24,7 @@ namespace ClientManagement.Mcp.Tools
         {
             try
             {
-                logger.LogInformation($"{nameof(AddInsightToPrompt)} invoked by {yourName}");
+                logger.LogInformation($"{nameof(AddInsightToPrompt)} invoked by {yourName} using {storeKey}");
                 _ = agentStoreKeyRegistry.Registry.TryGetValue(storeKey, out var storeKeyOwner);
                 var knowledgSourceName = !string.IsNullOrWhiteSpace(storeKeyOwner) ? agentOptions.Value.AiAgentMetaData.FirstOrDefault(aMetaData => aMetaData.Name.Equals(storeKeyOwner, StringComparison.OrdinalIgnoreCase))?.VecStoreMetaData?.Name ?? string.Empty : string.Empty;
                 if (string.IsNullOrWhiteSpace(storeKey) || !yourName.Equals(storeKeyOwner, StringComparison.OrdinalIgnoreCase)) //need to assign agents keys that only they know about
