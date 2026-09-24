@@ -26,6 +26,7 @@
         "AI__EmbeddingModel": "qwen3-embedding:0.6b",
         "AI__OllamaModel": "qwen3.5:4b",
         "AI__McpUrl": "http://localhost:6174",
+        "AI__AgentStorageKeyFilePath": "/agent-store-keys/agent-storekey-map.json",
 
         "AI__AiAgentMetaData__0__Name": "Paul",
         "AI__AiAgentMetaData__0__SkillPath": "Agents/Skills/paul",
