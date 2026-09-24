@@ -7,6 +7,7 @@ using ClientManagement.Ai.Helpers;
 using ClientManagement.Ai.Agents;
 using ClientManagement.Ai.Agents.Workflows;
 using Microsoft.Extensions.AI;
+using ClientManagement.Utils.Ai;
 
 
 namespace ClientManagement.Ai
@@ -40,7 +41,8 @@ namespace ClientManagement.Ai
                 .AddScoped<CvAnalystAgent>()
                 .AddScoped<AppAssistantWorkflowProvider>()
                 .AddScoped<AppHttpTransportClient>()
-                .AddScoped<IEmbeddingGenerator<string,Embedding<float>>, AssistantChatApiClient>(); 
+                .AddScoped<IEmbeddingGenerator<string,Embedding<float>>, AssistantChatApiClient>()
+                .AddScoped<AgentStoreKeyRegistry>(); 
 
             return services;
         }
