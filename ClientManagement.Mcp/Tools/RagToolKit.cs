@@ -30,7 +30,7 @@ namespace ClientManagement.Mcp.Tools
                 if (string.IsNullOrWhiteSpace(storeKey) || !yourName.Equals(storeKeyOwner, StringComparison.OrdinalIgnoreCase)) //need to assign agents keys that only they know about
                 {
                     logger.LogInformation($"{yourName} denied access to {knowledgSourceName}.");
-                    return $"{yourName} is not allowed to access this knowledge source ({knowledgSourceName}).";
+                    return $"{yourName} is not allowed to access this knowledge source ({knowledgSourceName}). It is owned by {storeKeyOwner}.";
                 }
                 var contextItems = (await vectorStore.SearchAsync(knowledgSourceName, instruction, yourName));
                 var context = string.Join("\n", contextItems);
