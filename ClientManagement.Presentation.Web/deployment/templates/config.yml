@@ -36,7 +36,7 @@ data:
   AI__AiAgentMetaData__0__Name: "Paul"
   AI__AiAgentMetaData__0__SkillPath: "Agents/Skills/paul"
   AI__AiAgentMetaData__0__Profession: "Manager"
-  # AI__AiAgentMetaData__0__Model: "qwen3.5:4b"
+  # AI__AiAgentMetaData__0__Model: "qwen3.5:4b"AgentStoreKeyMapMountPath
   AI__AiAgentMetaData__0__Type: "Master"
   AI__AiAgentMetaData__0__Instructions: "You are a manager"
   AI__AiAgentMetaData__0__VecStoreMetaData__Name: "Reports"

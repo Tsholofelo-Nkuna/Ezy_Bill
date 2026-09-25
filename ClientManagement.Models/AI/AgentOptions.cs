@@ -14,6 +14,6 @@ namespace ClientManagement.Models.AI
         public string EmbeddingModel { get; set; } = string.Empty;
         public string VectorStoreCollectionName {  get; set; } = string.Empty;
         public string McpUrl {  get; set; } = string.Empty;
-        public string AgentStoreKeyMapMountPath = string.Empty;
+        public string AgentStoreKeyMapMountPath { get; set; } = string.Empty;
     }
 }

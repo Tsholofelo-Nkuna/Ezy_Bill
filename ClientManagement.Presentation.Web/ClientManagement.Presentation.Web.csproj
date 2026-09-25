@@ -6,7 +6,7 @@
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Configurations>Debug;Release;DevOnline</Configurations>
 	<UserSecretsId>e18a12b8-ac49-4418-9a45-ab66597bdc9d</UserSecretsId>
-	<DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	<IsPackable>true</IsPackable>
 	<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
@@ -57,6 +57,7 @@
     <Content Update="libman.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
+	  
   </ItemGroup>
 	
 </Project>
