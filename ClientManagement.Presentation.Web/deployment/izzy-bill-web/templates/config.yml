@@ -8,7 +8,7 @@ data:
   Logging__LogLevel__Microsoft.AspNetCore: Warning
 
   AllowedHosts: "*"
-  ApiBaseUrl: "http://localhost:8080"
+  ApiBaseUrl: "http://{{.Values.appName}}.{{.Values.namespace}}.svc.cluster.local:{{.Values.service.port}}"
 
   EmailSettings__Smtp: "smtp.gmail.com"
   EmailSettings__SendFrom: "izybill85@gmail.com"
@@ -32,7 +32,7 @@ data:
   AI__OllamaModel: "qwen3.5:4b"
   AI__McpUrl: "http://localhost:8082"
   AI__AgentStoreKeyMapMountPath: "{{.Values.agentStoreKeyMapMountPath}}/agent-storekey-map.json"
-  AI__PhoenixUrl: "http://phoenix-0.phoenix.{{.Values.namespace}}.svc.cluster.local:4317"
+  AI__PhoenixUrl: "http://phoenix-svc.{{.Values.namespace}}.svc.cluster.local:6006/v1/traces"
   AI__AiAgentMetaData__0__Name: "Paul"
   AI__AiAgentMetaData__0__SkillPath: "Agents/Skills/paul"
   AI__AiAgentMetaData__0__Profession: "Manager"

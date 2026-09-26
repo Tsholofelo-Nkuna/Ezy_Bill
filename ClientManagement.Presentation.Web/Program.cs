@@ -73,7 +73,8 @@ namespace ClientManagement.Presentation.Web
                      {
                          var telemetryUrl = builder.Configuration["AI:PhoenixUrl"];
                          options.Endpoint = new Uri(telemetryUrl);
-                         options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
+                         options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
+                         
                      })
                   );
 

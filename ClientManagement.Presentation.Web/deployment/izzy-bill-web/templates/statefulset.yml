@@ -1,0 +1,94 @@
+﻿apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: qdrant
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: qdrant
+spec:
+  serviceName: "qdrant"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qdrant
+  template:
+    metadata:
+      labels:
+        app: qdrant
+    spec:
+      containers:
+        - name: qdrant
+          image: "qdrant/qdrant:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6333
+              name: http
+            - containerPort: 6334
+              name: grpc
+          resources:
+            limits:
+              cpu: "2"
+              memory: 1Gi
+            requests:
+              cpu: "1"
+              memory: 1Gi
+          volumeMounts:
+            - name: qdrant-storage
+              mountPath: /qdrant/storage
+  volumeClaimTemplates:
+    - metadata:
+        name: qdrant-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+# ---
+# apiVersion: apps/v1
+# kind: StatefulSet
+# metadata:
+#   name: phoenix
+#   namespace: {{ .Values.namespace }}
+#   labels:
+#     app: phoenix
+# spec:
+#   serviceName: "phoenix"
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: phoenix
+#   template:
+#     metadata:
+#       labels:
+#         app: phoenix
+#     spec:
+#       containers:
+#         - name: phoenix
+#           image: "arizephoenix/phoenix:latest"
+#           imagePullPolicy: IfNotPresent
+#           ports:
+#             - containerPort: 6006
+#               name: http
+#             - containerPort: 4317
+#               name: grpc
+#           resources:
+#             limits:
+#               cpu: "2"
+#               memory: 1Gi
+#             requests:
+#               cpu: "1"
+#               memory: 1Gi
+#           volumeMounts:
+#             - name: phoenix-storage
+#               mountPath: /phoenix/storage
+#   volumeClaimTemplates:
+#     - metadata:
+#         name: phoenix-storage
+#       spec:
+#         accessModes: ["ReadWriteOnce"]
+#         resources:
+#           requests:
+#             storage: 10Gi
+
+
+          

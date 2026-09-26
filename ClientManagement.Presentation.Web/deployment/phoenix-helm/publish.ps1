@@ -1,0 +1,1 @@
+helm upgrade phoenix . -f .\values.yaml --install --namespace development --create-namespace
