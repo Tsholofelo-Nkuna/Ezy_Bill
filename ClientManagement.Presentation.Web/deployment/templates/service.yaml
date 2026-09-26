@@ -32,3 +32,35 @@ spec:
     - port: 6334
       targetPort: 6334
       name: grpc  # Used for fast, high-performance vector search operations
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phoenix-grpc
+  namespace: {{.Values.namespace}}
+  labels:
+    app: phoenix
+spec:
+  clusterIP: None # Makes it a headless service
+  selector:
+    app: phoenix   # Must match the labels on your phoenix pods
+  ports:
+    - port: 4317
+      targetPort: 4317
+      name: grpc  # Used for fast, high-performance vector search operations
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phoenix-http
+  namespace: {{.Values.namespace}}
+  labels:
+    app: phoenix
+spec:
+  type: NodePort # Makes it a headless service
+  selector:
+    app: phoenix   # Must match the labels on your phoenix pods
+  ports:
+    - port: 6006
+      targetPort: 6006
+      name: http  # Used for REST API operations and dashboard access

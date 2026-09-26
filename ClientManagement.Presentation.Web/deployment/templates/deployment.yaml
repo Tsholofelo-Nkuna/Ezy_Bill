@@ -1,53 +1,55 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{.Values.appName}}
-  namespace: {{.Values.namespace}}
+  name: {{ .Values.appName }}
+  namespace: {{ .Values.namespace }}
   labels:
-    app: {{.Values.appName}}
+    app: {{ .Values.appName }}
 spec:
-  replicas: {{.Values.replicaCount}}
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{.Values.appName}}
+      app: {{ .Values.appName }}
   template:
     metadata:
       labels:
-        app: {{.Values.appName}}
+        app: {{ .Values.appName }}
     spec:
       containers:
-        - name: {{.Values.appName}}
-          image: "{{.Values.image.repository}}/{{.Values.appName}}:{{.Values.image.tag}}"
-          imagePullPolicy: {{.Values.image.pullPolicy}}
+        - name: {{ .Values.appName }}
+          image: "{{ .Values.image.repository }}/{{ .Values.appName }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 8080
           volumeMounts:
             - name: agent-storagekey-map
-              mountPath: {{.Values.agentStoreKeyMapMountPath}}
+              mountPath: {{ .Values.agentStoreKeyMapMountPath }}
           env:
             - name: ASPNETCORE_HTTP_PORTS
               value: "8080"
           envFrom:
             - configMapRef:
-                name: {{.Values.appConfigName}}
+                name: {{ .Values.appConfigName }}
             - secretRef:
-                name: {{.Values.appSecretName}}
-        - name: {{.Values.mcpName}}
-          image: "{{.Values.image.repository}}/{{.Values.mcpName}}:{{.Values.image.tag}}"
-          imagePullPolicy: {{.Values.image.pullPolicy}}
+                name: {{ .Values.appSecretName }}
+        
+        - name: {{ .Values.mcpName }}
+          image: "{{ .Values.image.repository }}/{{ .Values.mcpName }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 8082
           volumeMounts:
             - name: agent-storagekey-map
-              mountPath: {{.Values.agentStoreKeyMapMountPath}}
+              mountPath: {{ .Values.agentStoreKeyMapMountPath }}
           env:
             - name: ASPNETCORE_HTTP_PORTS
               value: "8082"
           envFrom:
             - configMapRef:
-                name: {{.Values.appConfigName}}
+                name: {{ .Values.appConfigName }}
             - secretRef:
-                name: {{.Values.appSecretName}}
+                name: {{ .Values.appSecretName }}
+
         - name: ollama
           image: "alpine/ollama:latest"
           imagePullPolicy: IfNotPresent
@@ -56,35 +58,50 @@ spec:
           volumeMounts:
             - name: ollama-storage
               mountPath: /root/.ollama
-          # resources:
-          #   limits:
-          #     cpu: 4
-          #     memory: 8Gi
-          #   requests:
-          #     cpu: 2
-          #     memory: 4Gi
+          resources:
+            limits:
+              cpu: 4
+              memory: 6Gi
+            requests:
+              cpu: 2
+              memory: 4Gi
       volumes:
         - name: ollama-storage
           hostPath:
-            path: /var/lib/ollama/ollamamodels # On your physical host machine
+            path: /var/lib/ollama/ollamamodels
             type: DirectoryOrCreate 
-        - name:  agent-storagekey-map
+        - name: agent-storagekey-map
           configMap:
-            name: {{.Values.agentStoreKeyMapName}}
+            name: {{ .Values.agentStoreKeyMapName }}
             items:
               - key: agent-storekey-map.json
                 path: agent-storekey-map.json              
 ---
-
+# Headless Service for Qdrant
+apiVersion: v1
+kind: Service
+metadata:
+  name: qdrant
+  namespace: {{ .Values.namespace }}
+spec:
+  clusterIP: None
+  selector:
+    app: qdrant
+  ports:
+    - port: 6333
+      name: http
+    - port: 6334
+      name: grpc
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: qdrant
-  namespace: {{.Values.namespace}}
+  namespace: {{ .Values.namespace }}
   labels:
     app: qdrant
 spec:
-  serviceName: "qdrant" # Must match the Headless Service name above
+  serviceName: "qdrant"
   replicas: 1
   selector:
     matchLabels:
@@ -103,26 +120,85 @@ spec:
               name: http
             - containerPort: 6334
               name: grpc
-          # resources:
-          #   limits:
-          #     cpu: "4"
-          #     memory: 4Gi
-          #   requests:
-          #     cpu: "2"
-          #     memory: 2Gi
+          resources:
+            limits:
+              cpu: "2"
+              memory: 1Gi
+            requests:
+              cpu: "1"
+              memory: 1Gi
           volumeMounts:
             - name: qdrant-storage
               mountPath: /qdrant/storage
-  # This dynamically creates a dedicated PVC for each replica
   volumeClaimTemplates:
     - metadata:
         name: qdrant-storage
       spec:
         accessModes: ["ReadWriteOnce"]
-        # Uncomment and set a storageClassName if you aren't using your cluster's default
-        # storageClassName: "standard" 
         resources:
           requests:
             storage: 10Gi
- 
-
+          
+            
+---
+# Headless Service for Phoenix
+apiVersion: v1
+kind: Service
+metadata:
+  name: phoenix
+  namespace: {{ .Values.namespace }}
+spec:
+  clusterIP: None
+  selector:
+    app: phoenix
+  ports:
+    - port: 6006
+      name: http
+    - port: 4317
+      name: grpc
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: phoenix
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: phoenix
+spec:
+  serviceName: "phoenix"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phoenix
+  template:
+    metadata:
+      labels:
+        app: phoenix
+    spec:
+      containers:
+        - name: phoenix
+          image: "arizephoenix/phoenix"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6006
+              name: http
+            - containerPort: 4317
+              name: grpc
+          volumeMounts:
+            - name: phoenix-storage
+              mountPath: /root/.phoenix # Corrected path for Phoenix
+          resources:
+            requests:
+              cpu: 2
+              memory: 1Gi
+            limits: 
+              memory: 2Gi
+              cpu: 3
+  volumeClaimTemplates:
+    - metadata:
+        name: phoenix-storage # Corrected name to match volumeMounts
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi

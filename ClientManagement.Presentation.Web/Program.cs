@@ -4,15 +4,16 @@ using ClientManagement.DataAccessLayer;
 using ClientManagement.Models;
 using ClientManagement.Models.AI;
 using ClientManagement.Presentation.Web.Components;
-using Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf;
 using ClientManagement.Utils;
 using ClientManagement.Utils.Constants;
-using ClientManagement.Utils.Logging;
+using Core.Presentation.ViewComponents.Utils.DocumentGeneration.Pdf;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using System.Globalization;
-using static Org.BouncyCastle.Math.EC.ECCurve;
+
 
 namespace ClientManagement.Presentation.Web
 {
@@ -56,11 +57,27 @@ namespace ClientManagement.Presentation.Web
                 config.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]);
                 config.Timeout = TimeSpan.FromMinutes(3);
             });
-          
 
            
 
-           
+            var serviceName = "izyBill-Agent-Core";
+
+            builder.Services.AddOpenTelemetry()
+                .ConfigureResource(resource => resource.AddService(serviceName))
+                .WithTracing(tracing => tracing
+                    .AddSource("Microsoft.Extensions.AI")
+                    .AddHttpClientInstrumentation()
+                    .AddAspNetCoreInstrumentation()
+                    .AddGrpcClientInstrumentation()
+                    .AddOtlpExporter(options =>
+                     {
+                         var telemetryUrl = builder.Configuration["AI:PhoenixUrl"];
+                         options.Endpoint = new Uri(telemetryUrl);
+                         options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
+                     })
+                  );
+
+
             builder.Services.AddControllers(c =>
             {
                //c.Filters.Add(typeof(ApiKeyActionFilter));
@@ -75,9 +92,9 @@ namespace ClientManagement.Presentation.Web
             });
             builder.Services.AddAiAgents(builder.Configuration);
             builder.Services.AddBusinessServices(builder.Configuration);
-          
-         
+
             var app = builder.Build();
+
             app.UseSession();
             app.UseRequestLocalization(options =>
             {

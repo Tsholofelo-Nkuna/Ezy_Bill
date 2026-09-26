@@ -1,0 +1,1 @@
+helm upgrade izzy-bill . -f .\values.yaml -f local-secrets.yaml  --install --namespace development --create-namespace
