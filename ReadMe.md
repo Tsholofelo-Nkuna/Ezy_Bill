@@ -340,4 +340,170 @@ AI__AiAgentMetaData__3__VecStoreMetaData__Description: "Description of what info
   ```powershell
     helm upgrade izzy-bill . -f .\values.yaml -f local-secrets.yaml --install --namespace development --create-namespace
   ```
+  ---
+  # Engineering Blueprint: Distributed Agent Telemetry Integration
+
+This document outlines the architecture and  implementation blueprint for observing and monitoring the multi-agent workflow  powering the **IzyBill** macro-agent. 
+
+By establishing a host-level OpenTelemetry middleware layer, this strategy captures agent reasoning paths (`TextReasoningContent`) and binary data fetches, streaming them natively into a self-hosted instance of **Arize Phoenix** for automated evaluation and model benchmarking.
+
+---
+
+## 🏗️ 1. Core Architectural Layout
+
+The system architecture follows a strict **Separation of Concerns**, splitting runtime configuration completely away from stateful data execution planes. Every critical asset is containerized to guarantee environment consistency across local and cloud environments.
+
+### Component Map
+*   **The Brain (Model Layer):** Hosted locally via **Ollama** containers (`qwen3.5:4b`), providing private, cost-free token generation entirely within the system perimeter.
+*   **The Factory (Agent Harness):** Orchestrated via the **Microsoft Agent Framework** inside the main Web App host. It initializes personas, structures guardrails, injects tool registries, and constructs active agent instances.
+*   **The Workers (Micro-Agents):** Decoupled operational personas—**Paul** (Proxy/Manager Gatekeeper), **Linda** (Recruiter), and **Jimmy** (Accountant)—running within a dynamic handoff workflow triggered by explicit, semantic reasons.
+*   **The Memory (Data Layer):** Isolated **Qdrant Vector Databases** running via **Kubernetes StatefulSets** with persistent volume attachments, ensuring absolute division between sensitive business sectors (e.g., CV structures vs. Billing records).
+
+---
+
+## 📊 2. Container Topology & Network Wireframe
+
+The following blueprint maps the boundary lines of the running container cluster and traces the dual-protocol telemetry pipeline managed by the central Web App host.
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                      IzyBill CONTAINER WORKLOAD CLUSTER                 │
+│                                                                        │
+│   ┌────────────────────────────────────────────────────────────────┐   │
+│   │               WEB APP CORE APP (COMPOSITION ROOT)              │   │
+│   │         [ Blazor Frontend ] ──► [ .NET Host Runtime ]          │   │
+│   └───────────────────────────────────────┬────────────────────────┘   │
+│                                           │                            │
+│           ┌───────────────────────────────┼──────────────────────┐     │
+│           │ (HTTP / Port 11434)           │ (HTTP MCP Transport) │     │
+│           ▼                               ▼                      ▼     │
+│    ┌─────────────┐                 ┌─────────────┐        ┌─────────────┐│
+│    │   OLLAMA    │                 │  MCP SERVER │        │   QDRANT    ││
+│    │ (Local LLM) │                 │(Tool Broker)│        │(StatefulSet)││
+│    └─────────────┘                 └──────┬──────┘        └─────────────┘│
+│                                           │                      ▲     │
+│                                           └──────(gRPC / 6334)───┘     │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔌 3. Observability & Telemetry Middleware Matrix
+
+Rather than polluting microservice files or agent definitions with diagnostic logging blocks, OpenTelemetry is injected as cross-cutting infrastructure strictly at the **Composition Root**. It hooks directly into network sockets to catch traffic flowing across HTTP and gRPC rails.
+
+```
+ [User Input] ──► [ Web App Core OTel Middleware ] ──────► [ Arize Phoenix ]
+                        │                                        ▲
+                        ├─► (HTTP) ──► [ Ollama Engine ] ────────┤ (Thought Spans)
+                        │      └─► Captures TextReasoningContent │
+                        │                                        │
+                        └─► (gRPC) ──► [ Qdrant Database ] ──────┘ (Retrieval Spans)
+                               └─► Captures RAG Context Injection
+```
+
+### 🔹 HTTP Client Instrumentation (`AddHttpClientInstrumentation`)
+*   **Target Engine:** Intercepts out-of-network model inference calls directed to the local Ollama API wrapper.
+*   **Diagnostic Return:** Natively isolates the framework's `TextReasoningContent` (the internal, raw reasoning thought tokens) right as they stream from the model, mapping the internal monologue before any final text reaches the front-end user.
+
+### 🔹 gRPC Client Instrumentation (`AddGrpcClientInstrumentation`)
+*   **Target Engine:** Intercepts high-throughput binary Protocol Buffer streams traversing port `6334` between the database clients and the Qdrant StatefulSet nodes.
+*   **Diagnostic Return:** Eliminates data blind spots by unpacking the binary payload envelope, exposing the exact context strings, similarity scores, and documents injected into the system prompt.
+---
+
+## 📊 4. Evaluation, Quality Auditing, & Tournament Models
+
+By establishing this zero-noise, double-protocol logging network, your team changes AI execution from a subjective black-box guess into an **Auditable Corporate Asset**.
+
+### ⚖️ The Agent Accountability Audit
+When the frontend displays an incorrect, vague, or failed answer, the system allows for precise fault attribution:
+*   **Lenient Scoring (Data Flaw):** Phoenix traces prove that the model processed the information correctly, but the gRPC fetch from Qdrant returned corrupted or incomplete context. The model is innocent; the fix belongs in the vector knowledge base.
+*   **Strict Scoring (Model Hallucination):** Traces show that Qdrant returned perfect, accurate data blocks, but the model's internal `TextReasoningContent` tokens chose to ignore system rules or misread the parameters. The model failed; the fix belongs in prompt refining or `config.yml` adjustment.
+
+### 🏆 Parallel Model Tournaments
+Because the system configuration isolates model assignments, the system is natively pre-architected for parallel benchmarking. 
+
+By uncommenting model overrides in `config.yml`, your architect can run the **Concurrent Orchestrator Pattern** across multiple local or cloud containers (`qwen3.5`, `qwen:9b`, `llama3.1`) simultaneously on a single user query. Arize Phoenix automatically tracks the latency, token overhead, and faithfulness of each output stream, acting as the ultimate automated judge to select and pass the highest-scoring response directly back to the Blazor dashboard.# Engineering Blueprint: Distributed Agent Telemetry Integration
+
+This document outlines the architecture and  implementation blueprint for observing and monitoring the multi-agent workflow  powering the **IzyBill** macro-agent. 
+
+By establishing a host-level OpenTelemetry middleware layer, this strategy captures agent reasoning paths (`TextReasoningContent`) and binary data fetches, streaming them natively into a self-hosted instance of **Arize Phoenix** for automated evaluation and model benchmarking.
+
+---
+
+## 🏗️ 1. Core Architectural Layout
+
+The system architecture follows a strict **Separation of Concerns**, splitting runtime configuration completely away from stateful data execution planes. Every critical asset is containerized to guarantee environment consistency across local and cloud environments.
+
+### Component Map
+*   **The Brain (Model Layer):** Hosted locally via **Ollama** containers (`qwen3.5:4b`), providing private, cost-free token generation entirely within the system perimeter.
+*   **The Factory (Agent Harness):** Orchestrated via the **Microsoft Agent Framework** inside the main Web App host. It initializes personas, structures guardrails, injects tool registries, and constructs active agent instances.
+*   **The Workers (Micro-Agents):** Decoupled operational personas—**Paul** (Proxy/Manager Gatekeeper), **Linda** (Recruiter), and **Jimmy** (Accountant)—running within a dynamic handoff workflow triggered by explicit, semantic reasons.
+*   **The Memory (Data Layer):** Isolated **Qdrant Vector Databases** running via **Kubernetes StatefulSets** with persistent volume attachments, ensuring absolute division between sensitive business sectors (e.g., CV structures vs. Billing records).
+
+---
+
+## 📊 2. Container Topology & Network Wireframe
+
+The following blueprint maps the boundary lines of the running container cluster and traces the dual-protocol telemetry pipeline managed by the central Web App host.
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                      IzyBill CONTAINER WORKLOAD CLUSTER                 │
+│                                                                        │
+│   ┌────────────────────────────────────────────────────────────────┐   │
+│   │               WEB APP CORE APP (COMPOSITION ROOT)              │   │
+│   │         [ Blazor Frontend ] ──► [ .NET Host Runtime ]          │   │
+│   └───────────────────────────────────────┬────────────────────────┘   │
+│                                           │                            │
+│           ┌───────────────────────────────┼──────────────────────┐     │
+│           │ (HTTP / Port 11434)           │ (HTTP MCP Transport) │     │
+│           ▼                               ▼                      ▼     │
+│    ┌─────────────┐                 ┌─────────────┐        ┌─────────────┐│
+│    │   OLLAMA    │                 │  MCP SERVER │        │   QDRANT    ││
+│    │ (Local LLM) │                 │(Tool Broker)│        │(StatefulSet)││
+│    └─────────────┘                 └──────┬──────┘        └─────────────┘│
+│                                           │                      ▲     │
+│                                           └──────(gRPC / 6334)───┘     │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔌 3. Observability & Telemetry Middleware Matrix
+
+Rather than polluting microservice files or agent definitions with diagnostic logging blocks, OpenTelemetry is injected as cross-cutting infrastructure strictly at the **Composition Root**. It hooks directly into network sockets to catch traffic flowing across HTTP and gRPC rails.
+
+```
+ [User Input] ──► [ Web App Core OTel Middleware ] ──────► [ Arize Phoenix ]
+                        │                                        ▲
+                        ├─► (HTTP) ──► [ Ollama Engine ] ────────┤ (Thought Spans)
+                        │      └─► Captures TextReasoningContent │
+                        │                                        │
+                        └─► (gRPC) ──► [ Qdrant Database ] ──────┘ (Retrieval Spans)
+                               └─► Captures RAG Context Injection
+```
+
+### 🔹 HTTP Client Instrumentation (`AddHttpClientInstrumentation`)
+*   **Target Engine:** Intercepts out-of-network model inference calls directed to the local Ollama API wrapper.
+*   **Diagnostic Return:** Natively isolates the framework's `TextReasoningContent` (the internal, raw reasoning thought tokens) right as they stream from the model, mapping the internal monologue before any final text reaches the front-end user.
+
+### 🔹 gRPC Client Instrumentation (`AddGrpcClientInstrumentation`)
+*   **Target Engine:** Intercepts high-throughput binary Protocol Buffer streams traversing port `6334` between the database clients and the Qdrant StatefulSet nodes.
+*   **Diagnostic Return:** Eliminates data blind spots by unpacking the binary payload envelope, exposing the exact context strings, similarity scores, and documents injected into the system prompt.
+---
+
+## 📊 4. Evaluation, Quality Auditing, & Tournament Models
+
+By establishing this zero-noise, double-protocol logging network, your team changes AI execution from a subjective black-box guess into an **Auditable Corporate Asset**.
+
+### ⚖️ The Agent Accountability Audit
+When the frontend displays an incorrect, vague, or failed answer, the system allows for precise fault attribution:
+*   **Lenient Scoring (Data Flaw):** Phoenix traces prove that the model processed the information correctly, but the gRPC fetch from Qdrant returned corrupted or incomplete context. The model is innocent; the fix belongs in the vector knowledge base.
+*   **Strict Scoring (Model Hallucination):** Traces show that Qdrant returned perfect, accurate data blocks, but the model's internal `TextReasoningContent` tokens chose to ignore system rules or misread the parameters. The model failed; the fix belongs in prompt refining or `config.yml` adjustment.
+
+### 🏆 Parallel Model Tournaments
+Because the system configuration isolates model assignments, the system is natively pre-architected for parallel benchmarking. 
+
+By uncommenting model overrides in `config.yml`, your architect can run the **Concurrent Orchestrator Pattern** across multiple local or cloud containers (`qwen3.5`, `qwen:9b`, `llama3.1`) simultaneously on a single user query. Arize Phoenix automatically tracks the latency, token overhead, and faithfulness of each output stream, acting as the ultimate automated judge to select and pass the highest-scoring response directly back to the Blazor dashboard.
 
