@@ -35,6 +35,7 @@ namespace ClientManagement.Presentation.Web.Controllers
                 logger.LogInformation($"inserting document(s) into their associated vector store(s)");
                 var vectorStoreReponse = await this._vectorStore.UpSert(vectorStoreName, value, value.FirstOrDefault()?.AgentName ?? string.Empty);
                 var logResponse = vectorStoreReponse ? "document(s) loaded successfully into their assocated vector store(s)" : "loading of document(s) into their associated vector stores failed";
+                logger.LogInformation(logResponse);
                 return vectorStoreReponse;
             }
             else
