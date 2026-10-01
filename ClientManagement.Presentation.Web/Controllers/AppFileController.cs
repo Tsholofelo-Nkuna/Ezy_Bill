@@ -26,10 +26,16 @@ namespace ClientManagement.Presentation.Web.Controllers
         [HttpPost("{vectorStoreName}")]
         public async Task<bool> Post([FromBody] List<AppFileDto> value, string vectorStoreName)
         {
+            logger.LogInformation("Inserting record(s) into relational db...");
             var serviceReponse = await this._appFileService.AddOrUpdate(value);
+            var message = serviceReponse ? "insert succeeded" : "insert failed";
+            logger.LogInformation($"{message}");
             if (serviceReponse)
             {
-                return await this._vectorStore.UpSert(vectorStoreName, value, value.FirstOrDefault()?.AgentName ?? string.Empty);
+                logger.LogInformation($"inserting document(s) into their associated vector store(s)");
+                var vectorStoreReponse = await this._vectorStore.UpSert(vectorStoreName, value, value.FirstOrDefault()?.AgentName ?? string.Empty);
+                var logResponse = vectorStoreReponse ? "document(s) loaded successfully into their assocated vector store(s)" : "loading of document(s) into their associated vector stores failed";
+                return vectorStoreReponse;
             }
             else
             {
