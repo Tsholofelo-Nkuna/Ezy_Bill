@@ -58,25 +58,25 @@ namespace ClientManagement.Presentation.Web
                 config.Timeout = TimeSpan.FromMinutes(3);
             });
 
-           
+
 
             var serviceName = "izyBill-Agent-Core";
 
-            builder.Services.AddOpenTelemetry()
-                .ConfigureResource(resource => resource.AddService(serviceName))
-                .WithTracing(tracing => tracing
-                    .AddSource("Microsoft.Extensions.AI")
-                    .AddHttpClientInstrumentation()
-                    .AddAspNetCoreInstrumentation()
-                    .AddGrpcClientInstrumentation()
-                    .AddOtlpExporter(options =>
-                     {
-                         var telemetryUrl = builder.Configuration["AI:PhoenixUrl"];
-                         options.Endpoint = new Uri(telemetryUrl);
-                         options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
-                         
-                     })
-                  );
+            //builder.Services.AddOpenTelemetry()
+            //    .ConfigureResource(resource => resource.AddService(serviceName))
+            //    .WithTracing(tracing => tracing
+            //        .AddSource("Microsoft.Extensions.AI")
+            //        .AddHttpClientInstrumentation()
+            //        .AddAspNetCoreInstrumentation()
+            //        .AddGrpcClientInstrumentation()
+            //        .AddOtlpExporter(options =>
+            //         {
+            //             var telemetryUrl = builder.Configuration["AI:PhoenixUrl"];
+            //             options.Endpoint = new Uri(telemetryUrl);
+            //             options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
+
+            //         })
+            //      );
 
 
             builder.Services.AddControllers(c =>
