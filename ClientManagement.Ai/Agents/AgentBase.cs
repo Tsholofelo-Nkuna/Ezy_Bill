@@ -118,7 +118,7 @@ namespace ClientManagement.Ai.Agents
             var knowledgeBaseContextStringForMaster = $"The following is a list of available knowledge source names along with their descriptions and owners (you are amongst the owners, the source you have access to is listed with your name): {string.Join("", knoweledgeBaseContext)}. **Access to knowledge source rule**: Only the owner of the knowledge source has access to it; you should always delegate any request for information from their knowledge sources to them.";
             var agentStoreKey = this.storeKeyRegistry.Registry.FirstOrDefault(entry => entry.Value.Equals(agentName, StringComparison.OrdinalIgnoreCase)).Key;
             var knowledgeSourceName = agentMetaData.FirstOrDefault()?.VecStoreMetaData?.Name;
-            var knowledgeBaseContextStringForWorkers = $"You are the sole owner of a knowledge source called {knowledgeSourceName}. Your store key is {agentStoreKey}. Use your store key to access your knowledge source. Keep your store key private to you.";
+            var knowledgeBaseContextStringForWorkers = $"You are the sole owner of a knowledge source called {knowledgeSourceName}.";
             //var knowledgeSourceString = !string.IsNullOrWhiteSpace(knowledgeSourceName) ? $"You have access to a single knowledge source called {knowledgeSourceName}" : "Always handoff the user's inquiry if it's outside your area of expertise";
             var agent = agentMetaData
                  .Select(aMetaData =>
@@ -131,7 +131,7 @@ namespace ClientManagement.Ai.Agents
                          AIContextProviders = [Skill],
                          ChatOptions = new()
                          {
-                             Instructions = $"Your name is {agentName}. {kBStr}. {aMetaData.Instructions}. All your responses should be in plain text. Never mention your internal tools.",
+                             Instructions = $"Your name is {agentName}. {kBStr}. {aMetaData.Instructions}. Your store key is {agentStoreKey}. Use your store key to access your knowledge source. Keep your store key private to you. All your responses should be in plain text. Never mention your internal tools.",
                              Tools = [.. this.stdIoTransportClient.GetTools(aMetaData.Profession)],
                              ModelId = string.IsNullOrWhiteSpace(aMetaData.Model) ? this.agentOptions.Value.OllamaModel : aMetaData.Model,
                              AdditionalProperties =new AdditionalPropertiesDictionary { [AgentRunOptionProperties.AgentName] = agentName }
