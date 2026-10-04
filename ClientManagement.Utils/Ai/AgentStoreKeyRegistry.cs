@@ -14,7 +14,7 @@ namespace ClientManagement.Utils.Ai
 
         public AgentStoreKeyRegistry(IOptions<AgentOptions> agentOptions, ILogger<AgentStoreKeyRegistry> logger) 
         {
-            logger.LogInformation($"Currently loaded agent options: {JsonSerializer.Serialize(agentOptions.Value)}");
+            //logger.LogInformation($"Currently loaded agent options: {JsonSerializer.Serialize(agentOptions.Value)}");
             logger.LogInformation($"Loading agent store key registry from {agentOptions.Value.AgentStoreKeyMapMountPath}");
             var fileContents = File.ReadAllText(agentOptions.Value.AgentStoreKeyMapMountPath);
             Registry = JsonSerializer.Deserialize<Dictionary<string, string>>(fileContents) ?? new Dictionary<string, string>();

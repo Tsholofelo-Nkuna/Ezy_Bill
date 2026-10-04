@@ -1,7 +1,7 @@
 $originalPath = $pwd.path
 $drop = "./bin/Debug/drop"
 $buildNumber = Get-Date -Format "yyMMddHHmmss"
-$image = "tsholofelo768/clientmanagement-presentation-web:dev-$($buildNumber)"
+$image = "tsholofelo768/clientmanagement-presentation-web:$($buildNumber)"
 
 dotnet publish --output $drop --configuration Release 
 copy-item -path "./Dockerfile" -destination "$($drop)/Dockerfile"
