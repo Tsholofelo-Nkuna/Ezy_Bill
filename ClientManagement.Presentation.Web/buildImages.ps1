@@ -7,7 +7,7 @@ dotnet publish --output $drop --configuration Release
 copy-item -path "./Dockerfile" -destination "$($drop)/Dockerfile"
 docker build -t $image $drop
 docker push $image
-$image2 = "tsholofelo768/clientmanagement-mcp:dev-$($buildNumber)"
+$image2 = "tsholofelo768/clientmanagement-mcp:$($buildNumber)"
 $mcpProjectPath = "../ClientManagement.Mcp";
 cd $mcpProjectPath
 $drop2 = "./bin/Debug/drop"
