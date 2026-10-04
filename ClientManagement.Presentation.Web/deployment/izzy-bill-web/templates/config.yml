@@ -29,7 +29,7 @@ data:
   AI__VectorStoreUrl: "http://qdrant-0.qdrant.{{.Values.namespace}}.svc.cluster.local:6334"
   AI__VectorStoreCollectionName: "Knowledge_base"
   AI__EmbeddingModel: "qwen3-embedding:0.6b"
-  AI__OllamaModel: "qwen3.5:0.8b"
+  AI__OllamaModel: "qwen3.5:4b"
   AI__McpUrl: "http://localhost:8082"
   AI__AgentStoreKeyMapMountPath: "{{.Values.agentStoreKeyMapMountPath}}/agent-storekey-map.json"
   AI__PhoenixUrl: "http://phoenix-svc.{{.Values.namespace}}.svc.cluster.local:6006/v1/traces"
