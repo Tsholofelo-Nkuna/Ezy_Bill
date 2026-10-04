@@ -35,7 +35,7 @@ namespace ClientManagement.Mcp.Tools
                 var contextItems = (await vectorStore.SearchAsync(knowledgSourceName, instruction, yourName));
                 var context = string.Join("\n", contextItems);
                 var prompt = $"Respond to the following instruction(s)/question(s) using the provided context.\nQuestion(s)/instruction(s): {instruction}\nContext:\n{context}";
-                logger.LogInformation($"{yourName} successfully accessed {knowledgSourceName}");
+                logger.LogInformation($"{yourName} successfully accessed {knowledgSourceName}. Found {contextItems.Count()} embeddings matching user's inquiry");
                 return prompt;
             }
             catch (Exception ex)
