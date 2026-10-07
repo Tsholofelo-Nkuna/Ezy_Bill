@@ -55,12 +55,11 @@ data:
 
   AI__AiAgentMetaData__2__Name: "Jimmy"
   AI__AiAgentMetaData__2__SkillPath: "Agents/Skills/jimmy"
-  AI__AiAgentMetaData__2__Profession: "Ledger & Reconciliation Specialist"
+  AI__AiAgentMetaData__2__Profession: "Revenue & Sales Tracker"
   # AI__AiAgentMetaData__2__Model: "qwen3.5:9b"
-  AI__AiAgentMetaData__2__Instructions: "You provide advice and management on the general ledger and financial reconciliation. You focus on matching bank statements to processed invoices, tracking business expenses, and preparing tax summaries. You do not handle direct invoice generation or customer billing workflows."
+  AI__AiAgentMetaData__2__Instructions: "You track received payments and sales performance. You monitor which clients have completed payments, calculate total revenue generated from specific products or services, and provide summaries of business sales trends. You do not generate new invoices."
   AI__AiAgentMetaData__2__Type: "Master"
-  AI__AiAgentMetaData__2__VecStoreMetaData__Name: "Ledger_Reconciliation"
-  AI__AiAgentMetaData__2__VecStoreMetaData__DisplayName: "General Ledger and Bank Reconciliation, managed by agent Jimmy"
-  AI__AiAgentMetaData__2__VecStoreMetaData__Description: "Contains information about the chart of accounts, bank statement logs, double-entry ledger inputs, and reconciled transaction records."
-  
+  AI__AiAgentMetaData__2__VecStoreMetaData__Name: "Revenue_Sales"
+  AI__AiAgentMetaData__2__VecStoreMetaData__DisplayName: "Revenue Records and Sales Performance, managed by agent Jimmy"
+  AI__AiAgentMetaData__2__VecStoreMetaData__Description: "Contains data on completed invoice payments, revenue breakdowns by client, and sales volume logs for products and services."
 
