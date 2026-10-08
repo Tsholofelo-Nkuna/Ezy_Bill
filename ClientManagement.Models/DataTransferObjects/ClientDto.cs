@@ -23,6 +23,7 @@ namespace ClientManagement.Models.DataTransferObjects
         public string PrimaryContactEmail { get; set; } = string.Empty;
         [Description("The telephonic or cell number of a company or an individual, this should match the contact number provided by the `LandLine` field, this field is required"), Required]
         public string PrimaryContactPhone { get; set; } = string.Empty;
+        [Description("List of alternative contacts, this field is not required")]
         public List<ContactPersonDto> ContactPerson { get; set; } = new List<ContactPersonDto>();
 
     }
