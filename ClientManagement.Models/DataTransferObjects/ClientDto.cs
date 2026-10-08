@@ -8,7 +8,7 @@ namespace ClientManagement.Models.DataTransferObjects
     {
         [Description("A company's name or the name of an individual")]
         public string CompanyName { get; set; } = string.Empty;
-        [Description("Will be same as the company's name if and only if the company's name points to a person otherwise this is a surname of a person if and only if the company's name points to a person")]
+        [Description("The trading name of the business. If the client is an individual, this should be their surname.")]
         public string TradingAs { get; set; } = string.Empty;
         [Description("Contact number of a person or company, this is the `LandLine` field"), Obsolete("Use primary contact phone field")]
         public string LandlineNumber { get; set; } = string.Empty;

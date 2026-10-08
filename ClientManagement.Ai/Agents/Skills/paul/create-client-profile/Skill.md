@@ -1,6 +1,6 @@
 ﻿---
 name: "create-client-profile"
-description: "creates a new client profile, use this whenever you are requested to create a client"
+description: "creates a new client/client profile, always use this skill whenever the user asks you to creat a new user/user profile."
 ---
 
 # Instructions
