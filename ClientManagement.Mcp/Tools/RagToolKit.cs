@@ -2,6 +2,7 @@
 
 using ClientManagement.DataAccessLayer.Helpers.Interface;
 using ClientManagement.Models.AI;
+using ClientManagement.Models.AI.Roles;
 using ClientManagement.Utils.Ai;
 using ClientManagement.Utils.Constants.AI;
 using Microsoft.Agents.AI;
@@ -16,7 +17,7 @@ namespace ClientManagement.Mcp.Tools
      [McpServerToolType]
     public class  RagToolKit(IVectorStore vectorStore, ILogger<RagToolKit> logger, AgentStoreKeyRegistry agentStoreKeyRegistry, IOptions<AgentOptions> agentOptions)
     {
-        [McpServerTool, Description("Adds more context to the user's inquiry, never respond to the user without first using this tool. [Roles: any]")]
+        [McpServerTool, Description($"Adds more context to the user's inquiry, never respond to the user without first using this tool. [Roles: {McpToolAccessRole.Any}]")]
         public async Task<string> AddInsightToPrompt(
             [Description("The most recent instruction/question from the user.")] string instruction,
             [Description("Your exact name")] string yourName,
