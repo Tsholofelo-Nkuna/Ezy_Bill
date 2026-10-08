@@ -124,7 +124,7 @@ namespace ClientManagement.Ai.Agents
                  .Select(aMetaData =>
                  {
                      var kBStr = aMetaData.Type.Equals(AgentType.Master, StringComparison.OrdinalIgnoreCase) ?  knowledgeBaseContextStringForMaster : knowledgeBaseContextStringForWorkers;
-                    
+                     var agentTools = this.stdIoTransportClient.GetTools(aMetaData.Profession);
                      var options = new ChatClientAgentOptions()
 
                      {
@@ -132,7 +132,7 @@ namespace ClientManagement.Ai.Agents
                          ChatOptions = new()
                          {
                              Instructions = $"Your name is {agentName}. {kBStr}. {aMetaData.Instructions}. Your store key is {agentStoreKey}. Use your store key to access your knowledge source. Keep your store key private to you. All your responses should be in plain text. Never mention your internal tools.",
-                             Tools = [.. this.stdIoTransportClient.GetTools(aMetaData.Profession)],
+                             Tools = [..agentTools],
                              ModelId = string.IsNullOrWhiteSpace(aMetaData.Model) ? this.agentOptions.Value.OllamaModel : aMetaData.Model,
                              AdditionalProperties =new AdditionalPropertiesDictionary { [AgentRunOptionProperties.AgentName] = agentName }
 
@@ -141,6 +141,7 @@ namespace ClientManagement.Ai.Agents
                          Description = aMetaData.Description,
                      };
                      var keys = options.AIContextProviders.Select(x => x.StateKeys);
+                     Logger.LogInformation($"The following tools ({string.Join(",", agentTools.Select(x => x.Name))}) have been assigned to {agentName}");
                      return chatClient.AsAIAgent(options: options).AsBuilder().Use(sharedFunc: InspectInputMiddleware).Build();// new ChatClientAgent(chatClient, options);
                  }).FirstOrDefault();
             Logger.LogInformation($"Agent configuration for {agentName} completed.");
