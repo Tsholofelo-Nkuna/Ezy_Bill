@@ -13,7 +13,7 @@ variables:
   - name: buildPlatform
     value: 'Any CPU'
   - name: buildConfiguration
-    value: 'DevOnline'
+    value: 'Debug'
   - name: containerRepository
     value: 'tsholofelo768/clientmanagement-presentation-web'
   - name: imageTag
