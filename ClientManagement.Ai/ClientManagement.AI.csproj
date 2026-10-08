@@ -33,7 +33,6 @@
   <ItemGroup>
     <Folder Include="Agents\Skills\jimmy\" />
     <Folder Include="Agents\Skills\linda\" />
-    <Folder Include="Agents\Skills\paul\" />
     <Folder Include="Interfaces\" />
 	<Content Include="Agents/Skills/**/*.md" CopyToOutputDirectory="Always"></Content>
   </ItemGroup>
