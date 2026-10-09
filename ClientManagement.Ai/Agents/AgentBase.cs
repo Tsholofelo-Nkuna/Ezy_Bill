@@ -142,6 +142,7 @@ namespace ClientManagement.Ai.Agents
                      };
                      var keys = options.AIContextProviders.Select(x => x.StateKeys);
                      Logger.LogInformation($"The following tools ({string.Join(",", agentTools.Select(x => x.Name))}) have been assigned to {agentName}");
+                     Logger.LogInformation($"Agent ({agentName}) has been assigned this ({options.ChatOptions.Instructions}) as an instruction");
                      return chatClient.AsAIAgent(options: options).AsBuilder().Use(sharedFunc: InspectInputMiddleware).Build();// new ChatClientAgent(chatClient, options);
                  }).FirstOrDefault();
             Logger.LogInformation($"Agent configuration for {agentName} completed.");
