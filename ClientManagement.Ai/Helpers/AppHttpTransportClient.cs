@@ -65,7 +65,7 @@ namespace ClientManagement.Ai.Helpers
                 var roleList = Regex.Match(validRoleContents, @"(?<=:)\s*(\w+\s*,?\s*)+").Value.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(y => y.Trim().ToLower());
                 _logger.LogInformation($"Checking if {x.Name} can be accessed by role ({role})");
                 var roleCanAccessTool =  roleList.Contains(role.Trim().ToLower()) || roleList.Contains("any") ? x : null;
-                _logger.LogInformation($"Role (role) can access tool ({x.Name}): {roleCanAccessTool?.ToString() == bool.TrueString}");
+                _logger.LogInformation($"Role ({role}) can access tool ({x.Name}): {(roleCanAccessTool?.ToString() ?? bool.FalseString) == bool.TrueString}");
                 return roleCanAccessTool;
             }
             else
