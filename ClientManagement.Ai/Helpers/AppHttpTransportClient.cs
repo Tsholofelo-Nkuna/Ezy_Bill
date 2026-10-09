@@ -54,10 +54,14 @@ namespace ClientManagement.Ai.Helpers
         public IEnumerable<McpClientTool> GetTools(string role) => Tools.Select(x =>
         {
             var roleContents = Regex.Match(x.Description, @"\[\s*(role)s?\s*:\s*(\w+\s*,?\s*)+\]", RegexOptions.IgnoreCase).Value;
+            _logger.LogInformation($"Tool({x.Name}) is associated with these ({roleContents}) roles");
             if(roleContents is string validRoleContents)
             {
                 var roleList = Regex.Match(validRoleContents, @"(?<=:)\s*(\w+\s*,?\s*)+").Value.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(y => y.Trim().ToLower());
-                return roleList.Contains(role.Trim().ToLower()) || roleList.Contains("any") ? x : null;
+                _logger.LogInformation($"Checking if {x.Name} can be accessed by role ({role})");
+                var roleCanAccessTool =  roleList.Contains(role.Trim().ToLower()) || roleList.Contains("any") ? x : null;
+                _logger.LogInformation($"Role can access tool: {roleCanAccessTool?.ToString() == bool.TrueString}");
+                return roleCanAccessTool;
             }
             else
             {
