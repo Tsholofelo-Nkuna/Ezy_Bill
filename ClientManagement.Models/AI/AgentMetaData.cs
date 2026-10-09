@@ -10,8 +10,8 @@ namespace ClientManagement.Models.AI
         public string Name { get; set; } = string.Empty;
         public string Model { get; set; } = string.Empty;
         public string Type {  get; set; } = string.Empty;
-        public string? Description = string.Empty;
-        public string Profession = string.Empty;
+        public string? Description { get; set; } = string.Empty;
+        public string Profession { get; set; } = string.Empty;
         public VectoreStoreMetaData? VecStoreMetaData { get; set; }
         public string SkillPath { get; set; } = string.Empty ;
     }
