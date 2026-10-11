@@ -9,13 +9,14 @@ using ClientManagement.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ClientManagement.BusinessLogicLayer.Services
 {
     public class UserProfileService : GenericService<UserProfileDto, UserProfileEntity>, IUserProfileService
     {
         public UserProfileService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
-              IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
+              IAppStateManager<ApplicationState> appStateManager, ILogger<UserProfileService> logger) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager, logger)
         {
         }
         public async Task<UserProfileDto> CreateProfile(string userId, ProfileDto newProfile)

@@ -10,6 +10,7 @@ using ClientManagement.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using Qdrant.Client;
@@ -25,7 +26,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
         private readonly QdrantClient qdrantClient;
 
         private readonly VectorStore _vStore;
-        public AppFileService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager, IAppStateManager<ApplicationState> appStateManager, IOptions<AgentOptions> agentOptions, IEmbeddingGenerator<string, Embedding<float>> chatClient) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
+        public AppFileService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager, IAppStateManager<ApplicationState> appStateManager, IOptions<AgentOptions> agentOptions, IEmbeddingGenerator<string, Embedding<float>> chatClient, ILogger<AppFileService> logger) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager, logger)
         {
             this.agentOptions = agentOptions;
             this.chatClient = chatClient;

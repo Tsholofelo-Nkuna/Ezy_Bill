@@ -8,6 +8,7 @@ using ClientManagement.Models.DataTransferObjects;
 using ClientManagement.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 
 namespace ClientManagement.BusinessLogicLayer.Services
@@ -15,7 +16,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
     public class ProfileService : GenericService<ProfileDto, ProfileEntity>, IProfileService
     {
         public ProfileService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
-              IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
+              IAppStateManager<ApplicationState> appStateManager, ILogger<ProfileService> logger) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager, logger)
         {
         }
     }

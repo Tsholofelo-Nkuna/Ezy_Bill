@@ -12,6 +12,7 @@ using ClientManagement.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
     public class InvoiceService : GenericService<InvoiceDto, InvoiceEntity>, IInvoiceService
     {
         public InvoiceService(WebDbContext dbContext, IMapper mapper,IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
-              IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
+              IAppStateManager<ApplicationState> appStateManager, ILogger<InvoiceService> logger) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager,logger)
         {
         }
 

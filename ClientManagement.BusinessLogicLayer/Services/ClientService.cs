@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using ClientManagement.Utils.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
 using ClientManagement.Models.DataTransferObjects;
+using Microsoft.Extensions.Logging;
 
 
 
@@ -23,7 +24,7 @@ namespace ClientManagement.BusinessLogicLayer.Services
             IMapper mapper, 
             IHttpContextAccessor httpContextAccessor, 
             UserManager<IdentityUser> userManager,
-            IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
+            IAppStateManager<ApplicationState> appStateManager, ILogger<ClientService> logger) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager, logger)
         {
         }
 

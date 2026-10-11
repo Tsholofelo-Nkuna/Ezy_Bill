@@ -1,6 +1,9 @@
 ﻿using ClientManagement.Ai.Agents;
 using ClientManagement.Ai.Agents.Workflows;
+using ClientManagement.Ai.Helpers;
 using ClientManagement.AI;
+using ClientManagement.AI.StateMachines.UserAssistant;
+using ClientManagement.Models.AI;
 using ClientManagement.Models.ViewModels;
 using Microsoft.Agents.AI;
 using Microsoft.Agents.AI.Workflows;
@@ -8,6 +11,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 using System.Net.NetworkInformation;
 
@@ -34,8 +38,8 @@ namespace ClientManagement.Presentation.Web.Components.Layout
         public BookkeepingAgent? BookkeeperAgent { get; set; }
         [Inject] AppAssistantWorkflowProvider? AppAssitantWorkFlowProviderInstance { get; set; }
         public AIAgent? AppAssistantAgent { get; set; }
-        [Inject]
-        IJSRuntime JsRunTime { get; set; }
+        [Inject] IJSRuntime JsRunTime { get; set; }
+        [Inject] AssistantChatApiClient ChatAssistant { get; set;  }
         public List<ChatMessage> ChatHistory 
         {
             get;
@@ -44,6 +48,10 @@ namespace ClientManagement.Presentation.Web.Components.Layout
         //public AgentSession ASession { get; set; }
         public Guid AgentConversationId { get; set; }
         public Guid KeyForImagePresentedToAgent = Guid.NewGuid();
+        [Inject] public IOptions<AgentOptions>? AgentOpt { get; set; }
+        public UserAssitantContext? UserAssistantContext { get; set; }
+
+        public EventHandler<ChatMessage>? AgentInstructionSignal { get; set; }
         protected override async Task OnInitializedAsync()
         {
             //this.Username = this._httpContextAccessor.HttpContext?.User?.Identity?.Name ?? string.Empty;
@@ -61,6 +69,9 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                      IconClass = "bi bi-person-lines-fill me-1" 
                  },
             ];
+            UserAssistantContext = new(this.ChatAssistant, this.AgentOpt!);
+            AgentInstructionSignal += UserAssistantContext.UserTextInputSignal;
+            UserAssistantContext.HtmlInputFormOutputSignal += this.OnUserContextHtmlInputFormGenerated;
         }
 
         public async Task OnFilePresentedToAgent(InputFileChangeEventArgs e)
@@ -108,6 +119,11 @@ namespace ClientManagement.Presentation.Web.Components.Layout
             //ASession = await AppAssistantAgent.CreateSessionAsync();
            // return Task.CompletedTask;
         }
+
+        public void OnUserContextHtmlInputFormGenerated(object? sender, string html)
+        {
+            Console.WriteLine(html);
+        }
         public async Task OnSendAgentInstructions()
         {
             AgentIsBusy = true;
@@ -120,6 +136,8 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                 messageContents.Add(new DataContent(ImagePresentedToAgent.dataUrl));
             }
 
+            AgentInstructionSignal.Invoke(this, new() { Contents = messageContents });
+            
 
             await AppAssistantAgent.HandleUserRequest(messageContents, BookkeeperAgent.ChatHistory, assistantReasoningTokenHandler: async (reasoningToken) => {
                 AgentThoughts = reasoningToken;

@@ -12,6 +12,7 @@ using ClientManagement.Utils.Interfaces;
 using ClientManagement.BusinessLogicLayer.Models;
 using ClientManagement.Utils.Constants;
 using ClientManagement.Models.DataTransferObjects;
+using Microsoft.Extensions.Logging;
 
 namespace ClientManagement.BusinessLogicLayer.Services.Base
 {
@@ -23,12 +24,14 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
         protected readonly IMapper _mapper;
         protected readonly UserManager<IdentityUser> _userManager;
         protected readonly IAppStateManager<ApplicationState> _appStateManager;
+        protected readonly ILogger<GenericService<TDto, TEntity>> _logger;
         public GenericService(
             WebDbContext dbContext, 
             IMapper mapper,
             IHttpContextAccessor httpContextAccessor,
             UserManager<IdentityUser> userManager,
-            IAppStateManager<ApplicationState> appStateManager)
+            IAppStateManager<ApplicationState> appStateManager,
+            ILogger<GenericService<TDto, TEntity>> logger)
         {
             _dbContext = dbContext;
             _entitySet = _dbContext.Set<TEntity>();
@@ -36,7 +39,7 @@ namespace ClientManagement.BusinessLogicLayer.Services.Base
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
             _appStateManager = appStateManager;
-
+            _logger = logger;
         }
 
         protected Guid CurrentProfileId

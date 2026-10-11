@@ -10,6 +10,7 @@ using ClientManagement.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,11 @@ using System.Threading.Tasks;
 
 namespace ClientManagement.BusinessLogicLayer.Services
 {
+    [Obsolete("All logic in this class should be moved to the aggregate root class(Invoice)")]
     public class InvoiceProductsService : GenericService<InvoiceProductDto, InvoiceProductsEntity>, IInvoiceProductService
     {
         public InvoiceProductsService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
-              IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
+              IAppStateManager<ApplicationState> appStateManager, ILogger<InvoiceProductsService> logger) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager, logger)
         {
         }
 

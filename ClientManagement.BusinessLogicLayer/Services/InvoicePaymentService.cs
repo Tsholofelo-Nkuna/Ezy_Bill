@@ -16,13 +16,15 @@ using ClientManagement.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ClientManagement.BusinessLogicLayer.Services
 {
+    [Obsolete("All logic in this class should be in the invoice service which is the aggregate root")]
     public class InvoicePaymentService : GenericService<InvoicePaymentDto, InvoicePaymentEntity>, IInvoicePaymentService
     {
         public InvoicePaymentService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
-              IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
+              IAppStateManager<ApplicationState> appStateManager, ILogger<InvoicePaymentService> logger) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager, logger)
         {
         }
 

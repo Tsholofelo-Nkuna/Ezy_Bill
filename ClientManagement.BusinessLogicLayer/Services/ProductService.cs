@@ -1,21 +1,22 @@
 ﻿using AutoMapper;
-using ClientManagement.DataAccessLayer.Entities;
-using Microsoft.EntityFrameworkCore;
+using ClientManagement.BusinessLogicLayer.Interfaces;
+using ClientManagement.BusinessLogicLayer.Models;
 using ClientManagement.BusinessLogicLayer.Services.Base;
 using ClientManagement.DataAccessLayer;
+using ClientManagement.DataAccessLayer.Entities;
 using ClientManagement.Models.DataTransferObjects;
+using ClientManagement.Utils.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using ClientManagement.BusinessLogicLayer.Models;
-using ClientManagement.Utils.Interfaces;
-using ClientManagement.BusinessLogicLayer.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ClientManagement.BusinessLogicLayer.Services
 {
     public class ProductService : GenericService<ProductDto, ProductEntity>, IProductService
     {
         public ProductService(WebDbContext dbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,
-              IAppStateManager<ApplicationState> appStateManager) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager)
+              IAppStateManager<ApplicationState> appStateManager, ILogger<ProductService> logger) : base(dbContext, mapper, httpContextAccessor, userManager, appStateManager, logger)
         {
             
         }
