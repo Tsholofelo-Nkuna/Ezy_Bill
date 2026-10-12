@@ -70,7 +70,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                  },
             ];
             UserAssistantContext = new(this.ChatAssistant, this.AgentOpt!);
-            AgentInstructionSignal += UserAssistantContext.UserTextInputSignal;
+            AgentInstructionSignal += UserAssistantContext.UserTextInputSignalListener;
             UserAssistantContext.HtmlInputFormOutputSignal += this.OnUserContextHtmlInputFormGenerated;
         }
 

@@ -1,9 +1,9 @@
-﻿using ClientManagement.AI.StateMachines.UserAssistant.Interfaces;
+﻿using ClientManagement.AI.StateMachines.UserAssistant.States.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClientManagement.AI.StateMachines.UserAssistant
+namespace ClientManagement.AI.StateMachines.UserAssistant.States
 {
     internal class UserAssitantState : IUserAssitantState
     {

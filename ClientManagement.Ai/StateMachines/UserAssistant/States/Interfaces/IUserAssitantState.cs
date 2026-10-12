@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClientManagement.AI.StateMachines.UserAssistant.Interfaces
+namespace ClientManagement.AI.StateMachines.UserAssistant.States.Interfaces
 {
-    internal interface IUserAssitantState
+    public interface IUserAssitantState
     {
         public void PresentInputForm(UserAssitantContext context);
     }
