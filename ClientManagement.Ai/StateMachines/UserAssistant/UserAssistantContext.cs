@@ -29,7 +29,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant
             IncomingMessageSelector = new(this);
         }
 
-        public void SwithOff()
+        public void SwitchOff()
         {
             this.State?.On = false;
         }

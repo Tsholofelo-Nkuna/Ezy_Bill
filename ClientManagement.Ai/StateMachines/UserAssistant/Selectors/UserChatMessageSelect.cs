@@ -28,16 +28,9 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
             _userMessage = payload;
             foreach (var action in Actions())
             {
-                try
+                if (_context is { State: { On: true } })
                 {
-
-                    if (_context is { State: { On: true } })
-                    {
-                        action(_userMessage);
-                    }
-                }
-                catch{ 
-                
+                    action(_userMessage);
                 }
             }
         }
