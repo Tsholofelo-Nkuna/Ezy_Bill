@@ -4,8 +4,8 @@ using System.Text;
 
 namespace ClientManagement.AI.StateMachines.UserAssistant.States.Interfaces
 {
-    public interface IUserAssitantState
+    public interface IUserAssistantState
     {
-        public void PresentInputForm(UserAssitantContext context);
+        bool On {  get; set; }
     }
 }

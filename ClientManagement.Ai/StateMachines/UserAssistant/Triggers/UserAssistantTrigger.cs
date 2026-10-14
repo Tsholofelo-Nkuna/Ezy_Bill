@@ -7,11 +7,11 @@ using System.Text;
 
 namespace ClientManagement.AI.StateMachines.UserAssistant.Triggers
 {
-    public  class UserIncomingMessageTrigger(UserAssitantContext context) : Base.TriggerBase<UserIncomingMessageTrigger, ChatMessage> , ITriggerBase<UserIncomingMessageTrigger,ChatMessage>
+    public  class UserIncomingMessageTrigger(UserAssistantContext context) : Base.TriggerBase<UserIncomingMessageTrigger, ChatMessage> , ITriggerBase<UserIncomingMessageTrigger,ChatMessage>
     {
         public void UserTextInputSignalListener(object? sender, ChatMessage userMessage)
         {
-            Fire(this, userMessage);
+            Trigger(this, userMessage);
         }
     }
 }

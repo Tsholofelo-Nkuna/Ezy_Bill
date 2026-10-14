@@ -49,7 +49,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
         public Guid AgentConversationId { get; set; }
         public Guid KeyForImagePresentedToAgent = Guid.NewGuid();
         [Inject] public IOptions<AgentOptions>? AgentOpt { get; set; }
-        public UserAssitantContext? UserAssistantContext { get; set; }
+        public UserAssistantContext? UserAssistantContext { get; set; }
 
         public EventHandler<ChatMessage>? AgentInstructionSignal { get; set; }
         protected override async Task OnInitializedAsync()
@@ -70,8 +70,8 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                  },
             ];
             UserAssistantContext = new(this.ChatAssistant, this.AgentOpt!);
-            AgentInstructionSignal += UserAssistantContext.UserTextInputSignalListener;
-            UserAssistantContext.HtmlInputFormOutputSignal += this.OnUserContextHtmlInputFormGenerated;
+            AgentInstructionSignal += UserAssistantContext.IncomingUserMessageSignal!.UserTextInputSignalListener;
+            UserAssistantContext.HtmlInputFormOutputSignal += OnUserContextHtmlInputFormGenerated;
         }
 
         public async Task OnFilePresentedToAgent(InputFileChangeEventArgs e)
