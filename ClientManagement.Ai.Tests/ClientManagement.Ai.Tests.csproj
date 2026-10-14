@@ -8,6 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Moq" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClientManagement.Ai\ClientManagement.AI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Update="MSTest.TestFramework">
       <VersionOverride>4.5.1</VersionOverride>
     </PackageReference>

@@ -4,10 +4,10 @@ using System.Text;
 
 namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors.Interfaces.Base
 {
-    internal interface ISelectorBase<IContext>: IDisposable
+    public interface ISelectorBase<IContext, TPayload>
     {
-        void SignalListener(IContext context);
-        IEnumerable<Action<IContext>> Actions();
+        internal IEnumerable<Action<TPayload>> Actions();
+        void Receptor(IContext? context, TPayload payload);
         
     }
 }

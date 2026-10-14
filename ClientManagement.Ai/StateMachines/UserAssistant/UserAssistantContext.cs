@@ -1,4 +1,7 @@
-﻿using ClientManagement.AI.StateMachines.UserAssistant.States;
+﻿using ClientManagement.AI.StateMachines.UserAssistant.Selectors;
+using ClientManagement.AI.StateMachines.UserAssistant.Selectors.Interfaces.Base;
+using ClientManagement.AI.StateMachines.UserAssistant.States;
+using ClientManagement.AI.StateMachines.UserAssistant.States.Interfaces;
 using ClientManagement.AI.StateMachines.UserAssistant.Triggers;
 using ClientManagement.AI.StateMachines.UserAssistant.Triggers.Base;
 using ClientManagement.AI.StateMachines.UserAssistant.Triggers.Interfaces.Base;
@@ -17,22 +20,19 @@ namespace ClientManagement.AI.StateMachines.UserAssistant
         public EventHandler<string>? HtmlInputFormOutputSignal { get; set; }
         internal  IChatClient ChatClient => chatClient;
         internal  IOptions<AgentOptions> AgentOptions => agentOptions;
-        internal IEnumerable<Triggers.Interfaces.Base.ITriggerBase<object? ,object?>> EnvironmentSignals { get; set; } = [];
         internal UserAssistantState? State { get; set; }
-        public UserIncomingMessageTrigger? IncomingUserMessageSignal { get; set; }
-        public Task Initialize()
+        public UserChatMessageSelect? IncomingMessageSelector { get; set; }
+        public void SwitchOn()
         {
-            
-            return Task.CompletedTask;
-        }
-
-        internal void OnTrigger(object? sender, object? payload)
-        {
-            if (State?.On ?? false)
-            {
-
-            }
            
+            this.State = new(1, 1) { On = true};
+            IncomingMessageSelector = new(this);
         }
+
+        public void SwithOff()
+        {
+            this.State?.On = false;
+        }
+
     }
 }

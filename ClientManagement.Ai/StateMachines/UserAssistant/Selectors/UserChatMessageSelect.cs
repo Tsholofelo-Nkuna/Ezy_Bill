@@ -8,49 +8,38 @@ using System.Text;
 
 namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
 {
-    internal class UserChatMessageSelect : ISelectorBase<UserAssistantContext>
+    public class UserChatMessageSelect(UserAssistantContext context) : ISelectorBase<UserAssistantContext, ChatMessage>
     {
-        private UserAssistantContext? _context;
+        private UserAssistantContext _context = context;
         private ChatMessage? _userMessage;
-        public IEnumerable<Action<UserAssistantContext>> Actions()
+        public IEnumerable<Action<ChatMessage>> Actions()
         {
             return [
                    GreetUser
                 ];
         }
-
-        public void Dispose()
-        {
-            //Dispose signal
-            _context?.IncomingUserMessageSignal?.OnTrigger -= OnSelectorActivated;
+        internal void GreetUser(ChatMessage context) {
+            Console.WriteLine(_userMessage);
         }
 
-        public void SignalListener(UserAssistantContext context)
+        public void Receptor(UserAssistantContext? context, ChatMessage payload)
         {
-            _context = context;
-            _context.IncomingUserMessageSignal?.OnTrigger += OnSelectorActivated;
-        }
-
-        public void OnSelectorActivated(UserIncomingMessageTrigger? intent, ChatMessage? userMessage)
-        {
-            _userMessage = userMessage;
-            foreach (var action in Actions()) {
+            _userMessage = payload;
+            foreach (var action in Actions())
+            {
                 try
                 {
                     _context?.State?.Wait();
                     if (_context is { State: { On: true } })
                     {
-                        action(_context);
+                        action(_userMessage);
                     }
                 }
-                finally {
+                finally
+                {
                     _context?.State?.Release();
                 }
             }
-        }
-
-        public void GreetUser(UserAssistantContext context) {
-            Console.WriteLine(_userMessage);
         }
     }
 }
