@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.InkML;
 using Microsoft.Extensions.AI;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
@@ -29,15 +30,14 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
             {
                 try
                 {
-                    _context?.State?.Wait();
+
                     if (_context is { State: { On: true } })
                     {
                         action(_userMessage);
                     }
                 }
-                finally
-                {
-                    _context?.State?.Release();
+                catch{ 
+                
                 }
             }
         }

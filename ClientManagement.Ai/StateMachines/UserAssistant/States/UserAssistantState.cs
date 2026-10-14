@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ClientManagement.AI.StateMachines.UserAssistant.States
 {
-    internal class UserAssistantState(int x, int y) : SemaphoreSlim(x,y), IUserAssistantState
+    internal class UserAssistantState: IUserAssistantState
     {
         public bool On {  get; set; }
     }

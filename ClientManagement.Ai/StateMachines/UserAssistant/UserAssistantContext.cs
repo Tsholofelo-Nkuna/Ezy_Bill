@@ -25,7 +25,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant
         public void SwitchOn()
         {
            
-            this.State = new(1, 1) { On = true};
+            this.State = new() { On = true};
             IncomingMessageSelector = new(this);
         }
 
