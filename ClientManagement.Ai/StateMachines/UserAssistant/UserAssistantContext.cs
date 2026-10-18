@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Text;
 namespace ClientManagement.AI.StateMachines.UserAssistant
 {
-    public class UserAssistantContext(IChatClient chatClient, IOptions<AgentOptions> agentOptions)
+    public class UserAssistantContext(IChatClient chatClient, IOptions<AgentOptions> agentOptions) : SemaphoreSlim(1,1)
     {
         internal ChatMessage? UserMessage { get; set; }
         internal string InputForm { get; set; } = string.Empty;

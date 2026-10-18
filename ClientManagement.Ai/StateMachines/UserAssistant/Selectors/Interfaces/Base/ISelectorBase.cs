@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.AI;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,8 +7,11 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors.Interfaces.B
 {
     public interface ISelectorBase<IContext, TPayload>
     {
-        internal IEnumerable<Action<TPayload>> Actions();
-        void Receptor(IContext? context, TPayload payload);
-        
+      
+        internal IEnumerable<Func<UserAssistantContext, TPayload, Task<ChatResponse>>> Actions();
+        IAsyncEnumerable<ChatResponse> Receptor(IContext? context, TPayload payload);
+      
+
+
     }
 }

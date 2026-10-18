@@ -35,6 +35,7 @@
     <Folder Include="Agents\Skills\linda\" />
     <Folder Include="Interfaces\" />
 	<Content Include="Agents/Skills/**/*.md" CopyToOutputDirectory="Always"></Content>
+	<Folder Include="StateMachines\UserAssistant\Actions\" />
   </ItemGroup>
 
 </Project>
