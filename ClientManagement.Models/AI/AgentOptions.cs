@@ -16,5 +16,6 @@ namespace ClientManagement.Models.AI
         public string McpUrl {  get; set; } = string.Empty;
         public string AgentStoreKeyMapMountPath { get; set; } = string.Empty;
         public string PhoenixUrl { get; set; } = string.Empty;
+        public IEnumerable<string> SupportedFileTypes { get; set; } = [];
     }
 }

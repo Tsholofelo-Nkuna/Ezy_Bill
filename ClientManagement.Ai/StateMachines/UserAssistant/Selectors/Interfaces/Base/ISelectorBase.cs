@@ -5,11 +5,11 @@ using System.Text;
 
 namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors.Interfaces.Base
 {
-    public interface ISelectorBase<IContext, TPayload>
+    public interface ISelectorBase<TContext, TPayload>
     {
       
-        internal IEnumerable<Func<UserAssistantContext, TPayload, Task<ChatResponse>>> Actions();
-        IAsyncEnumerable<ChatResponse> Receptor(IContext? context, TPayload payload);
+        internal IEnumerable<Func<TContext, TPayload, ChatResponse?, Task<ChatResponse>>> Actions { get; set; }
+        IAsyncEnumerable<ChatResponse> Receptor(object? sender, TPayload payload);
       
 
 

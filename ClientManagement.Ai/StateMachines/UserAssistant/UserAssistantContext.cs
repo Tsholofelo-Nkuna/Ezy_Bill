@@ -21,7 +21,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant
         internal  IChatClient ChatClient => chatClient;
         internal  IOptions<AgentOptions> AgentOptions => agentOptions;
         internal UserAssistantState? State { get; set; }
-        public UserChatMessageSelect? IncomingMessageSelector { get; set; }
+        internal RootSelector? IncomingMessageSelector { get; set; }
         public void SwitchOn()
         {
            
@@ -32,6 +32,19 @@ namespace ClientManagement.AI.StateMachines.UserAssistant
         public void SwitchOff()
         {
             this.State?.On = false;
+        }
+
+        public IAsyncEnumerable<ChatResponse>? Receptor(object? sender, ChatMessage? message)
+        {
+            if(message is not null)
+            {
+                return IncomingMessageSelector?.Receptor(sender, message);
+            }
+            else
+            {
+                return default;
+            }
+           
         }
 
     }

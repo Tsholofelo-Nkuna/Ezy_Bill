@@ -33,7 +33,9 @@ data:
   AI__McpUrl: "http://localhost:8082"
   AI__AgentStoreKeyMapMountPath: "{{.Values.agentStoreKeyMapMountPath}}/agent-storekey-map.json"
   AI__PhoenixUrl: "http://phoenix-svc.{{.Values.namespace}}.svc.cluster.local:6006/v1/traces"
-
+  AI__SupportedFileTypes__0: "image/*"
+  AI__SupportedFileTypes__1: "application/pdf"
+  AI__SupportedFileTypes__2: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
   AI__AiAgentMetaData__0__Name: "Paul"
   AI__AiAgentMetaData__0__SkillPath: "Agents/Skills/paul"
   AI__AiAgentMetaData__0__Profession: "ClientInventorySpecialist"
