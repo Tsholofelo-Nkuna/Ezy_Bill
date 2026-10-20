@@ -70,7 +70,6 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                  },
             ];
             UserAssistantContext = new(this.ChatAssistant, this.AgentOpt!);
-            AgentInstructionSignal += UserAssistantContext.IncomingUserMessageSignal!.UserTextInputSignalListener;
             UserAssistantContext.HtmlInputFormOutputSignal += OnUserContextHtmlInputFormGenerated;
         }
 
@@ -136,8 +135,10 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                 messageContents.Add(new DataContent(ImagePresentedToAgent.dataUrl));
             }
 
-            AgentInstructionSignal.Invoke(this, new() { Contents = messageContents });
             
+            await foreach(var stateMachineResponse in UserAssistantContext.Receptor(this, new() { Contents = messageContents })){
+                Console.WriteLine(stateMachineResponse?.Text);
+            }
 
             await AppAssistantAgent.HandleUserRequest(messageContents, BookkeeperAgent.ChatHistory, assistantReasoningTokenHandler: async (reasoningToken) => {
                 AgentThoughts = reasoningToken;

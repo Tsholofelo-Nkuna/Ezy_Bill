@@ -13,6 +13,6 @@ namespace ClientManagement.Models.AI
         public string? Description { get; set; } = string.Empty;
         public string Profession { get; set; } = string.Empty;
         public VectoreStoreMetaData? VecStoreMetaData { get; set; }
-        public string SkillPath { get; set; } = string.Empty ;
+        public string SkillPath { get; set; } = string.Empty;
     }
 }

@@ -19,7 +19,7 @@ public sealed class Test1
         opt.Setup(x => x.Value).Returns(new AgentOptions());
         var x = new UserAssistantContext(moq.Object, opt.Object);
         x.SwitchOn();
-        x.IncomingMessageSelector?.Receptor(x, new(ChatRole.User, "Hello agent"));
+        x.Receptor(x, new(ChatRole.User, "Hello agent"));
 
        // x.IncomingUserMessageSignal?.
     }

@@ -2,6 +2,8 @@
 using ClientManagement.AI.StateMachines.UserAssistant.Selectors.Interfaces.Base;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
+using OllamaSharp;
+using OllamaSharp.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -45,15 +47,30 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
         {
            
             var textContent = string.Join("\n",userMessage.Contents.OfType<TextContent>());
-            var prompt = $"""
-                Is the following instruction(s) in alignment with the provided professions, respond with a yes or no:
-                instruction(s): {textContent}
-                professions: {string.Join(", ", context.AgentOptions.Value.AiAgentMetaData.Select(x => x.Profession))}
-                """;
-            var response = await context.ChatClient.GetResponseAsync(prompt);
+           
+            var criteria = context.AgentOptions.Value.AiAgentMetaData.Select(x => new KeyValuePair<string, string>(x.Profession, x.Description ?? string.Empty))
+                .ToDictionary(x => x.Key, x=> x.Value);
+            SystemOneResponse? ans = null;
+            if(context.ChatClient is IOllamaApiClient oApiClient)
+            {
+               ans = await oApiClient.SystemOneAsync(new()
+                {
+                    Model = context.AgentOptions.Value.SystemOneModel,
+                    State = textContent,
+                    Questions = {
+                     ["label"] = new SystemOneChoiceQuestion()
+                     {
+                         Criteria = criteria,
+                         Instructions = "Which profession is this in alignment with?"
+                     }
+                    }
+                });
+            }
+            var systemOneChoiceResponse = (ans?.Answers?["label"] as SystemOneChoiceAnswer);
+            var response = new ChatResponse(new ChatMessage(ChatRole.Assistant, systemOneChoiceResponse?.Confidence >=0.6 ? systemOneChoiceResponse?.Choice:"This inquiry is outside the scope of my expertise."));
             response.AdditionalProperties = new AdditionalPropertiesDictionary()
             {
-                [Constants.ExecutionStatus.Success] = response.Text?.ToLower()?.Contains("yes") ?? false
+                [Constants.ExecutionStatus.Success] = !string.IsNullOrWhiteSpace(systemOneChoiceResponse?.Choice)
 
             };
             return response;
