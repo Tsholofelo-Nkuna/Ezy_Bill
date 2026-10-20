@@ -9,11 +9,12 @@ using System.Text.RegularExpressions;
 
 namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
 {
-    internal class UserFileTypeSelector : SequentialSelectorBase, ISelectorBase<UserAssistantContext, ChatMessage>
+    internal class UserContentValidatorSelector : SequentialSelectorBase, ISelectorBase<UserAssistantContext, ChatMessage>
     {
-        public UserFileTypeSelector(UserAssistantContext context) : base(context)
+        public UserContentValidatorSelector(UserAssistantContext context) : base(context)
         {
-           Actions  = Actions.Append(HasCorrectFileType);
+           Actions.Add(HasCorrectFileType);
+           Actions.Add(TextContentIsValid);
         }
 
         public Task<ChatResponse> HasCorrectFileType(UserAssistantContext context, ChatMessage userMessage, ChatResponse? formerResponse)
@@ -38,6 +39,24 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
                 [Constants.ExecutionStatus.Success] = isCorrectFileType 
             };
             return Task.FromResult(response);
+        }
+
+        public async Task<ChatResponse> TextContentIsValid(UserAssistantContext context, ChatMessage userMessage, ChatResponse? formerResponse)
+        {
+           
+            var textContent = string.Join("\n",userMessage.Contents.OfType<TextContent>());
+            var prompt = $"""
+                Is the following instruction(s) in alignment with the provided professions, respond with a yes or no:
+                instruction(s): {textContent}
+                professions: {string.Join(", ", context.AgentOptions.Value.AiAgentMetaData.Select(x => x.Profession))}
+                """;
+            var response = await context.ChatClient.GetResponseAsync(prompt);
+            response.AdditionalProperties = new AdditionalPropertiesDictionary()
+            {
+                [Constants.ExecutionStatus.Success] = response.Text?.ToLower()?.Contains("yes") ?? false
+
+            };
+            return response;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors.Interfaces.B
     public interface ISelectorBase<TContext, TPayload>
     {
       
-        internal IEnumerable<Func<TContext, TPayload, ChatResponse?, Task<ChatResponse>>> Actions { get; set; }
+        internal IList<Func<TContext, TPayload, ChatResponse?, Task<ChatResponse>>> Actions { get; set; }
         IAsyncEnumerable<ChatResponse> Receptor(object? sender, TPayload payload);
       
 

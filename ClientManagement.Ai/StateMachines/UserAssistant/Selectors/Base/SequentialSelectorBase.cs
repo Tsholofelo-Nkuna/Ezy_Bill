@@ -9,7 +9,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors.Base
     {
         protected UserAssistantContext _context = context;
         protected ChatMessage? _userMessage;
-        virtual public IEnumerable<Func<UserAssistantContext, ChatMessage, ChatResponse?, Task<ChatResponse>>> Actions { get; set; } = [];
+        virtual public IList<Func<UserAssistantContext, ChatMessage, ChatResponse?, Task<ChatResponse>>> Actions { get; set; } = [];
         virtual public async IAsyncEnumerable<ChatResponse> Receptor(object? sender, ChatMessage payload)
         {
             try
