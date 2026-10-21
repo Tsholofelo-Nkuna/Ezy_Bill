@@ -8,6 +8,7 @@ using OllamaSharp.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
@@ -53,7 +54,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
 
         public async Task<ChatResponse> TextContentIsValid(UserAssistantContext context, ChatMessage userMessage, ChatResponse? formerResponse)
         {
-            context.Logger.LogInformation($"executing {nameof(TextContentIsValid)}");
+            context.Logger.LogInformation($"executing {nameof(TextContentIsValid)} from {nameof(UserContentValidatorSelector)}");
             var textContent = string.Join("\n",userMessage.Contents.OfType<TextContent>());
            
             var criteria = context.AgentOptions.Value.AiAgentMetaData.Select(x => new KeyValuePair<string, string>(x.Profession, x.Description ?? string.Empty))
@@ -61,6 +62,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
             SystemOneResponse? ans = null;
             if(context.ChatClient is IOllamaApiClient oApiClient)
             {
+               context.Logger.LogInformation($"sending systemone choice question to {context.AgentOptions.Value.SystemOneModel}");
                ans = await oApiClient.SystemOneAsync(new()
                 {
                     Model = context.AgentOptions.Value.SystemOneModel,
@@ -74,6 +76,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
                     }
                 });
             }
+            context.Logger.LogInformation($"systemone choice answer: {JsonSerializer.Serialize(ans)}");
             var systemOneChoiceResponse = (ans?.Answers?["label"] as SystemOneChoiceAnswer);
             var response = new ChatResponse(new ChatMessage(ChatRole.Assistant, systemOneChoiceResponse?.Confidence >=0.6 ? systemOneChoiceResponse?.Choice:"This inquiry is outside the scope of my expertise."));
             response.AdditionalProperties = new AdditionalPropertiesDictionary()
