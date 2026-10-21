@@ -15,7 +15,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors.Base
         {
             try
             {
-                await context.WaitAsync();
+                //await context.WaitAsync();
                 userMessage = payload;
                 ChatResponse? formerActionResponse = null;
                 foreach (var effect in Actions)
@@ -41,7 +41,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors.Base
             }
             finally
             {
-                context.Release();
+               // context.Release();
             }
         }
     }

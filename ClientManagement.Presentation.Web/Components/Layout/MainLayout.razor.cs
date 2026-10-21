@@ -137,7 +137,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
 
             try
             {
-                UserAssistantContext?.WaitAsync();
+               // UserAssistantContext?.WaitAsync();
                 UserAssistantContext?.SwitchOn();
                 if (UserAssistantContext is not null)
                 {
@@ -152,7 +152,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
             }
             finally
             {
-                UserAssistantContext?.Release();
+               // UserAssistantContext?.Release();
             }
 
             await AppAssistantAgent.HandleUserRequest(messageContents, BookkeeperAgent.ChatHistory, assistantReasoningTokenHandler: async (reasoningToken) => {
