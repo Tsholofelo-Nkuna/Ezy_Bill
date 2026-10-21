@@ -50,7 +50,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
         public Guid KeyForImagePresentedToAgent = Guid.NewGuid();
         [Inject] public IOptions<AgentOptions>? AgentOpt { get; set; }
         [Inject] public UserAssistantContext? UserAssistantContext { get; set; }
-
+        [Inject] ILogger<MainLayout> Logger { get; set; }
         public EventHandler<ChatMessage>? AgentInstructionSignal { get; set; }
         protected override async Task OnInitializedAsync()
         {
@@ -124,6 +124,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
         }
         public async Task OnSendAgentInstructions()
         {
+            Logger.LogInformation($"Executing {nameof(OnSendAgentInstructions)}");
             AgentIsBusy = true;
            
             await Task.Yield();
@@ -134,9 +135,24 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                 messageContents.Add(new DataContent(ImagePresentedToAgent.dataUrl));
             }
 
-            
-            await foreach(var stateMachineResponse in UserAssistantContext.Receptor(this, new() { Contents = messageContents })){
-                Console.WriteLine(stateMachineResponse?.Text);
+            try
+            {
+                UserAssistantContext?.WaitAsync();
+                UserAssistantContext?.SwitchOn();
+                if (UserAssistantContext is not null)
+                {
+
+                    Logger.LogInformation($"{nameof(UserAssistantContext)} initialized.");
+
+                    await foreach (var stateMachineResponse in UserAssistantContext.Receptor(this, new() { Contents = messageContents }))
+                    {
+                        Console.WriteLine(stateMachineResponse?.Text);
+                    }
+                }
+            }
+            finally
+            {
+                UserAssistantContext?.Release();
             }
 
             await AppAssistantAgent.HandleUserRequest(messageContents, BookkeeperAgent.ChatHistory, assistantReasoningTokenHandler: async (reasoningToken) => {

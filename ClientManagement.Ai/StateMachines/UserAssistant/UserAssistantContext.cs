@@ -39,6 +39,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant
 
         public IAsyncEnumerable<ChatResponse>? Receptor(object? sender, ChatMessage? message)
         {
+            Logger.LogInformation($"executing {nameof(Receptor)} from {nameof(UserAssistantContext)}");
             if(message is not null)
             {
                 return IncomingMessageSelector?.Receptor(sender, message);
