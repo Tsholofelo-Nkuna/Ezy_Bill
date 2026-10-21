@@ -8,6 +8,7 @@ using ClientManagement.Ai.Agents;
 using ClientManagement.Ai.Agents.Workflows;
 using Microsoft.Extensions.AI;
 using ClientManagement.Utils.Ai;
+using ClientManagement.AI.StateMachines.UserAssistant;
 
 
 namespace ClientManagement.Ai
@@ -42,7 +43,9 @@ namespace ClientManagement.Ai
                 .AddScoped<AppAssistantWorkflowProvider>()
                 .AddScoped<AppHttpTransportClient>()
                 .AddScoped<IEmbeddingGenerator<string,Embedding<float>>, AssistantChatApiClient>()
-                .AddScoped<AgentStoreKeyRegistry>(); 
+                .AddScoped<AgentStoreKeyRegistry>()
+                .AddScoped<IChatClient, AssistantChatApiClient>()
+                .AddScoped<UserAssistantContext>(); 
 
             return services;
         }

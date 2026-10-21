@@ -49,7 +49,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
         public Guid AgentConversationId { get; set; }
         public Guid KeyForImagePresentedToAgent = Guid.NewGuid();
         [Inject] public IOptions<AgentOptions>? AgentOpt { get; set; }
-        public UserAssistantContext? UserAssistantContext { get; set; }
+        [Inject] public UserAssistantContext? UserAssistantContext { get; set; }
 
         public EventHandler<ChatMessage>? AgentInstructionSignal { get; set; }
         protected override async Task OnInitializedAsync()
@@ -69,8 +69,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                      IconClass = "bi bi-person-lines-fill me-1" 
                  },
             ];
-            UserAssistantContext = new(this.ChatAssistant, this.AgentOpt!);
-            UserAssistantContext.HtmlInputFormOutputSignal += OnUserContextHtmlInputFormGenerated;
+          
         }
 
         public async Task OnFilePresentedToAgent(InputFileChangeEventArgs e)
