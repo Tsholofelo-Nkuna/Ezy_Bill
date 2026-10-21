@@ -21,7 +21,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors.Base
                 foreach (var effect in Actions)
                 {
                     if (context is { State: { On: true } })
-                    {
+                    { 
                         formerActionResponse =  await effect(context, userMessage, formerActionResponse);
                         
                         if (formerActionResponse?.AdditionalProperties?.TryGetValue(ExecutionStatus.Success, out bool success) ?? false)

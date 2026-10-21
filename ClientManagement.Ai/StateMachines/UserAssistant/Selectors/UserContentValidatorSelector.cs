@@ -2,6 +2,7 @@
 using ClientManagement.AI.StateMachines.UserAssistant.Selectors.Interfaces.Base;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using OllamaSharp;
 using OllamaSharp.Models;
 using System;
@@ -21,17 +22,20 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
 
         public Task<ChatResponse> HasCorrectFileType(UserAssistantContext context, ChatMessage userMessage, ChatResponse? formerResponse)
         {
+            context.Logger.LogInformation($"executing {nameof(HasCorrectFileType)}");
             var isCorrectFileType = true;
             var fileContents = userMessage.Contents.OfType<DataContent>();
             foreach (var content in fileContents) {
-
+                
                 if (Regex.Match(content.MediaType, @"^(image/)", RegexOptions.IgnoreCase).Success) //image detected
                 {
+                    context.Logger.LogInformation($"image({content.MediaType}) detected");
                     continue;
                 }
 
                 if(!context.AgentOptions.Value.SupportedFileTypes.Select(x => x.ToLower()).Contains(content.MediaType.ToLower()))
                 {
+                    context.Logger.LogInformation($"invalid file type ({content.MediaType}) detected.");
                     isCorrectFileType = false;
                 }
             }
@@ -40,12 +44,16 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
             response.AdditionalProperties = new AdditionalPropertiesDictionary() {
                 [Constants.ExecutionStatus.Success] = isCorrectFileType 
             };
+            if (!string.IsNullOrWhiteSpace(response.Text))
+            {
+                context.Logger.LogInformation($"Response from {nameof(HasCorrectFileType)}: "+response.Text);
+            }
             return Task.FromResult(response);
         }
 
         public async Task<ChatResponse> TextContentIsValid(UserAssistantContext context, ChatMessage userMessage, ChatResponse? formerResponse)
         {
-           
+            context.Logger.LogInformation($"executing {nameof(TextContentIsValid)}");
             var textContent = string.Join("\n",userMessage.Contents.OfType<TextContent>());
            
             var criteria = context.AgentOptions.Value.AiAgentMetaData.Select(x => new KeyValuePair<string, string>(x.Profession, x.Description ?? string.Empty))
@@ -73,6 +81,10 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
                 [Constants.ExecutionStatus.Success] = !string.IsNullOrWhiteSpace(systemOneChoiceResponse?.Choice)
 
             };
+            if (!string.IsNullOrWhiteSpace(response.Text))
+            {
+                context.Logger.LogInformation($"Response from {nameof(TextContentIsValid)}: {response.Text}");
+            }
             return response;
         }
     }
