@@ -14,7 +14,7 @@ namespace ClientManagement.Ai.Helpers
     public class AssistantChatApiClient : OllamaApiClient, IChatClient
     {
         public delegate void ChatResponseHandler((string responseToken, string reasoningToken) payload);
-        public event ChatResponseHandler ChatResponseTokenReceived;
+        public event ChatResponseHandler? ChatResponseTokenReceived;
         protected  AgentOptions AOptions { get; }
         public AssistantChatApiClient(IOptions<AgentOptions> apiOptions, ILogger<AssistantChatApiClient> logger) 
             : base(new HttpClient() { BaseAddress = new Uri(apiOptions.Value.OllamaUrl), Timeout = TimeSpan.FromMinutes(3)}, apiOptions.Value.OllamaModel)
@@ -39,7 +39,7 @@ namespace ClientManagement.Ai.Helpers
                 await foreach(var responseItem in responseStream)
                 {
                     llmResponse += responseItem?.Response;
-                    ChatResponseTokenReceived.Invoke((responseItem?.Response ?? string.Empty, responseItem?.Thinking ?? string.Empty));
+                    ChatResponseTokenReceived?.Invoke((responseItem?.Response ?? string.Empty, responseItem?.Thinking ?? string.Empty));
                 }
             }
 
