@@ -2,6 +2,7 @@
 using ClientManagement.AI.StateMachines.UserAssistant.Triggers;
 using ClientManagement.Models.AI;
 using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 
@@ -17,7 +18,9 @@ public sealed class Test1
         var moq = new Mock<IChatClient>();
         var opt = new Mock<IOptions<AgentOptions>>();
         opt.Setup(x => x.Value).Returns(new AgentOptions());
-        var x = new UserAssistantContext(moq.Object, opt.Object);
+        var loggerMoq = new Mock<ILogger<UserAssistantContext>>();
+        loggerMoq.Setup(x => x.LogInformation(It.IsAny<string>()));
+        var x = new UserAssistantContext(moq.Object, opt.Object, loggerMoq.Object);
         x.SwitchOn();
         x.Receptor(x, new(ChatRole.User, "Hello agent"));
 

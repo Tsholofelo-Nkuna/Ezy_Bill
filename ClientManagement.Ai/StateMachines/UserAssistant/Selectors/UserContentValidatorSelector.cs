@@ -1,4 +1,5 @@
-﻿using ClientManagement.AI.StateMachines.UserAssistant.Selectors.Base;
+﻿using ClientManagement.Ai.Helpers;
+using ClientManagement.AI.StateMachines.UserAssistant.Selectors.Base;
 using ClientManagement.AI.StateMachines.UserAssistant.Selectors.Interfaces.Base;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
@@ -54,41 +55,50 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
 
         public async Task<ChatResponse> TextContentIsValid(UserAssistantContext context, ChatMessage userMessage, ChatResponse? formerResponse)
         {
-            context.Logger.LogInformation($"executing {nameof(TextContentIsValid)} from {nameof(UserContentValidatorSelector)}");
-            var textContent = string.Join("\n",userMessage.Contents.OfType<TextContent>());
-           
-            var criteria = context.AgentOptions.Value.AiAgentMetaData.Select(x => new KeyValuePair<string, string>(x.Profession, x.Description ?? string.Empty))
-                .ToDictionary(x => x.Key, x=> x.Value);
-            SystemOneResponse? ans = null;
-            if(context.ChatClient is IOllamaApiClient oApiClient)
+            try
             {
-               context.Logger.LogInformation($"sending systemone choice question to {context.AgentOptions.Value.SystemOneModel}");
-               ans = await oApiClient.SystemOneAsync(new()
+                context.Logger.LogInformation($"executing {nameof(TextContentIsValid)} from {nameof(UserContentValidatorSelector)}");
+                var textContent = string.Join("\n", userMessage.Contents.OfType<TextContent>());
+
+                var criteria = context.AgentOptions.Value.AiAgentMetaData.Select(x => new KeyValuePair<string, string>(x.Profession, x.VecStoreMetaData?.Description ?? string.Empty))
+                    .ToDictionary(x => x.Key, x => x.Value);
+                context.Logger.LogInformation($"{JsonSerializer.Serialize(criteria)}");
+                SystemOneResponse? ans = null;
+                if (context.ChatClient is AssistantChatApiClient oApiClient)
                 {
-                    Model = context.AgentOptions.Value.SystemOneModel,
-                    State = textContent,
-                    Questions = {
+                    context.Logger.LogInformation($"sending systemone choice question to {context.AgentOptions.Value.SystemOneModel}");
+                    ans = await oApiClient.SystemOneAsync(new()
+                    {
+                        Model = context.AgentOptions.Value.SystemOneModel,
+                        State = textContent,
+                        Questions = {
                      ["label"] = new SystemOneChoiceQuestion()
                      {
                          Criteria = criteria,
                          Instructions = "Which profession is this in alignment with?"
                      }
                     }
-                });
-            }
-            context.Logger.LogInformation($"systemone choice answer: {JsonSerializer.Serialize(ans)}");
-            var systemOneChoiceResponse = (ans?.Answers?["label"] as SystemOneChoiceAnswer);
-            var response = new ChatResponse(new ChatMessage(ChatRole.Assistant, systemOneChoiceResponse?.Confidence >=0.6 ? systemOneChoiceResponse?.Choice:"This inquiry is outside the scope of my expertise."));
-            response.AdditionalProperties = new AdditionalPropertiesDictionary()
-            {
-                [Constants.ExecutionStatus.Success] = !string.IsNullOrWhiteSpace(systemOneChoiceResponse?.Choice)
+                    });
+                }
+                context.Logger.LogInformation($"systemone choice answer: {JsonSerializer.Serialize(ans)}");
+                var systemOneChoiceResponse = (ans?.Answers?["label"] as SystemOneChoiceAnswer);
+                var response = new ChatResponse(new ChatMessage(ChatRole.Assistant, (systemOneChoiceResponse?.Confidence ?? 0) >= 0.6 ? systemOneChoiceResponse?.Choice : "This inquiry is outside the scope of my expertise."));
+                response.AdditionalProperties = new AdditionalPropertiesDictionary()
+                {
+                    [Constants.ExecutionStatus.Success] = !string.IsNullOrWhiteSpace(systemOneChoiceResponse?.Choice)
 
-            };
-            if (!string.IsNullOrWhiteSpace(response.Text))
-            {
-                context.Logger.LogInformation($"Response from {nameof(TextContentIsValid)}: {response.Text}");
+                };
+                if (!string.IsNullOrWhiteSpace(response.Text))
+                {
+                    context.Logger.LogInformation($"Response from {nameof(TextContentIsValid)}: {response.Text}");
+                }
+                return response;
             }
-            return response;
+            catch (Exception ex)
+            {
+                context.Logger.LogError(ex, $"{ex.StackTrace}");
+                throw;
+            }
         }
     }
 }
