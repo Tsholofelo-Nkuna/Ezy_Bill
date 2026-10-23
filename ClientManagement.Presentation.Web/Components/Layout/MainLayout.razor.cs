@@ -72,18 +72,21 @@ namespace ClientManagement.Presentation.Web.Components.Layout
             ];
 
             UserAssistantContext?.SwitchOn();
-            UserAssistantContext?.AddLlmResponseListener((payload) => {
-                var authorName = UserAssistantContext.Persona?.Name ?? string.Empty;
-                if (!AgentThoughts.ContainsKey(authorName))
-                {
-                    AgentThoughts[authorName] = string.Empty;
-                }
+            UserAssistantContext?.AddLlmResponseListener(OnAgentThoughtTokenReceived);
 
-                AgentThoughts[authorName] += payload.reasoningToken;
-                StateHasChanged();
-                Logger.LogInformation(JsonSerializer.Serialize(AgentThoughts));
-            });
+        }
 
+        public async Task OnAgentThoughtTokenReceived((string responseToken, string thoughtToken) payload)
+        {
+            Logger.LogInformation($"executing {nameof(OnAgentThoughtTokenReceived)} from {nameof(MainLayout)}");
+            var authorName = UserAssistantContext.Persona?.Name ?? string.Empty;
+            if (!AgentThoughts.ContainsKey(authorName))
+            {
+                AgentThoughts[authorName] = string.Empty;
+            }
+
+            AgentThoughts[authorName] += payload.thoughtToken;
+            Logger.LogInformation($"Received thought token: {payload.thoughtToken}");
         }
 
         public async Task OnFilePresentedToAgent(InputFileChangeEventArgs e)
@@ -157,6 +160,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                 await foreach (var stateMachineResponse in UserAssistantContext.Receptor(this, new() { Contents = messageContents }))
                 {
                     stringFinalResponse = (stateMachineResponse?.Text);
+                    await Task.Yield();
                 }
                 Logger.LogInformation($"Agent's final response: {stringFinalResponse}");
             }
