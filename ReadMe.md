@@ -131,20 +131,6 @@ The system performs a sub-millisecond deterministic string parsing operation to 
 To guarantee that a compromised agent layer or an LLM payload bypass cannot invoke low-level endpoints directly over the JSON-RPC pipe, a gateway interceptor resides on the incoming request pipeline. This middleware parses the caller identity attached to the execution metadata, reads the compiled capability requirement locally, and drops unauthorized traffic before it can ever execute a state mutation against the downstream `BusinessLogicLayer`.
 
 ---
-
-## ✅ Operational Testing & Success Verification
-
-### Verification Scenario: Tool Masking Validation
-1. Deploy the application stack within the local **Rancher Desktop** cluster space via Helm (`izzy-bill`).
-2. Trigger the instantiation of the recruitment specialist (`Linda`).
-3. Query the initialized agent instance kernel properties. Verify that financial execution endpoints are **completely absent** from its available capabilities manifest and that all active tool descriptions are clear of governance tag fragments.
-
-### Verification Scenario: Security Bypass Defense
-1. Simulate an adversarial or corrupted system state by forcing the recruitment layer to dispatch an explicit JSON-RPC payload call targeting a financial capability, passing the metadata claim identifier tracking back to the recruitment profile.
-2. Verify that `ClientManagement.MCP` catches the command at the network gateway interface, drops the transaction with an explicit access violation error, and prevents any downstream interaction with core domain components.
-
-
-
 ## 🛠️ Environment & Tooling Setup
 
 To successfully build and run the application, the following tooling must be installed and configured on your development machine:
@@ -411,25 +397,7 @@ Rather than polluting microservice files or agent definitions with diagnostic lo
 *   **Diagnostic Return:** Eliminates data blind spots by unpacking the binary payload envelope, exposing the exact context strings, similarity scores, and documents injected into the system prompt.
 ---
 
-## 📊 4. Evaluation, Quality Auditing, & Tournament Models
 
-By establishing this zero-noise, double-protocol logging network, your team changes AI execution from a subjective black-box guess into an **Auditable Corporate Asset**.
-
-### ⚖️ The Agent Accountability Audit
-When the frontend displays an incorrect, vague, or failed answer, the system allows for precise fault attribution:
-*   **Lenient Scoring (Data Flaw):** Phoenix traces prove that the model processed the information correctly, but the gRPC fetch from Qdrant returned corrupted or incomplete context. The model is innocent; the fix belongs in the vector knowledge base.
-*   **Strict Scoring (Model Hallucination):** Traces show that Qdrant returned perfect, accurate data blocks, but the model's internal `TextReasoningContent` tokens chose to ignore system rules or misread the parameters. The model failed; the fix belongs in prompt refining or `config.yml` adjustment.
-
-### 🏆 Parallel Model Tournaments
-Because the system configuration isolates model assignments, the system is natively pre-architected for parallel benchmarking. 
-
-By uncommenting model overrides in `config.yml`, your architect can run the **Concurrent Orchestrator Pattern** across multiple local or cloud containers (`qwen3.5`, `qwen:9b`, `llama3.1`) simultaneously on a single user query. Arize Phoenix automatically tracks the latency, token overhead, and faithfulness of each output stream, acting as the ultimate automated judge to select and pass the highest-scoring response directly back to the Blazor dashboard.# Engineering Blueprint: Distributed Agent Telemetry Integration
-
-This document outlines the architecture and  implementation blueprint for observing and monitoring the multi-agent workflow  powering the **IzyBill** macro-agent. 
-
-By establishing a host-level OpenTelemetry middleware layer, this strategy captures agent reasoning paths (`TextReasoningContent`) and binary data fetches, streaming them natively into a self-hosted instance of **Arize Phoenix** for automated evaluation and model benchmarking.
-
----
 
 ## 🏗️ 1. Core Architectural Layout
 
@@ -469,41 +437,4 @@ The following blueprint maps the boundary lines of the running container cluster
 ```
 
 ---
-
-## 🔌 3. Observability & Telemetry Middleware Matrix
-
-Rather than polluting microservice files or agent definitions with diagnostic logging blocks, OpenTelemetry is injected as cross-cutting infrastructure strictly at the **Composition Root**. It hooks directly into network sockets to catch traffic flowing across HTTP and gRPC rails.
-
-```
- [User Input] ──► [ Web App Core OTel Middleware ] ──────► [ Arize Phoenix ]
-                        │                                        ▲
-                        ├─► (HTTP) ──► [ Ollama Engine ] ────────┤ (Thought Spans)
-                        │      └─► Captures TextReasoningContent │
-                        │                                        │
-                        └─► (gRPC) ──► [ Qdrant Database ] ──────┘ (Retrieval Spans)
-                               └─► Captures RAG Context Injection
-```
-
-### 🔹 HTTP Client Instrumentation (`AddHttpClientInstrumentation`)
-*   **Target Engine:** Intercepts out-of-network model inference calls directed to the local Ollama API wrapper.
-*   **Diagnostic Return:** Natively isolates the framework's `TextReasoningContent` (the internal, raw reasoning thought tokens) right as they stream from the model, mapping the internal monologue before any final text reaches the front-end user.
-
-### 🔹 gRPC Client Instrumentation (`AddGrpcClientInstrumentation`)
-*   **Target Engine:** Intercepts high-throughput binary Protocol Buffer streams traversing port `6334` between the database clients and the Qdrant StatefulSet nodes.
-*   **Diagnostic Return:** Eliminates data blind spots by unpacking the binary payload envelope, exposing the exact context strings, similarity scores, and documents injected into the system prompt.
----
-
-## 📊 4. Evaluation, Quality Auditing, & Tournament Models
-
-By establishing this zero-noise, double-protocol logging network, your team changes AI execution from a subjective black-box guess into an **Auditable Corporate Asset**.
-
-### ⚖️ The Agent Accountability Audit
-When the frontend displays an incorrect, vague, or failed answer, the system allows for precise fault attribution:
-*   **Lenient Scoring (Data Flaw):** Phoenix traces prove that the model processed the information correctly, but the gRPC fetch from Qdrant returned corrupted or incomplete context. The model is innocent; the fix belongs in the vector knowledge base.
-*   **Strict Scoring (Model Hallucination):** Traces show that Qdrant returned perfect, accurate data blocks, but the model's internal `TextReasoningContent` tokens chose to ignore system rules or misread the parameters. The model failed; the fix belongs in prompt refining or `config.yml` adjustment.
-
-### 🏆 Parallel Model Tournaments
-Because the system configuration isolates model assignments, the system is natively pre-architected for parallel benchmarking. 
-
-By uncommenting model overrides in `config.yml`, your architect can run the **Concurrent Orchestrator Pattern** across multiple local or cloud containers (`qwen3.5`, `qwen:9b`, `llama3.1`) simultaneously on a single user query. Arize Phoenix automatically tracks the latency, token overhead, and faithfulness of each output stream, acting as the ultimate automated judge to select and pass the highest-scoring response directly back to the Blazor dashboard.
 
