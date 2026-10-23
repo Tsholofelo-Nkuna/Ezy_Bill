@@ -76,10 +76,10 @@ namespace ClientManagement.Presentation.Web.Components.Layout
 
         }
 
-        public async Task OnAgentThoughtTokenReceived((string responseToken, string thoughtToken) payload)
+        public Task OnAgentThoughtTokenReceived((string responseToken, string thoughtToken) payload)
         {
             Logger.LogInformation($"executing {nameof(OnAgentThoughtTokenReceived)} from {nameof(MainLayout)}");
-            var authorName = UserAssistantContext.Persona?.Name ?? string.Empty;
+            var authorName = UserAssistantContext?.Persona?.Name ?? string.Empty;
             if (!AgentThoughts.ContainsKey(authorName))
             {
                 AgentThoughts[authorName] = string.Empty;
@@ -87,6 +87,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
 
             AgentThoughts[authorName] += payload.thoughtToken;
             Logger.LogInformation($"Received thought token: {payload.thoughtToken}");
+            return Task.CompletedTask;
         }
 
         public async Task OnFilePresentedToAgent(InputFileChangeEventArgs e)
