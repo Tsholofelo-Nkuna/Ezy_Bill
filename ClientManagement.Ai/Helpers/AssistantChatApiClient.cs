@@ -65,5 +65,9 @@ namespace ClientManagement.Ai.Helpers
             Logger.LogInformation($"systemone choice answer: {JsonSerializer.Serialize(ans)}");
             return ans;
         }
+
+        ~ AssistantChatApiClient() {
+            ChatResponseTokenReceived = null;
+        }
     }
 }

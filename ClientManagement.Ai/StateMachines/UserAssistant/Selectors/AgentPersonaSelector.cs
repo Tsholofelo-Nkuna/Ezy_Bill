@@ -4,21 +4,17 @@ using ClientManagement.AI.StateMachines.UserAssistant.Selectors.Base;
 using ClientManagement.AI.StateMachines.UserAssistant.Selectors.Interfaces.Base;
 using ClientManagement.Models.AI;
 using Microsoft.Extensions.AI;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using OllamaSharp;
-using OllamaSharp.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
 {
-    internal class UserContentValidatorSelector : SequentialSelectorBase, ISelectorBase<UserAssistantContext, ChatMessage>
+    [Description("Determines which agent persona to load based on the user's inquiry")]
+    internal class AgentPersonaSelector : SequentialSelectorBase, ISelectorBase<UserAssistantContext, ChatMessage>
     {
-        public UserContentValidatorSelector(UserAssistantContext context) : base(context)
+        public AgentPersonaSelector(UserAssistantContext context) : base(context)
         {
            Actions.Add(HasCorrectFileType);
            Actions.Add(TextContentIsValid);
@@ -70,7 +66,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
         {
             try
             {
-                context.Logger.LogInformation($"executing {nameof(TextContentIsValid)} from {nameof(UserContentValidatorSelector)}");
+                context.Logger.LogInformation($"executing {nameof(TextContentIsValid)} from {nameof(AgentPersonaSelector)}");
                 var textContent = string.Join("\n", userMessage.Contents.OfType<TextContent>());
                 var llm_prompt = $"""
                     Is the following text content in alignment with the provided knowledge sources:
@@ -85,11 +81,10 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
 
                 context.Logger.LogInformation($"llm_prompt: {llm_prompt}");
                 var llmResponse = string.Empty;
-                if(context.ChatClient is AssistantChatApiClient cClient)
-                {
-                    llmResponse = await cClient.GenerateResponseAsync(llm_prompt);
-                    context.Logger.LogInformation($"llm_response: {llmResponse}");
-                }
+            
+                llmResponse = await context.ChatClient.GenerateResponseAsync(llm_prompt);
+                context.Logger.LogInformation($"llm_response: {llmResponse}");
+                
                 var response = new ChatResponse(new ChatMessage(ChatRole.Assistant, !string.IsNullOrWhiteSpace(llmResponse) ? llmResponse : "Your inquiry is outside the scope of my expertise"));
                 response.AdditionalProperties = new AdditionalPropertiesDictionary()
                 {
@@ -112,7 +107,7 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
         {
             try
             {
-                context.Logger.LogInformation($"executing {nameof(LoadAgentPersona)} from {nameof(UserContentValidatorSelector)}");
+                context.Logger.LogInformation($"executing {nameof(LoadAgentPersona)} from {nameof(AgentPersonaSelector)}");
                 if (formerResponse?.AdditionalProperties?.TryGetValue(Constants.ExecutionStatus.Success, out bool successStatus) ?? false)
                 {
                     if (successStatus)

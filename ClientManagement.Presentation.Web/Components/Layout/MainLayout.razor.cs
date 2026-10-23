@@ -69,7 +69,18 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                      IconClass = "bi bi-person-lines-fill me-1" 
                  },
             ];
-          
+
+            UserAssistantContext?.SwitchOn();
+            UserAssistantContext?.AddLlmResponseListener((payload) => {
+                var authorName = UserAssistantContext.Persona?.Name ?? string.Empty;
+                if (!AgentThoughts.ContainsKey(authorName))
+                {
+                    AgentThoughts[authorName] = string.Empty;
+                }
+
+                AgentThoughts[authorName] += payload.reasoningToken;
+            });
+
         }
 
         public async Task OnFilePresentedToAgent(InputFileChangeEventArgs e)
@@ -135,32 +146,24 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                 messageContents.Add(new DataContent(ImagePresentedToAgent.dataUrl));
             }
 
-            try
+            if (UserAssistantContext is not null)
             {
-               // UserAssistantContext?.WaitAsync();
-                UserAssistantContext?.SwitchOn();
-                if (UserAssistantContext is not null)
+
+                Logger.LogInformation($"{nameof(UserAssistantContext)} initialized.");
+                var stringFinalResponse = string.Empty;
+                await foreach (var stateMachineResponse in UserAssistantContext.Receptor(this, new() { Contents = messageContents }))
                 {
-
-                    Logger.LogInformation($"{nameof(UserAssistantContext)} initialized.");
-
-                    await foreach (var stateMachineResponse in UserAssistantContext.Receptor(this, new() { Contents = messageContents }))
-                    {
-                        Console.WriteLine(stateMachineResponse?.Text);
-                    }
+                    stringFinalResponse = (stateMachineResponse?.Text);
                 }
-            }
-            finally
-            {
-               // UserAssistantContext?.Release();
+                Logger.LogInformation($"Agent's final response: {stringFinalResponse}");
             }
 
-            await AppAssistantAgent.HandleUserRequest(messageContents, BookkeeperAgent.ChatHistory, assistantReasoningTokenHandler: async (reasoningToken) => {
-                AgentThoughts = reasoningToken;
-                StateHasChanged();
-                await JsRunTime.InvokeVoidAsync("scrollChatPanelDown");
+            //await AppAssistantAgent.HandleUserRequest(messageContents, BookkeeperAgent.ChatHistory, assistantReasoningTokenHandler: async (reasoningToken) => {
+            //    AgentThoughts = reasoningToken;
+            //    StateHasChanged();
+            //    await JsRunTime.InvokeVoidAsync("scrollChatPanelDown");
 
-            });
+            //});
             AgentThoughts = new();
             AgentIsBusy = false;
             AgentInstructions = string.Empty;
