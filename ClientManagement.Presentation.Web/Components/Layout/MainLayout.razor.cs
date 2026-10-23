@@ -14,6 +14,7 @@ using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 using System.Net.NetworkInformation;
+using System.Text.Json;
 
 namespace ClientManagement.Presentation.Web.Components.Layout
 {
@@ -79,6 +80,8 @@ namespace ClientManagement.Presentation.Web.Components.Layout
                 }
 
                 AgentThoughts[authorName] += payload.reasoningToken;
+                StateHasChanged();
+                Logger.LogInformation(JsonSerializer.Serialize(AgentThoughts));
             });
 
         }
