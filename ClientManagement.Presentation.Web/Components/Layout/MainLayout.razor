@@ -56,11 +56,11 @@
                             @if (AgentIsBusy)
                             {
                                 <div style="font-size:0.733em;color:darkgray;">
-                                    <div>Thinking...</div>
+                                   
                                     @foreach(var entry in AgentThoughts)
                                     {
                                         <div class="container mx-2">
-                                            <strong>@entry.Key:</strong> @entry.Value
+                                            <strong>@(!string.IsNullOrWhiteSpace(entry.Key) ? $"{entry.Key}:": string.Empty)</strong> @entry.Value
                                         </div>
                                     }
                                 </div>
