@@ -13,7 +13,7 @@ namespace ClientManagement.Ai.Helpers
 {
     public class AssistantChatApiClient : OllamaApiClient, IChatClient
     {
-        public delegate Task ChatResponseHandler((string responseToken, string reasoningToken) payload);
+        public delegate void ChatResponseHandler((string responseToken, string reasoningToken) payload);
         public event ChatResponseHandler? ChatResponseTokenReceived;
         protected  AgentOptions AOptions { get; }
         public AssistantChatApiClient(IOptions<AgentOptions> apiOptions, ILogger<AssistantChatApiClient> logger) 

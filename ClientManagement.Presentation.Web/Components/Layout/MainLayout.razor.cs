@@ -76,7 +76,7 @@ namespace ClientManagement.Presentation.Web.Components.Layout
 
         }
 
-        public Task OnAgentThoughtTokenReceived((string responseToken, string thoughtToken) payload)
+        public void OnAgentThoughtTokenReceived((string responseToken, string thoughtToken) payload)
         {
             Logger.LogInformation($"executing {nameof(OnAgentThoughtTokenReceived)} from {nameof(MainLayout)}");
             var authorName = UserAssistantContext?.Persona?.Name ?? string.Empty;
@@ -86,10 +86,8 @@ namespace ClientManagement.Presentation.Web.Components.Layout
             }
 
             AgentThoughts[authorName] += payload.thoughtToken;
-            StateHasChanged();
             Logger.LogInformation($"Received thought token: {payload.thoughtToken}");
-            return Task.CompletedTask;
-           
+            StateHasChanged();
         }
 
         public async Task OnFilePresentedToAgent(InputFileChangeEventArgs e)
@@ -160,12 +158,15 @@ namespace ClientManagement.Presentation.Web.Components.Layout
 
                 Logger.LogInformation($"{nameof(UserAssistantContext)} initialized.");
                 var stringFinalResponse = string.Empty;
-                await foreach (var stateMachineResponse in UserAssistantContext.Receptor(this, new() { Contents = messageContents }))
+                ChatMessage m = new() { Contents = messageContents };
+                BookkeeperAgent?.ChatHistory.Add(m);
+                await Task.Yield();
+                await foreach (var stateMachineResponse in UserAssistantContext.Receptor(this, m))
                 {
                     stringFinalResponse = (stateMachineResponse?.Text);
-                    await Task.Yield();
                 }
                 Logger.LogInformation($"Agent's final response: {stringFinalResponse}");
+                BookkeeperAgent?.ChatHistory?.Add(new(ChatRole.Assistant, stringFinalResponse));
             }
 
             //await AppAssistantAgent.HandleUserRequest(messageContents, BookkeeperAgent.ChatHistory, assistantReasoningTokenHandler: async (reasoningToken) => {
