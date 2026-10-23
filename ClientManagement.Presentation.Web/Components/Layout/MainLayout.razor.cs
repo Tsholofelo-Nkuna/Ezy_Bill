@@ -86,8 +86,10 @@ namespace ClientManagement.Presentation.Web.Components.Layout
             }
 
             AgentThoughts[authorName] += payload.thoughtToken;
+            StateHasChanged();
             Logger.LogInformation($"Received thought token: {payload.thoughtToken}");
             return Task.CompletedTask;
+           
         }
 
         public async Task OnFilePresentedToAgent(InputFileChangeEventArgs e)
