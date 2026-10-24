@@ -30,7 +30,7 @@
         "AI__VectorStoreUrl": "http://localhost:6334",
         "AI__VectorStoreCollectionName": "Knowledge_base",
         "AI__EmbeddingModel": "qwen3-embedding:0.6b",
-        "AI__OllamaModel": "qwen3.5:4b",
+        "AI__OllamaModel": "qwen3.5:0.8b",
         "AI__SystemOneModel": "tev1:0.8b",
         "AI__McpUrl": "http://localhost:6174",
         "AI__AgentStoreKeyMapMountPath": "agent-store-keys/agent-storekey-map.json",

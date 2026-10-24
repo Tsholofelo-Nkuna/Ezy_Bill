@@ -12,6 +12,7 @@ using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using static ClientManagement.Ai.Helpers.AssistantChatApiClient;
@@ -27,7 +28,16 @@ namespace ClientManagement.AI.StateMachines.UserAssistant
         internal UserAssistantState? State { get; set; }
         internal RootSelector? IncomingMessageSelector { get; set; }
         internal ILogger<UserAssistantContext> Logger => loggerObject;
+        internal ConcurrentDictionary<string, string?> Drafts = new()
+        {
+            [Constants.FileCategories.PdfDocuments] = "",
+            [Constants.FileCategories.WordDocuments] = "",
+            [Constants.FileCategories.Images] = ""
+        };
+
+        internal ConcurrentDictionary<string, IList<DataContent>> DataPartitions = new();
         public AgentMetaData? Persona => State?.Persona;
+        
         public void SwitchOn()
         {
            

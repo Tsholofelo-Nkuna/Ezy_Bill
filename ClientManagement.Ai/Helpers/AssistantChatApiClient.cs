@@ -25,13 +25,14 @@ namespace ClientManagement.Ai.Helpers
         }
 
         public ILogger<AssistantChatApiClient> Logger { get; }
-        public async Task<string> GenerateResponseAsync(string prompt)
+        public async Task<string> GenerateResponseAsync(string prompt, IEnumerable<string>? images = null)
         {
 
             var responseStream = GenerateAsync(new()
             {
                 Model = AOptions.OllamaModel,
-                Prompt = prompt
+                Prompt = prompt,
+                Images = images?.ToArray() 
             });
             var llmResponse = string.Empty;
             if(responseStream is not null)
@@ -59,7 +60,7 @@ namespace ClientManagement.Ai.Helpers
                     ["label"] = new SystemOneChoiceQuestion()
                     {
                         Criteria = criteria,
-                        Instructions = "Which profession is this in alignment with?"
+                        Instructions = "Which item within the criteria is this in alignment with?"
                     }
                 }
             });

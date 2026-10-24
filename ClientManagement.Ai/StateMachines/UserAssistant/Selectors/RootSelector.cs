@@ -16,7 +16,9 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
         {
            
             Children.Add(new AgentPersonaSelector(context));
-            Children.Add(new AgentToolSelector(context));
+            Children.Add(new DataPartitionSelector(context));
+            Children.Add(new DocumentProcessorSelector(context));
+          
         }
 
         public IList<ISelectorBase<UserAssistantContext, ChatMessage>> Children { get; set; } = [];
