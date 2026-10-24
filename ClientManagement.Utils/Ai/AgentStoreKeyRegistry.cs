@@ -16,7 +16,7 @@ namespace ClientManagement.Utils.Ai
         {
             //logger.LogInformation($"Currently loaded agent options: {JsonSerializer.Serialize(agentOptions.Value)}");
             logger.LogInformation($"Loading agent store key registry from {agentOptions.Value.AgentStoreKeyMapMountPath}");
-            var fileContents = File.ReadAllText(agentOptions.Value.AgentStoreKeyMapMountPath);
+            var fileContents = File.Exists(agentOptions.Value.AgentStoreKeyMapMountPath) ? File.ReadAllText(agentOptions.Value.AgentStoreKeyMapMountPath) : "null";
             Registry = JsonSerializer.Deserialize<Dictionary<string, string>>(fileContents) ?? new Dictionary<string, string>();
             logger.LogInformation($"Agent store key registry loaded. Found {Registry.Values.Count()} entries");
         }

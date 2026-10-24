@@ -5,6 +5,7 @@ using ClientManagement.AI.StateMachines.UserAssistant.Selectors.Interfaces.Base;
 using ClientManagement.Models.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging;
+using OllamaSharp.Models;
 using System.ComponentModel;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -66,39 +67,29 @@ namespace ClientManagement.AI.StateMachines.UserAssistant.Selectors
         {
             try
             {
+                
                 context.Logger.LogInformation($"executing {nameof(TextContentIsValid)} from {nameof(AgentPersonaSelector)}");
                 var textContent = string.Join("\n", userMessage.Contents.OfType<TextContent>());
-                var llm_prompt = $"""
-                    Is the following text content in alignment with the provided knowledge sources:
-                    text content: {textContent}
-                    knowledge sources: 
-                    {string.Join("\n", context.AgentOptions.Value.AiAgentMetaData.Select(x => $"""
-                                               - name: {x.VecStoreMetaData?.Name}
-                                                 description: {x.VecStoreMetaData?.Description}
-                                            """))}
-                    If yes, provide the exact name of the relevant knowledge source otherwise respond with an empty string.
-                    """;
-
-                context.Logger.LogInformation($"llm_prompt: {llm_prompt}");
-                var llmResponse = string.Empty;
-            
-                llmResponse = await context.ChatClient.GenerateResponseAsync(llm_prompt);
-                context.Logger.LogInformation($"llm_response: {llmResponse}");
+                var critetira = context.AgentOptions.Value.AiAgentMetaData.Where(x => x is { VecStoreMetaData: { Name : { Length : > 0} } }).Select(x => new KeyValuePair<string, string?>(x.VecStoreMetaData!.Name, x.VecStoreMetaData?.Description))
+                    .ToDictionary();
                 
-                var response = new ChatResponse(new ChatMessage(ChatRole.Assistant, !string.IsNullOrWhiteSpace(llmResponse) ? llmResponse : "Your inquiry is outside the scope of my expertise"));
+                var systemOneResponse = await context.ChatClient.SystemOneChoiceQuestion(textContent, critetira);
+                var systemOnChoiceAnswer = systemOneResponse?.Answers?["label"] as SystemOneChoiceAnswer;
+                context.Logger.LogInformation($"system one response: Choice = {systemOnChoiceAnswer?.Choice}, Confidence = {systemOnChoiceAnswer?.Confidence}");
+                
+                var response = new ChatResponse(new ChatMessage(ChatRole.Assistant, !string.IsNullOrWhiteSpace(systemOnChoiceAnswer?.Choice) ? systemOnChoiceAnswer!.Choice : "Your inquiry is outside the scope of my expertise"));
                 response.AdditionalProperties = new AdditionalPropertiesDictionary()
                 {
-                    [Constants.ExecutionStatus.Success] = !string.IsNullOrWhiteSpace(llmResponse) && context.AgentOptions.Value.AiAgentMetaData
-                    .Select(x => x.VecStoreMetaData?.Name?.ToLower()).Where(x => !string.IsNullOrWhiteSpace(x)).Contains(llmResponse?.ToLower())
+                    [Constants.ExecutionStatus.Success] = !string.IsNullOrWhiteSpace(systemOnChoiceAnswer?.Choice) && context.AgentOptions.Value.AiAgentMetaData
+                    .Select(x => x.VecStoreMetaData?.Name?.ToLower()).Where(x => !string.IsNullOrWhiteSpace(x)).Contains(systemOnChoiceAnswer?.Choice?.ToLower())
 
                 };
                 context.Logger.LogInformation($"additional response properties: {JsonSerializer.Serialize(response.AdditionalProperties)}");
-               
                 return response;
             }
             catch (Exception ex)
             {
-                context.Logger.LogError(ex, $"{ex.StackTrace}");
+                context.Logger.LogError(ex, $"{ex.StackTrace} {ex.InnerException}");
                 throw;
             }
         }

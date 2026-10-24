@@ -46,7 +46,7 @@ namespace ClientManagement.Ai.Helpers
             return llmResponse;
         }
 
-        public async Task<SystemOneResponse?> SystemOneChoiceQuestion(string state, Dictionary<string, string> criteria)
+        public async Task<SystemOneResponse?> SystemOneChoiceQuestion(string state, Dictionary<string, string?> criteria)
         {
             SystemOneResponse? ans = null;
             Logger.LogInformation($"sending systemone choice question to {AOptions.SystemOneModel}");
@@ -54,15 +54,16 @@ namespace ClientManagement.Ai.Helpers
             {
                 Model = AOptions.SystemOneModel,
                 State = state,
-                Questions = {
-                     ["label"] = new SystemOneChoiceQuestion()
-                     {
-                         Criteria = criteria,
-                         Instructions = "Which profession is this in alignment with?"
-                     }
+                Questions = new Dictionary<string, SystemOneQuestion>()
+                {
+                    ["label"] = new SystemOneChoiceQuestion()
+                    {
+                        Criteria = criteria,
+                        Instructions = "Which profession is this in alignment with?"
                     }
+                }
             });
-            Logger.LogInformation($"systemone choice answer: {JsonSerializer.Serialize(ans)}");
+
             return ans;
         }
 
